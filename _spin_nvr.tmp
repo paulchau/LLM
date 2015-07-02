@@ -1,0 +1,9 @@
+never ltlCheck {    /* !(! (<> ((STUDENTexTrace&(1<<EXAM_bo.id))))) */
+T0_init:
+	if
+	:: (((STUDENTexTrace&(1<<EXAM_bo.id)))) -> goto accept_all
+	:: (1) -> goto T0_init
+	fi;
+accept_all:
+	skip
+}
