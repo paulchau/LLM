@@ -14,4 +14,5 @@ To successfully compile the file, the marcos attached, i.e.
 * EduOperation.h
 * verctor.lpr
 * for.h
+
 are required to deploy in the same folder as your LPromela and Rules file.
