@@ -1,4 +1,5 @@
 
+
 /*
  * EPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
@@ -66,6 +67,7 @@ RULE(CHOOSE)
      printf("\n\n")}
 
      RD(CHOOSE,STUDENT,CCR,CND);/*abnormal cont end*/
+	 abncoend=FALSE;
     fi
     }
  END(CHOOSE);		 
@@ -128,7 +130,7 @@ RULE(CHOOSEREJ)
      printf("\n\n")}
 
      RD(CHOOSEREJ,LMS,CCO,CND);/*abnormal cont end*/
-
+	 abncoend=FALSE;
     }
  END(CHOOSEREJ);		 
 }
@@ -182,7 +184,7 @@ RULE(CHOOSECONF)
      printf("\n\n")}
 
      RD(CHOOSECONF,LMS,CCO,CND);/*abnormal cont end*/
-
+	 abncoend=FALSE;
     }
  END(CHOOSECONF);		 
 }
@@ -243,7 +245,7 @@ RULE(LECTURES){
      printf("\n\n")}
 
      RD(LECTURES,STUDENT,CCO,CND);/*abnormal cont end*/
-
+	 abncoend=FALSE;
     }
  END(LECTURES);		 
 }
@@ -302,6 +304,7 @@ RULE(CW){
      printf("\n\n")}
 
      RD(CW,STUDENT,CCO,CND);/*abnormal cont end*/
+	 abncoend=FALSE;
     }
  END(CW);		 
 }
@@ -361,6 +364,7 @@ RULE(EXAM){
      printf("\n\n")}
 
      RD(EXAM,STUDENT,CCO,CND);/*abnormal cont end*/
+	 abncoend=FALSE;	 
     }
  END(EXAM);		 
 }
