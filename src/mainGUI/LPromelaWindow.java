@@ -152,8 +152,10 @@ public class LPromelaWindow {
 			bw2.write(rule.getText());
 			bw2.close();
 			BufferedWriter bw3 = new BufferedWriter(new FileWriter(file3));
-			String input = pml.getText() + "ltl ltlCheck {"
-					+ chooseLTL.getFormula() + "}";
+			String input = pml.getText();
+			if (chooseLTL.getFormula() != null) {
+				input += "ltl ltlCheck {" + chooseLTL.getFormula() + "}";
+			}
 			bw3.write(input);
 			bw3.close();
 			FileOutputStream fos = new FileOutputStream(fileRoot + "file.ltl");
