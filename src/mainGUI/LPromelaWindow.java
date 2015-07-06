@@ -85,7 +85,7 @@ public class LPromelaWindow {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
 		bw.write(pml.getText());
 		bw.close();
-		String command1 = "spin \"./test.pml\"";
+		String command1 = "./spin \"./test.pml\"";
 		Runtime runtime = Runtime.getRuntime();
 		Process proc1 = runtime.exec(command1);
 		System.out.println("proc1");
