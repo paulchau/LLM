@@ -1,0 +1,9 @@
+never P1 {    /* !([] ((! (((STUDENTexTrace&(1<<C1_bo.id))) && ((choose1==1)))) || (((C1_bo.prohib==1)) && ((C1_bo.role_pl==STUDENT))))) */
+T0_init:
+	do
+	:: atomic { (! (((! (((STUDENTexTrace&(1<<C1_bo.id))) && ((choose1==1)))) || (((C1_bo.prohib==1)) && ((C1_bo.role_pl==STUDENT)))))) -> assert(!(! (((! (((STUDENTexTrace&(1<<C1_bo.id))) && ((choose1==1)))) || (((C1_bo.prohib==1)) && ((C1_bo.role_pl==STUDENT))))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}

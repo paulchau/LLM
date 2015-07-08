@@ -1,7 +1,8 @@
+
 /*
- * Ching Hay Chau, 17 Jun 2015, Ncl Uni, UK
+ * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
- * Sample.pml: EPROMELA code of a 
+ * Case2.pml: EPROMELA code of a 
  * contract between a STUDENT and LMS. This model 
  * is meant to correctly implement the English 
  * contract of Fig 4 of this techical report, thus 
@@ -31,45 +32,36 @@
 
 #include "setting.h"      /* macro definition */
 #include "EduOperation.h" /* macro definition */
-#include "SampleRules.h"        /* ECA rule code    */
+#include "Case2Rules.h"        /* ECA rule code    */
 
 #define TRUE  1
 #define FALSE 0
 #define YES   1
 #define NO    0
 
-#define AbnContractEnd (abncoend==TRUE)
-
 /* var for recording occurrences of executions 
  * with S and LF outcomes                      
  */
-bool abncoend=FALSE;
-bool ReqFailBefore=NO;
-bool RejFailBefore=NO;
-bool ConfFailBefore=NO;
-bool PayFailBefore=NO;
-bool CancFailBefore=NO;
-int lectures=3;
-int LCount=0;
-int cw=1;
-int CwCount=0;
-int exam=1;
-int ExamCount=0;
+bool choose1=FALSE;
+bool choose2=FALSE;
+bool choose3=FALSE;
+bool all=FALSE;
 
-/* declaration of the 2 role players involved */
-RolePlayer(STUDENT,LMS);
+/* declaration of the role players involved */
+RolePlayer(STUDENT, LMS);
 
 /* account for S,LF,TF,TO execution outcome,
- * in this ex, we use only S and LF */
+ * in this ex, we use only S, TF, TO and P  */
 RuleMessage(S,LF,TF,TO,P); 
 
-/* 5 operations are involved in the contract */
-LN_EVENT(CHOOSE);
-LN_EVENT(CHOOSEREJ);
-LN_EVENT(CHOOSECONF);
-LN_EVENT(LECTURES);
-LN_EVENT(CW);
-LN_EVENT(EXAM);
+/* 7 operations are involved in the contract */
+LN_EVENT(RegReq);
+LN_EVENT(RegReply);
+LN_EVENT(C1);
+LN_EVENT(C2);
+LN_EVENT(C3);
+LN_EVENT(ChooseAccept);
+LN_EVENT(ChooseReject);
 
 /*
  * LTLs for expressing, mutual exclusion of 
@@ -92,13 +84,13 @@ proctype LEG()
   * granted to STUDENT or LMS */
   DONE(STUDENT);
   DONE(LMS);
-
-  INIT(CHOOSE,  STUDENT, 0,1,0); 
-  INIT(CHOOSECONF, LMS, 0,0,0);
-  INIT(CHOOSEREJ,  LMS, 0,0,0);
-  INIT(LECTURES,  STUDENT, 0,0,1);
-  INIT(CW, STUDENT, 0,0,1);
-  INIT(EXAM, STUDENT, 0,0,0);
+  INIT(RegReq, STUDENT, 1,0,0);
+  INIT(RegReply,  LMS, 0,0,0);
+  INIT(C1, STUDENT, 0,0,0);
+  INIT(C2, STUDENT, 0,0,0);
+  INIT(C3, STUDENT, 0,0,0);
+  INIT(ChooseAccept, LMS, 0,0,0);
+  INIT(ChooseReject, LMS, 0,0,0);
  }
  END_INIT:
 
@@ -106,23 +98,30 @@ proctype LEG()
   * For each of the 5 operations, 2 possible exec
   * are modelled: exec with S and exec with TF */ 
  end:do
- :: L_E(STUDENT, CHOOSE,  S);  
- :: L_E(STUDENT, CHOOSE,  TF); 
-
- :: L_E(LMS, CHOOSEREJ,  S); 
- :: L_E(LMS, CHOOSEREJ,  TF);
-
- :: L_E(LMS, CHOOSECONF, S);
- :: L_E(LMS, CHOOSECONF, TF);
-
- :: L_E(STUDENT, LECTURES,  S);            
- :: L_E(STUDENT, LECTURES,  TF);             
-
- :: L_E(STUDENT, CW, S);            
- :: L_E(STUDENT, CW, TF); 
+ :: L_E(STUDENT, RegReq, S);
+ :: L_E(STUDENT, RegReq, TF);
  
- :: L_E(STUDENT, EXAM, S);            
- :: L_E(STUDENT, EXAM, TF); 
+ :: L_E(LMS, RegReply, S);
+ :: L_E(LMS, RegReply, TF);
+ 
+ :: L_E(STUDENT, C1,  S);  
+ :: L_E(STUDENT, C1,  P);  
+ :: L_E(STUDENT, C1,  TF);             
+
+ :: L_E(STUDENT, C2, S);  
+ :: L_E(STUDENT, C2, P);  
+ :: L_E(STUDENT, C2, TF); 
+ 
+ :: L_E(STUDENT, C3, S);    
+ :: L_E(STUDENT, C3, P);  
+ :: L_E(STUDENT, C3, TF); 
+ 
+ :: L_E(LMS, ChooseAccept, S);
+ :: L_E(LMS, ChooseAccept, TF);
+ 
+ :: L_E(LMS, ChooseReject, S);
+ :: L_E(LMS, ChooseReject, TF);
+ 
  od; 
 }
 
@@ -136,12 +135,13 @@ proctype CRM()
 {
  printf("CONTRACT RULE MANAGER"); 
  end:do
-  :: CONTRACT(CHOOSE);  /* include RULE(CHOOSE) */
-  :: CONTRACT(CHOOSECONF); 
-  :: CONTRACT(CHOOSEREJ);  /* include RULE(CHOOSEREJ) */
-  :: CONTRACT(LECTURES); 
-  :: CONTRACT(CW);
-  :: CONTRACT(EXAM);
+  :: CONTRACT(RegReq);
+  :: CONTRACT(RegReply); 
+  :: CONTRACT(C1);
+  :: CONTRACT(C2);
+  :: CONTRACT(C3);
+  :: CONTRACT(ChooseAccept);  
+  :: CONTRACT(ChooseReject);
  od;
 }
 
@@ -152,3 +152,4 @@ init
    run LEG(); run CRM(); 
   }
 }
+ltl P1 {[](IS_X(C1, STUDENT)&&(choose1 == TRUE) -> IS_P(C1, STUDENT))}

@@ -1,0 +1,17 @@
+#define IS_O	?
+#define EXAM,	?
+#define STUDENT	?
+#define IS_X	?
+#define LECTURES,STUDENT	?
+#define CW,	?
+
+tl_spin: parentheses not balanced
+tl_spin: !([]  (((IS_O(EXAM, STUDENT)) U (IS_X(LECTURES,STUDENT) && IS_X(CW, STUDENT))))
+---------^
+
+#ifdef NOTES
+Use Load to open a file or a template.
+#endif
+#ifdef RESULT
+
+#endif

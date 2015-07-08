@@ -1,7 +1,8 @@
+
 /*
- * Ching Hay Chau, 17 Jun 2015, Ncl Uni, UK
+ * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
- * Sample.pml: EPROMELA code of a 
+ * Case1.pml: EPROMELA code of a 
  * contract between a STUDENT and LMS. This model 
  * is meant to correctly implement the English 
  * contract of Fig 4 of this techical report, thus 
@@ -31,42 +32,36 @@
 
 #include "setting.h"      /* macro definition */
 #include "EduOperation.h" /* macro definition */
-#include "SampleRules.h"        /* ECA rule code    */
+#include "Case1Rules.h"        /* ECA rule code    */
 
 #define TRUE  1
 #define FALSE 0
 #define YES   1
 #define NO    0
 
-#define AbnContractEnd (abncoend==TRUE)
+#define PassEnd (fail==FALSE)
+#define Finish (lectures==LCount && cw==CwCount && exam==ExamCount)
 
 /* var for recording occurrences of executions 
  * with S and LF outcomes                      
  */
-bool abncoend=FALSE;
-bool ReqFailBefore=NO;
-bool RejFailBefore=NO;
-bool ConfFailBefore=NO;
-bool PayFailBefore=NO;
-bool CancFailBefore=NO;
-int lectures=3;
+bool fail=FALSE;
+int lectures=8;
 int LCount=0;
-int cw=1;
+int cw=2;
 int CwCount=0;
 int exam=1;
 int ExamCount=0;
 
-/* declaration of the 2 role players involved */
-RolePlayer(STUDENT,LMS);
+/* declaration of the role players involved */
+RolePlayer(STUDENT, LMS);
 
 /* account for S,LF,TF,TO execution outcome,
- * in this ex, we use only S and LF */
+ * in this ex, we use only S, TF, TO and P  */
 RuleMessage(S,LF,TF,TO,P); 
 
-/* 5 operations are involved in the contract */
-LN_EVENT(CHOOSE);
-LN_EVENT(CHOOSEREJ);
-LN_EVENT(CHOOSECONF);
+/* 3 operations are involved in the contract */
+LN_EVENT(START);
 LN_EVENT(LECTURES);
 LN_EVENT(CW);
 LN_EVENT(EXAM);
@@ -92,13 +87,10 @@ proctype LEG()
   * granted to STUDENT or LMS */
   DONE(STUDENT);
   DONE(LMS);
-
-  INIT(CHOOSE,  STUDENT, 0,1,0); 
-  INIT(CHOOSECONF, LMS, 0,0,0);
-  INIT(CHOOSEREJ,  LMS, 0,0,0);
+  INIT(START, LMS, 1,0,0);
   INIT(LECTURES,  STUDENT, 0,0,1);
   INIT(CW, STUDENT, 0,0,1);
-  INIT(EXAM, STUDENT, 0,0,0);
+  INIT(EXAM, STUDENT, 0,0,1);
  }
  END_INIT:
 
@@ -106,23 +98,19 @@ proctype LEG()
   * For each of the 5 operations, 2 possible exec
   * are modelled: exec with S and exec with TF */ 
  end:do
- :: L_E(STUDENT, CHOOSE,  S);  
- :: L_E(STUDENT, CHOOSE,  TF); 
-
- :: L_E(LMS, CHOOSEREJ,  S); 
- :: L_E(LMS, CHOOSEREJ,  TF);
-
- :: L_E(LMS, CHOOSECONF, S);
- :: L_E(LMS, CHOOSECONF, TF);
-
- :: L_E(STUDENT, LECTURES,  S);            
+ :: L_E(LMS, START, S);
+ 
+ :: L_E(STUDENT, LECTURES,  S);  
+ :: L_E(STUDENT, LECTURES,  P);  
  :: L_E(STUDENT, LECTURES,  TF);             
 
- :: L_E(STUDENT, CW, S);            
- :: L_E(STUDENT, CW, TF); 
+ :: L_E(STUDENT, CW, S);  
+ :: L_E(STUDENT, CW, P);  
+ :: L_E(STUDENT, CW, TO); 
  
- :: L_E(STUDENT, EXAM, S);            
- :: L_E(STUDENT, EXAM, TF); 
+ :: L_E(STUDENT, EXAM, S);    
+ :: L_E(STUDENT, EXAM, P);  
+ :: L_E(STUDENT, EXAM, TO); 
  od; 
 }
 
@@ -136,9 +124,7 @@ proctype CRM()
 {
  printf("CONTRACT RULE MANAGER"); 
  end:do
-  :: CONTRACT(CHOOSE);  /* include RULE(CHOOSE) */
-  :: CONTRACT(CHOOSECONF); 
-  :: CONTRACT(CHOOSEREJ);  /* include RULE(CHOOSEREJ) */
+  :: CONTRACT(START);
   :: CONTRACT(LECTURES); 
   :: CONTRACT(CW);
   :: CONTRACT(EXAM);
@@ -152,3 +138,20 @@ init
    run LEG(); run CRM(); 
   }
 }
+#define IS_O	?
+#define EXAM,	?
+#define STUDENT	?
+#define IS_X	?
+#define LECTURES,STUDENT	?
+#define CW,	?
+
+tl_spin: parentheses not balanced
+tl_spin: !([]  (((IS_O(EXAM, STUDENT)) U (IS_X(LECTURES,STUDENT) && IS_X(CW, STUDENT))))
+---------^
+
+#ifdef NOTES
+Use Load to open a file or a template.
+#endif
+#ifdef RESULT
+
+#endif

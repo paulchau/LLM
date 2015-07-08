@@ -46,7 +46,7 @@ RULE(LECTURES){
  printf("LECTURES");
  /* handle LECTURES with success outcome */
  WHEN::EVENT(LECTURES,IS_O(LECTURES,STUDENT),SC(LECTURES))
-  ->{SET_X(LECTURES,STUDENT);
+  ->{
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -61,6 +61,7 @@ RULE(LECTURES){
 				SET_O(LECTURES,0);
 				SET_P(EXAM,0);
 				SET_O(EXAM,1);
+				SET_X(LECTURES,STUDENT);
 				RD(LECTURES,STUDENT,CCO,CO);
 		::(LCount==3) ->
 				SET_O(LECTURES,0);
@@ -122,8 +123,7 @@ RULE(LECTURES){
 RULE(CW){
  printf("CW ");
  /* handle CW with success outcome */
- WHEN::EVENT(CW,IS_O(CW,STUDENT),SC(CW))
-  ->{ SET_X(CW,STUDENT);
+ WHEN::EVENT(CW,IS_O(CW,STUDENT),SC(CW))->{ 
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -142,6 +142,7 @@ RULE(CW){
 				printf("LECTURES are now continued");
 				RD(CW,STUDENT,CCO,CO);
 		::(CwCount==cw) ->	
+				SET_X(CW,STUDENT);
 				SET_O(CW,0);
 				SET_P(LECTURES,0);
 				SET_O(LECTURES,1);
@@ -152,8 +153,7 @@ RULE(CW){
     }	
 	
  /* handle CW with technical failure outcome */
- ::EVENT(CW,IS_O(CW,STUDENT),TO(CW))
-  ->{
+ ::EVENT(CW,IS_O(CW,STUDENT),TO(CW))->{
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -191,8 +191,7 @@ RULE(CW){
 RULE(EXAM){
  printf("EXAM ");
  /* handle CW with success outcome */
- WHEN::EVENT(EXAM,IS_O(EXAM,STUDENT),SC(EXAM))
-  ->{ SET_X(EXAM,STUDENT);
+ WHEN::EVENT(EXAM,IS_O(EXAM,STUDENT),SC(EXAM))->{ 
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -204,6 +203,7 @@ RULE(EXAM){
 	ExamCount=ExamCount+1;	 
 	 if
 		::(ExamCount==exam) ->	
+				SET_X(EXAM,STUDENT);
 				SET_O(EXAM,0);
 				atomic{
 				printf("\n\n");
