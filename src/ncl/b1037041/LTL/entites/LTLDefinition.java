@@ -20,6 +20,12 @@ public class LTLDefinition implements Serializable{
 		this.nickname = nickname;
 	}
 	
+	public LTLDefinition() {
+		this.formula="";
+		this.description = "";
+		this.nickname = "";
+	}
+
 	public int getId() {
 		return id;
 	}

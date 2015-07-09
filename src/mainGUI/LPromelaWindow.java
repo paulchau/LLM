@@ -25,6 +25,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JLabel;
 
 import ncl.b1037041.LTL.entites.LTLDefinition;
+import ncl.b1037041.dao.ImplLTLDao;
 
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
@@ -44,6 +45,7 @@ public class LPromelaWindow {
 	private JTextArea rule;
 	private ArrayList<String> files = new ArrayList<String>();
 	private ArrayList<LTLDefinition> ltlList = new ArrayList<LTLDefinition>();
+	private ImplLTLDao dao = new ImplLTLDao();
 
 	/**
 	 * Launch the application.
@@ -282,7 +284,7 @@ public class LPromelaWindow {
 				JOptionPane.showMessageDialog(frmLpromela,
 						"Error! Fail to load the content.");
 			}
-
+			ltlList = dao.getAllLTLDefinition();
 			try {
 				File fileLTL = new File(fileRoot + "file.ltl");
 				FileInputStream fis3 = new FileInputStream(fileLTL);
