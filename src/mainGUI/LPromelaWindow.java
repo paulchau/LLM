@@ -153,7 +153,7 @@ public class LPromelaWindow {
 			bw2.close();
 			BufferedWriter bw3 = new BufferedWriter(new FileWriter(file3));
 			String input = pml.getText();
-			if (chooseLTL.getFormula() != null) {
+			if (!(chooseLTL == null)) {
 				input += "ltl ltlCheck {" + chooseLTL.getFormula() + "}";
 			}
 			bw3.write(input);
@@ -181,7 +181,7 @@ public class LPromelaWindow {
 			}
 		}
 		String command1 = "./spin -a \"./test.pml\"";
-		String command2 = "cc -o ./pan ./pan.c";
+		String command2 = "cc -o pan pan.c";
 		String command3 = "./pan -a";
 		Runtime runtime = Runtime.getRuntime();
 		Process proc1 = runtime.exec(command1);
@@ -190,15 +190,17 @@ public class LPromelaWindow {
 		} catch (InterruptedException e) {
 			System.out.println("proc1 error");
 		}
+		proc1.getOutputStream().close();
 		Process proc2 = runtime.exec(command2);
 		try {
 			proc2.waitFor();
 		} catch (InterruptedException e) {
 			System.out.println("proc2 error");
 		}
+		proc2.getOutputStream().close();
 		Process proc3 = runtime.exec(command3);
 		proc3.getOutputStream().close();
-		System.out.println("proc1");
+		System.out.println("proc3");
 		output = "Verification Result: <br>";
 		String line = "";
 		BufferedReader stdout = new BufferedReader(new InputStreamReader(

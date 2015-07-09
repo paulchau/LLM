@@ -1,4 +1,18 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
@@ -152,4 +166,3 @@ init
    run LEG(); run CRM(); 
   }
 }
-ltl P1 {[](IS_X(C1, STUDENT)&&(choose1 == TRUE) -> IS_P(C1, STUDENT))}
