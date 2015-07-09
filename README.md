@@ -12,7 +12,7 @@ The SPIN compiler, spin.exe is attached together with the executable Java file.
 To successfully compile the file, the marcos attached, i.e. 
 * setting.h
 * EduOperation.h
-* verctor.lpr
+* bitverctor.lpr
 * for.h
 
 are required to deploy in the same folder as your LPromela and Rules file.
