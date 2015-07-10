@@ -1,9 +1,9 @@
-never ltlCheck {    /* !(! (<> ((STUDENTexTrace&(1<<EXAM_bo.id))))) */
+never P1 {    /* !([] ((! (((STUDENTexTrace&(1<<C1_bo.id))) && ((choose1==1)))) || (((C1_bo.prohib==1)) && ((C1_bo.role_pl==STUDENT))))) */
 T0_init:
-	if
-	:: (((STUDENTexTrace&(1<<EXAM_bo.id)))) -> goto accept_all
+	do
+	:: atomic { (! (((! (((STUDENTexTrace&(1<<C1_bo.id))) && ((choose1==1)))) || (((C1_bo.prohib==1)) && ((C1_bo.role_pl==STUDENT)))))) -> assert(!(! (((! (((STUDENTexTrace&(1<<C1_bo.id))) && ((choose1==1)))) || (((C1_bo.prohib==1)) && ((C1_bo.role_pl==STUDENT))))))) }
 	:: (1) -> goto T0_init
-	fi;
+	od;
 accept_all:
 	skip
 }

@@ -475,28 +475,17 @@ public class LPromelaWindow {
 		JMenu mnLtl = new JMenu("LTL Manager");
 		menuBar.add(mnLtl);
 
-		JMenuItem mntmConstructLtl = new JMenuItem("Construct LTL");
+		JMenuItem mntmConstructLtl = new JMenuItem("Construct LTL template");
 		mntmConstructLtl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LTLSetting ls = new LTLSetting(frmLpromela);
-				ls.display();
-				try {
-					LTLDefinition ltl = ls.getLTL();
-					if (ltlList.isEmpty()) {
-						ltl.setId(1);
-					} else {
-						ltl.setId(ltlList.size() + 1);
-					}
-					ltlList.add(ltl);
-				} catch (NullPointerException npe) {
-					JOptionPane.showMessageDialog(frmLpromela,
-							"No New LTL formula added");
-				}
+				ls.setVisible(true);
+				ltlList = dao.getAllLTLDefinition();
 			}
 		});
 		mnLtl.add(mntmConstructLtl);
 
-		JMenuItem mntmAddLtl = new JMenuItem("View LTL");
+		JMenuItem mntmAddLtl = new JMenuItem("View LTL template");
 		mntmAddLtl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LTL_list list = new LTL_list();

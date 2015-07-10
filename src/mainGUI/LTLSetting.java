@@ -2,6 +2,7 @@ package mainGUI;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -17,56 +18,90 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import ncl.b1037041.LTL.entites.LTLDefinition;
+import ncl.b1037041.dao.ImplLTLDao;
 
 public class LTLSetting extends JFrame {
 
 	private JFrame frame;
-	private JPanel contentPane;
+	private JPanel newPanel;
+	private JPanel manPanel;
 	private JDialog dialog;
+
+	public LTLSetting(JFrame frame) {
+		setTitle("LTL Management System");
+		this.frame = frame;
+		getContentPane().setLayout(null);
+		this.setSize(680, 800);
+		setLocationRelativeTo(null);
+
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		splitPane.setBounds(0, 0, 650, 750);
+		splitPane.setDividerLocation(300);
+		splitPane.setDividerSize(10);
+		getContentPane().add(splitPane);
+
+		newPanel = new newLTL();
+		manPanel = new LTLmang();
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.add(manPanel);
+		splitPane.setRightComponent(scrollPane);
+		splitPane.setLeftComponent(newPanel);
+		newPanel.setLayout(null);
+	}
+
+	public void close() {
+		dialog.setVisible(false);
+		this.dispose();
+	}
+}
+
+class newLTL extends JPanel {
 	private JTextField name;
 	private JTextField formula;
 	private JTextField description;
-	private LTLDefinition nLTL;
+	private ImplLTLDao dao = new ImplLTLDao();
 
-	public LTLSetting(JFrame frame) {
-		this.frame = frame;
-	}
-
-	private JPanel mainPanel() {
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-
+	public newLTL() {
 		JLabel lblDescription = new JLabel("Description:");
 		lblDescription.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblDescription.setBounds(21, 42, 109, 42);
-		contentPane.add(lblDescription);
+		this.add(lblDescription);
+
+		description = new JTextField();
+		description.setColumns(10);
+		description.setBounds(162, 49, 313, 33);
+		this.add(description);
 
 		JLabel lblFormula = new JLabel("Formula:");
 		lblFormula.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblFormula.setBounds(21, 156, 109, 42);
-		contentPane.add(lblFormula);
+		this.add(lblFormula);
 
 		name = new JTextField();
 		name.setBounds(162, 110, 313, 33);
-		contentPane.add(name);
+		this.add(name);
 		name.setColumns(10);
 
 		JLabel lblLtlLabel = new JLabel("Name of the LTL:");
 		lblLtlLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblLtlLabel.setBounds(21, 103, 131, 42);
-		contentPane.add(lblLtlLabel);
+		this.add(lblLtlLabel);
 
 		formula = new JTextField();
 		formula.setColumns(10);
 		formula.setBounds(162, 163, 313, 33);
-		contentPane.add(formula);
+		this.add(formula);
 
 		JButton btnAddNewLtl = new JButton("Add New LTL");
 		btnAddNewLtl.addActionListener(new ActionListener() {
@@ -74,10 +109,9 @@ public class LTLSetting extends JFrame {
 				if ((!formula.getText().isEmpty())
 						&& (!description.getText().isEmpty())
 						&& (!name.getText().isEmpty())) {
-					nLTL = new LTLDefinition(formula.getText(), description
-							.getText(), name.getText());
+					dao.addLTLForlumaPrototype(description.getText(),
+							formula.getText(), name.getText());
 					JOptionPane.showMessageDialog(null, "New LTL added");
-					close();
 				} else {
 					JOptionPane
 							.showMessageDialog(null,
@@ -85,8 +119,8 @@ public class LTLSetting extends JFrame {
 				}
 			}
 		});
-		btnAddNewLtl.setBounds(500, 167, 100, 40);
-		contentPane.add(btnAddNewLtl);
+		btnAddNewLtl.setBounds(500, 167, 120, 20);
+		this.add(btnAddNewLtl);
 
 		final JButton bt_not = new JButton("!");
 		bt_not.setToolTipText("not");
@@ -96,7 +130,7 @@ public class LTLSetting extends JFrame {
 			}
 		});
 		bt_not.setBounds(60, 236, 61, 25);
-		getContentPane().add(bt_not);
+		this.add(bt_not);
 
 		final JButton bt_and = new JButton("&&");
 		bt_and.setToolTipText("and");
@@ -106,7 +140,7 @@ public class LTLSetting extends JFrame {
 			}
 		});
 		bt_and.setBounds(120, 236, 61, 25);
-		getContentPane().add(bt_and);
+		this.add(bt_and);
 
 		final JButton bt_or = new JButton("||");
 		bt_or.setToolTipText("or");
@@ -116,7 +150,7 @@ public class LTLSetting extends JFrame {
 			}
 		});
 		bt_or.setBounds(180, 236, 61, 25);
-		getContentPane().add(bt_or);
+		this.add(bt_or);
 
 		final JButton bt_implies = new JButton("->");
 		bt_implies.setToolTipText("implies");
@@ -126,7 +160,7 @@ public class LTLSetting extends JFrame {
 			}
 		});
 		bt_implies.setBounds(240, 236, 61, 25);
-		getContentPane().add(bt_implies);
+		this.add(bt_implies);
 
 		final JButton bt_equivalent = new JButton("<->");
 		bt_equivalent.setToolTipText("equivalent");
@@ -136,7 +170,7 @@ public class LTLSetting extends JFrame {
 			}
 		});
 		bt_equivalent.setBounds(300, 236, 61, 25);
-		getContentPane().add(bt_equivalent);
+		this.add(bt_equivalent);
 
 		final JButton bt_always = new JButton("[]");
 		bt_always.setToolTipText("always");
@@ -146,7 +180,7 @@ public class LTLSetting extends JFrame {
 			}
 		});
 		bt_always.setBounds(360, 236, 61, 25);
-		getContentPane().add(bt_always);
+		this.add(bt_always);
 
 		final JButton bt_eventually = new JButton("<>");
 		bt_eventually.setToolTipText("eventually");
@@ -156,7 +190,7 @@ public class LTLSetting extends JFrame {
 			}
 		});
 		bt_eventually.setBounds(420, 236, 61, 25);
-		getContentPane().add(bt_eventually);
+		this.add(bt_eventually);
 
 		final JButton bt_until = new JButton("U");
 		bt_until.setToolTipText("until");
@@ -166,7 +200,7 @@ public class LTLSetting extends JFrame {
 			}
 		});
 		bt_until.setBounds(480, 236, 61, 25);
-		getContentPane().add(bt_until);
+		this.add(bt_until);
 
 		final JButton bt_variable = new JButton("@V@");
 		bt_variable.setToolTipText("define replaceable variables, e.g. @V2@");
@@ -176,41 +210,106 @@ public class LTLSetting extends JFrame {
 			}
 		});
 		bt_variable.setBounds(540, 236, 61, 25);
-		getContentPane().add(bt_variable);
+		this.add(bt_variable);
 
-		description = new JTextField();
-		description.setColumns(10);
-		description.setBounds(162, 49, 313, 33);
-		contentPane.add(description);
-		return contentPane;
-	}
-
-	public void display() {
-		dialog = new JDialog(frame, "Add LTL", true);
-		dialog.setSize(692, 341);
-		dialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		dialog.setContentPane(mainPanel());
-		dialog.setLocationRelativeTo(frame);
-		dialog.setVisible(true);
-	}
-
-	public void close() {
-		dialog.setVisible(false);
-		this.dispose();
 	}
 
 	private void showButtonSymbol(JButton button) {
 		String curentString = formula.getText() == null ? "" : formula
 				.getText() + button.getText();
+		String des = description.getText() == null ? "" : description.getText()
+				+ " " + button.getToolTipText();
+		description.setText("");
+		description.setText(des);
+		description.requestFocus();
 		formula.setText("");
 		formula.setText(curentString);
 		formula.requestFocus();
-	}
 
-	public LTLDefinition getLTL() {
-		System.out.println(nLTL);
-		return nLTL;
 	}
+}
 
+class LTLmang extends JPanel {
+	private ImplLTLDao dao = new ImplLTLDao();
+
+	public LTLmang() {
+		this.removeAll();
+		this.repaint();
+
+		List<LTLDefinition> definitions = dao.getAllLTLDefinition();
+
+		// one column
+		setLayout(new GridLayout(definitions.size(), 1));
+
+		Iterator<LTLDefinition> it = definitions.iterator();
+		LTLDefinition definition = null;
+		LTLItemPanel itemPanel = null;
+		while (it.hasNext()) {
+			definition = it.next();
+			itemPanel = new LTLItemPanel(definition);
+			this.add(itemPanel);
+		}
+
+		this.validate();
+	}
+}
+
+class LTLItemPanel extends JPanel {
+	private JTextField name;
+	private JTextField formula;
+	private JTextField description;
+	private int id;
+	private ImplLTLDao dao = new ImplLTLDao();
+
+	public LTLItemPanel(LTLDefinition definition) {
+		JLabel lblDescription = new JLabel("Description:");
+		lblDescription.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblDescription.setBounds(21, 42, 109, 42);
+		this.add(lblDescription);
+
+		description = new JTextField();
+		description.setColumns(10);
+		description.setBounds(162, 49, 313, 33);
+		description.setText(definition.getDescription());
+		this.add(description);
+
+		JLabel lblFormula = new JLabel("Formula:");
+		lblFormula.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblFormula.setBounds(21, 156, 109, 42);
+		this.add(lblFormula);
+
+		name = new JTextField();
+		name.setBounds(162, 110, 313, 33);
+		name.setText(definition.getNickname());
+		this.add(name);
+		name.setColumns(10);
+
+		JLabel lblLtlLabel = new JLabel("Name of the LTL:");
+		lblLtlLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblLtlLabel.setBounds(21, 103, 131, 42);
+		this.add(lblLtlLabel);
+
+		formula = new JTextField();
+		formula.setColumns(10);
+		formula.setText(definition.getFormula());
+		formula.setBounds(162, 163, 313, 33);
+		this.add(formula);
+
+		id = definition.getId();
+
+		JButton btnAddNewLtl = new JButton("Delete");
+		btnAddNewLtl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (JOptionPane.showConfirmDialog(null,
+						"Are you sure you need to delete this template?",
+						"Delete..", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					dao.deleteLpm(id);
+				} else {
+					JOptionPane.showMessageDialog(null, "Not removed");
+				}
+			}
+		});
+		btnAddNewLtl.setBounds(500, 167, 120, 20);
+		this.add(btnAddNewLtl);
+	}
 }
