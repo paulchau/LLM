@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JLabel;
 
+import ncl.b1037041.LTL.entites.LPromelaModel;
 import ncl.b1037041.LTL.entites.LTLDefinition;
 import ncl.b1037041.dao.ImplLTLDao;
 
@@ -245,6 +246,10 @@ public class LPromelaWindow {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
 			fileDir = file.getAbsolutePath();
+			LPromelaModel lpm = new LPromelaModel();
+			lpm.setFilePath(fileDir);
+			lpm.setName(file.getName());
+			dao.addLpm(lpm);
 			filePath = file.getAbsolutePath().substring(0,
 					fileDir.indexOf(file.getName(), 0));
 			fileRoot = filePath;
