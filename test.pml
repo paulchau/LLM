@@ -13,6 +13,31 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
@@ -165,4 +190,4 @@ init
   { 
    run LEG(); run CRM(); 
   }
-}
+}ltl ltlCheck {  [] IS_P( C1 )}

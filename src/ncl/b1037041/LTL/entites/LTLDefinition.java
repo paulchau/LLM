@@ -69,6 +69,6 @@ public class LTLDefinition implements Serializable{
 	}
 	
 	public String toString(){
-		return nickname;
+		return description;
 	}
 }

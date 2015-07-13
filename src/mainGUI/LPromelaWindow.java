@@ -9,8 +9,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import javax.swing.JTextField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -20,6 +22,8 @@ import javax.swing.JScrollPane;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JLabel;
@@ -31,6 +35,8 @@ import ncl.b1037041.dao.ImplLTLDao;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class LPromelaWindow {
 
@@ -47,6 +53,9 @@ public class LPromelaWindow {
 	private ArrayList<String> files = new ArrayList<String>();
 	private ArrayList<LTLDefinition> ltlList = new ArrayList<LTLDefinition>();
 	private ImplLTLDao dao = new ImplLTLDao();
+	private static final Pattern NO_ERROR_PATTERN = Pattern
+			.compile("State-vector \\d+ byte, depth reached \\d+, errors: 0");
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -116,6 +125,7 @@ public class LPromelaWindow {
 
 	private String Verifier() throws IOException {
 		LTLDefinition chooseLTL = null;
+		ltlList = dao.getAllLTLDefinition();
 		if (ltlList.size() != 0) {
 			LTLDefinition[] temp = new LTLDefinition[ltlList.size()];
 			for (int i = 0; i < ltlList.size(); i++) {
@@ -127,6 +137,46 @@ public class LPromelaWindow {
 					"Add LTL to model", JOptionPane.QUESTION_MESSAGE, null,
 					temp, temp[0]);
 		}
+		if (!(chooseLTL == null)) {
+			ArrayList<String> var = new ArrayList<String>();
+			for (String s : pml.getText().split("\\n")) {
+				if (s.contains("LN_EVENT")) {
+					var.add(s.substring(9, s.length() - 2));
+				}
+			}
+			String[] choice = new String[var.size()];
+			for (int i = 0; i < var.size(); i++) {
+				choice[i] = var.get(i);
+			}
+			int id = 0;
+			String formula = "";
+			String[] text = chooseLTL.getFormula().split(" ");
+			for (String temp : text) {
+				if (temp.contains("@")) {
+					id++;
+					String input = (String) JOptionPane.showInputDialog(
+							frmLpromela, chooseLTL.getDescription(),
+							"Choose variable " + id,
+							JOptionPane.QUESTION_MESSAGE, null, choice,
+							choice[0]);
+					System.out.println(input);
+					while (input == null) {
+						input = (String) JOptionPane.showInputDialog(
+								frmLpromela, chooseLTL.getDescription(),
+								"Choose variable " + id,
+								JOptionPane.QUESTION_MESSAGE, null, choice,
+								choice[0]);
+					}
+					formula = formula + " " + input;
+				} else {
+					formula = formula + " " + temp;
+				}
+				System.out.println("formula: " + formula);
+			}
+			chooseLTL.setFormula(formula);
+		}
+
+		System.out.println(chooseLTL.getFormula());
 		String output = "";
 		File des;
 		File file = new File(fileDir);
@@ -208,8 +258,41 @@ public class LPromelaWindow {
 		String line = "";
 		BufferedReader stdout = new BufferedReader(new InputStreamReader(
 				proc3.getInputStream()));
+		boolean found = false;
 		while ((line = stdout.readLine()) != null) {
+			Matcher matcher = NO_ERROR_PATTERN.matcher(line);
+			if (matcher.find()) {
+				found = true;
+			}
 			output = output + line + "<br>";
+		}
+		if (!found) {
+			JOptionPane.showMessageDialog(null, "Errors found");
+			sf = new SimulateFrame();
+			sf.setVisible(true);
+			String error = "";
+			String command0 = "./spin -t \"./test.pml\"";
+			Runtime runtime0 = Runtime.getRuntime();
+			Process proc0 = runtime0.exec(command0);
+			System.out.println("trail");
+			output = "Output: \n";
+			BufferedReader stdout1 = new BufferedReader(new InputStreamReader(
+					proc0.getInputStream()));
+			while ((line = stdout1.readLine()) != null) {
+				error = error + line + "\n";
+			}
+			stdout1.close();
+			error = error + "\n Error: \n";
+			BufferedReader stderr1 = new BufferedReader(new InputStreamReader(
+					proc0.getErrorStream()));
+			while ((line = stderr1.readLine()) != null) {
+				error = error + line + "\n";
+			}
+			stderr1.close();
+			System.out.println("Done");
+
+			proc0.getOutputStream().close();
+			sf.setText(error);
 		}
 		stdout.close();
 		output = output + "<br> Error: <br>";
@@ -402,6 +485,27 @@ public class LPromelaWindow {
 								"Error! Fail to set the Path.");
 						System.exit(0);
 					}
+					String[] options = { "OK" };
+					JPanel panel = new JPanel();
+					JLabel lbl = new JLabel(
+							"Number of Learning Events to have: ");
+					JTextField txt = new JTextField(10);
+					panel.add(lbl);
+					panel.add(txt);
+					int selectedOption = JOptionPane.showOptionDialog(null,
+							panel, "LPromela Setup Wizard",
+							JOptionPane.YES_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options,
+							options[0]);
+					if (selectedOption == 0) {
+						try {
+							int events = Integer.parseInt(txt.getText());
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(null,
+									"Invalid setup. Program terminate");
+							System.exit(1);
+						}
+					}
 				}
 			}
 		});
@@ -478,7 +582,7 @@ public class LPromelaWindow {
 		JMenuItem mntmConstructLtl = new JMenuItem("Construct LTL template");
 		mntmConstructLtl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LTLSetting ls = new LTLSetting(frmLpromela);
+				LTLSetting ls = new LTLSetting();
 				ls.setVisible(true);
 				ltlList = dao.getAllLTLDefinition();
 			}
@@ -612,5 +716,4 @@ public class LPromelaWindow {
 		lblRules.setBounds(418, 0, 89, 25);
 		frmLpromela.getContentPane().add(lblRules);
 	}
-
 }

@@ -484,6 +484,26 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}
 	}
 
+	public void deleteLTL(int id){
+		Connection connection = null;
+		PreparedStatement ps = null;
+		String sql = "delete from ltl_formula_definition where id = " + id;
+		try {
+			connection = DataBaseUtil.getConnection();
+			ps = connection.prepareStatement(sql);
+			ps.execute();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(ps != null) {
+				DataBaseUtil.closeStatement(ps);				
+			}
+			if(connection != null) {
+				DataBaseUtil.closeConnection(connection);
+			}
+		}
+	}
+	
 	@Override
 	public List<StatisticsLTLUsage> getLTLUsageStatistics() {
 		List<StatisticsLTLUsage> results = new ArrayList<StatisticsLTLUsage>();
