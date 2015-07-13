@@ -2,23 +2,36 @@
 	default: Uerror("bad return move");
 	case  0: goto R999; /* nothing to undo */
 
+		 /* CLAIM ltlCheck */
+;
+		
+	case 3: // STATE 1
+		goto R999;
+
+	case 4: // STATE 10
+		;
+		p_restor(II);
+		;
+		;
+		goto R999;
+
 		 /* PROC :init: */
 
-	case 3: // STATE 1
+	case 5: // STATE 1
 		;
 		;
 		delproc(0, now._nr_pr-1);
 		;
 		goto R999;
 
-	case 4: // STATE 2
+	case 6: // STATE 2
 		;
 		;
 		delproc(0, now._nr_pr-1);
 		;
 		goto R999;
 
-	case 5: // STATE 4
+	case 7: // STATE 4
 		;
 		p_restor(II);
 		;
@@ -31,7 +44,7 @@
 		;
 		;
 		
-	case 8: // STATE 3
+	case 10: // STATE 3
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -43,7 +56,7 @@
 ;
 		;
 		
-	case 10: // STATE 5
+	case 12: // STATE 5
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -55,7 +68,7 @@
 ;
 		;
 		
-	case 12: // STATE 7
+	case 14: // STATE 7
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -67,7 +80,7 @@
 ;
 		;
 		
-	case 14: // STATE 9
+	case 16: // STATE 9
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -79,7 +92,7 @@
 ;
 		;
 		
-	case 16: // STATE 11
+	case 18: // STATE 11
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -90,22 +103,22 @@
 		goto R999;
 ;
 		
-	case 17: // STATE 15
+	case 19: // STATE 15
 		goto R999;
 ;
 		;
 		
-	case 19: // STATE 18
+	case 21: // STATE 18
 		;
 		now.STUDENTexTrace = trpt->bup.oval;
 		;
 		goto R999;
 ;
 		
-	case 20: // STATE 19
+	case 22: // STATE 19
 		goto R999;
 
-	case 21: // STATE 26
+	case 23: // STATE 26
 		;
 		now.RegReply_bo.oblig = trpt->bup.oval;
 		;
@@ -115,7 +128,7 @@
 		;
 		;
 		
-	case 24: // STATE 30
+	case 26: // STATE 30
 		;
 		now.RegReq_bo.right = trpt->bup.oval;
 		;
@@ -125,7 +138,7 @@
 		;
 		;
 		
-	case 27: // STATE 34
+	case 29: // STATE 34
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -134,10 +147,10 @@
 		;
 		;
 		
-	case 29: // STATE 38
+	case 31: // STATE 38
 		goto R999;
 
-	case 30: // STATE 46
+	case 32: // STATE 46
 		;
 		now.RegReply_bo.oblig = trpt->bup.oval;
 		;
@@ -147,7 +160,7 @@
 		;
 		;
 		
-	case 33: // STATE 50
+	case 35: // STATE 50
 		;
 		now.RegReq_bo.right = trpt->bup.oval;
 		;
@@ -158,16 +171,16 @@
 		;
 		;
 		
-	case 36: // STATE 54
+	case 38: // STATE 54
 		goto R999;
 
-	case 37: // STATE 61
+	case 39: // STATE 61
 		;
 		_m = unsend(now.CRM2LEG);
 		;
 		goto R999;
 
-	case 38: // STATE 65
+	case 40: // STATE 65
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -175,7 +188,7 @@
 ;
 		;
 		
-	case 40: // STATE 71
+	case 42: // STATE 71
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -187,7 +200,7 @@
 ;
 		;
 		
-	case 42: // STATE 73
+	case 44: // STATE 73
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -199,7 +212,7 @@
 ;
 		;
 		
-	case 44: // STATE 75
+	case 46: // STATE 75
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -211,7 +224,7 @@
 ;
 		;
 		
-	case 46: // STATE 77
+	case 48: // STATE 77
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -223,7 +236,7 @@
 ;
 		;
 		
-	case 48: // STATE 79
+	case 50: // STATE 79
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -238,16 +251,16 @@
 		;
 		;
 		
-	case 51: // STATE 85
+	case 53: // STATE 85
 		goto R999;
 
-	case 52: // STATE 92
+	case 54: // STATE 92
 		;
 		now.LMSexTrace = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 53: // STATE 93
+	case 55: // STATE 93
 		;
 		now.RegReply_bo.oblig = trpt->bup.oval;
 		;
@@ -257,7 +270,7 @@
 		;
 		;
 		
-	case 56: // STATE 97
+	case 58: // STATE 97
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -267,7 +280,7 @@
 		;
 		;
 		
-	case 59: // STATE 101
+	case 61: // STATE 101
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -277,7 +290,7 @@
 		;
 		;
 		
-	case 62: // STATE 105
+	case 64: // STATE 105
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -287,7 +300,7 @@
 		;
 		;
 		
-	case 65: // STATE 109
+	case 67: // STATE 109
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -296,10 +309,10 @@
 		;
 		;
 		
-	case 67: // STATE 113
+	case 69: // STATE 113
 		goto R999;
 
-	case 68: // STATE 121
+	case 70: // STATE 121
 		;
 		now.RegReply_bo.oblig = trpt->bup.oval;
 		;
@@ -309,7 +322,7 @@
 		;
 		;
 		
-	case 71: // STATE 125
+	case 73: // STATE 125
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -319,7 +332,7 @@
 		;
 		;
 		
-	case 74: // STATE 129
+	case 76: // STATE 129
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -329,7 +342,7 @@
 		;
 		;
 		
-	case 77: // STATE 133
+	case 79: // STATE 133
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -340,16 +353,16 @@
 		;
 		;
 		
-	case 80: // STATE 137
+	case 82: // STATE 137
 		goto R999;
 
-	case 81: // STATE 144
+	case 83: // STATE 144
 		;
 		_m = unsend(now.CRM2LEG);
 		;
 		goto R999;
 
-	case 82: // STATE 148
+	case 84: // STATE 148
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -357,7 +370,7 @@
 ;
 		;
 		
-	case 84: // STATE 154
+	case 86: // STATE 154
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -369,7 +382,7 @@
 ;
 		;
 		
-	case 86: // STATE 156
+	case 88: // STATE 156
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -381,7 +394,7 @@
 ;
 		;
 		
-	case 88: // STATE 158
+	case 90: // STATE 158
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -393,7 +406,7 @@
 ;
 		;
 		
-	case 90: // STATE 160
+	case 92: // STATE 160
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -405,7 +418,7 @@
 ;
 		;
 		
-	case 92: // STATE 162
+	case 94: // STATE 162
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -420,16 +433,16 @@
 		;
 		;
 		
-	case 95: // STATE 168
+	case 97: // STATE 168
 		goto R999;
 
-	case 96: // STATE 175
+	case 98: // STATE 175
 		;
 		now.STUDENTexTrace = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 97: // STATE 176
+	case 99: // STATE 176
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -439,7 +452,7 @@
 		;
 		;
 		
-	case 100: // STATE 180
+	case 102: // STATE 180
 		;
 		now.ChooseReject_bo.oblig = trpt->bup.oval;
 		;
@@ -449,7 +462,7 @@
 		;
 		;
 		
-	case 103: // STATE 184
+	case 105: // STATE 184
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -459,7 +472,7 @@
 		;
 		;
 		
-	case 106: // STATE 188
+	case 108: // STATE 188
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -469,7 +482,7 @@
 		;
 		;
 		
-	case 109: // STATE 192
+	case 111: // STATE 192
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -479,7 +492,7 @@
 		;
 		;
 		
-	case 112: // STATE 196
+	case 114: // STATE 196
 		;
 		now.choose1 = trpt->bup.oval;
 		;
@@ -487,7 +500,7 @@
 ;
 		;
 		
-	case 114: // STATE 198
+	case 116: // STATE 198
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -496,10 +509,10 @@
 		;
 		;
 		
-	case 116: // STATE 202
+	case 118: // STATE 202
 		goto R999;
 
-	case 117: // STATE 210
+	case 119: // STATE 210
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -509,7 +522,7 @@
 		;
 		;
 		
-	case 120: // STATE 214
+	case 122: // STATE 214
 		;
 		now.ChooseReject_bo.oblig = trpt->bup.oval;
 		;
@@ -519,7 +532,7 @@
 		;
 		;
 		
-	case 123: // STATE 218
+	case 125: // STATE 218
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -530,10 +543,10 @@
 		;
 		;
 		
-	case 126: // STATE 222
+	case 128: // STATE 222
 		goto R999;
 
-	case 127: // STATE 229
+	case 129: // STATE 229
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -543,13 +556,13 @@
 		;
 		;
 		
-	case 130: // STATE 234
+	case 132: // STATE 234
 		;
 		_m = unsend(now.CRM2LEG);
 		;
 		goto R999;
 
-	case 131: // STATE 238
+	case 133: // STATE 238
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -557,7 +570,7 @@
 ;
 		;
 		
-	case 133: // STATE 244
+	case 135: // STATE 244
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -569,7 +582,7 @@
 ;
 		;
 		
-	case 135: // STATE 246
+	case 137: // STATE 246
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -581,7 +594,7 @@
 ;
 		;
 		
-	case 137: // STATE 248
+	case 139: // STATE 248
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -593,7 +606,7 @@
 ;
 		;
 		
-	case 139: // STATE 250
+	case 141: // STATE 250
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -605,7 +618,7 @@
 ;
 		;
 		
-	case 141: // STATE 252
+	case 143: // STATE 252
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -620,16 +633,16 @@
 		;
 		;
 		
-	case 144: // STATE 258
+	case 146: // STATE 258
 		goto R999;
 
-	case 145: // STATE 265
+	case 147: // STATE 265
 		;
 		now.STUDENTexTrace = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 146: // STATE 266
+	case 148: // STATE 266
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -639,7 +652,7 @@
 		;
 		;
 		
-	case 149: // STATE 270
+	case 151: // STATE 270
 		;
 		now.ChooseReject_bo.oblig = trpt->bup.oval;
 		;
@@ -649,7 +662,7 @@
 		;
 		;
 		
-	case 152: // STATE 274
+	case 154: // STATE 274
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -659,7 +672,7 @@
 		;
 		;
 		
-	case 155: // STATE 278
+	case 157: // STATE 278
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -669,7 +682,7 @@
 		;
 		;
 		
-	case 158: // STATE 282
+	case 160: // STATE 282
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -679,7 +692,7 @@
 		;
 		;
 		
-	case 161: // STATE 286
+	case 163: // STATE 286
 		;
 		now.choose2 = trpt->bup.oval;
 		;
@@ -687,7 +700,7 @@
 ;
 		;
 		
-	case 163: // STATE 288
+	case 165: // STATE 288
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -696,10 +709,10 @@
 		;
 		;
 		
-	case 165: // STATE 292
+	case 167: // STATE 292
 		goto R999;
 
-	case 166: // STATE 300
+	case 168: // STATE 300
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -709,7 +722,7 @@
 		;
 		;
 		
-	case 169: // STATE 304
+	case 171: // STATE 304
 		;
 		now.ChooseReject_bo.oblig = trpt->bup.oval;
 		;
@@ -719,7 +732,7 @@
 		;
 		;
 		
-	case 172: // STATE 308
+	case 174: // STATE 308
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -730,10 +743,10 @@
 		;
 		;
 		
-	case 175: // STATE 312
+	case 177: // STATE 312
 		goto R999;
 
-	case 176: // STATE 319
+	case 178: // STATE 319
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -743,13 +756,13 @@
 		;
 		;
 		
-	case 179: // STATE 324
+	case 181: // STATE 324
 		;
 		_m = unsend(now.CRM2LEG);
 		;
 		goto R999;
 
-	case 180: // STATE 328
+	case 182: // STATE 328
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -757,7 +770,7 @@
 ;
 		;
 		
-	case 182: // STATE 334
+	case 184: // STATE 334
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -769,7 +782,7 @@
 ;
 		;
 		
-	case 184: // STATE 336
+	case 186: // STATE 336
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -781,7 +794,7 @@
 ;
 		;
 		
-	case 186: // STATE 338
+	case 188: // STATE 338
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -793,7 +806,7 @@
 ;
 		;
 		
-	case 188: // STATE 340
+	case 190: // STATE 340
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -805,7 +818,7 @@
 ;
 		;
 		
-	case 190: // STATE 342
+	case 192: // STATE 342
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -820,16 +833,16 @@
 		;
 		;
 		
-	case 193: // STATE 348
+	case 195: // STATE 348
 		goto R999;
 
-	case 194: // STATE 355
+	case 196: // STATE 355
 		;
 		now.STUDENTexTrace = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 195: // STATE 356
+	case 197: // STATE 356
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -839,7 +852,7 @@
 		;
 		;
 		
-	case 198: // STATE 360
+	case 200: // STATE 360
 		;
 		now.ChooseReject_bo.oblig = trpt->bup.oval;
 		;
@@ -849,7 +862,7 @@
 		;
 		;
 		
-	case 201: // STATE 364
+	case 203: // STATE 364
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -859,7 +872,7 @@
 		;
 		;
 		
-	case 204: // STATE 368
+	case 206: // STATE 368
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -869,7 +882,7 @@
 		;
 		;
 		
-	case 207: // STATE 372
+	case 209: // STATE 372
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -879,7 +892,7 @@
 		;
 		;
 		
-	case 210: // STATE 376
+	case 212: // STATE 376
 		;
 		now.choose3 = trpt->bup.oval;
 		;
@@ -887,7 +900,7 @@
 ;
 		;
 		
-	case 212: // STATE 378
+	case 214: // STATE 378
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -896,10 +909,10 @@
 		;
 		;
 		
-	case 214: // STATE 382
+	case 216: // STATE 382
 		goto R999;
 
-	case 215: // STATE 390
+	case 217: // STATE 390
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -909,7 +922,7 @@
 		;
 		;
 		
-	case 218: // STATE 394
+	case 220: // STATE 394
 		;
 		now.ChooseReject_bo.oblig = trpt->bup.oval;
 		;
@@ -919,7 +932,7 @@
 		;
 		;
 		
-	case 221: // STATE 398
+	case 223: // STATE 398
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -930,10 +943,10 @@
 		;
 		;
 		
-	case 224: // STATE 402
+	case 226: // STATE 402
 		goto R999;
 
-	case 225: // STATE 409
+	case 227: // STATE 409
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -943,13 +956,13 @@
 		;
 		;
 		
-	case 228: // STATE 414
+	case 230: // STATE 414
 		;
 		_m = unsend(now.CRM2LEG);
 		;
 		goto R999;
 
-	case 229: // STATE 418
+	case 231: // STATE 418
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -957,7 +970,7 @@
 ;
 		;
 		
-	case 231: // STATE 424
+	case 233: // STATE 424
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -969,7 +982,7 @@
 ;
 		;
 		
-	case 233: // STATE 426
+	case 235: // STATE 426
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -981,7 +994,7 @@
 ;
 		;
 		
-	case 235: // STATE 428
+	case 237: // STATE 428
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -993,7 +1006,7 @@
 ;
 		;
 		
-	case 237: // STATE 430
+	case 239: // STATE 430
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -1005,7 +1018,7 @@
 ;
 		;
 		
-	case 239: // STATE 432
+	case 241: // STATE 432
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -1020,16 +1033,16 @@
 		;
 		;
 		
-	case 242: // STATE 438
+	case 244: // STATE 438
 		goto R999;
 
-	case 243: // STATE 445
+	case 245: // STATE 445
 		;
 		now.LMSexTrace = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 244: // STATE 446
+	case 246: // STATE 446
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -1040,10 +1053,10 @@
 		;
 		;
 		
-	case 247: // STATE 450
+	case 249: // STATE 450
 		goto R999;
 
-	case 248: // STATE 457
+	case 250: // STATE 457
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -1052,10 +1065,10 @@
 		;
 		;
 		
-	case 250: // STATE 461
+	case 252: // STATE 461
 		goto R999;
 
-	case 251: // STATE 469
+	case 253: // STATE 469
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -1065,7 +1078,7 @@
 		;
 		;
 		
-	case 254: // STATE 473
+	case 256: // STATE 473
 		;
 		now.ChooseReject_bo.oblig = trpt->bup.oval;
 		;
@@ -1076,16 +1089,16 @@
 		;
 		;
 		
-	case 257: // STATE 477
+	case 259: // STATE 477
 		goto R999;
 
-	case 258: // STATE 484
+	case 260: // STATE 484
 		;
 		_m = unsend(now.CRM2LEG);
 		;
 		goto R999;
 
-	case 259: // STATE 488
+	case 261: // STATE 488
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -1093,7 +1106,7 @@
 ;
 		;
 		
-	case 261: // STATE 494
+	case 263: // STATE 494
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -1105,7 +1118,7 @@
 ;
 		;
 		
-	case 263: // STATE 496
+	case 265: // STATE 496
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -1117,7 +1130,7 @@
 ;
 		;
 		
-	case 265: // STATE 498
+	case 267: // STATE 498
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -1129,7 +1142,7 @@
 ;
 		;
 		
-	case 267: // STATE 500
+	case 269: // STATE 500
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -1141,7 +1154,7 @@
 ;
 		;
 		
-	case 269: // STATE 502
+	case 271: // STATE 502
 		;
 		XX = 1;
 		unrecv(now.LEG2CRM, XX-1, 0, trpt->bup.ovals[0], 1);
@@ -1156,16 +1169,16 @@
 		;
 		;
 		
-	case 272: // STATE 508
+	case 274: // STATE 508
 		goto R999;
 
-	case 273: // STATE 515
+	case 275: // STATE 515
 		;
 		now.LMSexTrace = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 274: // STATE 516
+	case 276: // STATE 516
 		;
 		now.ChooseReject_bo.oblig = trpt->bup.oval;
 		;
@@ -1175,7 +1188,7 @@
 		;
 		;
 		
-	case 277: // STATE 520
+	case 279: // STATE 520
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -1187,7 +1200,7 @@
 		;
 		;
 		
-	case 281: // STATE 525
+	case 283: // STATE 525
 		;
 		now.C1_bo.prohib = trpt->bup.oval;
 		;
@@ -1199,7 +1212,7 @@
 		;
 		;
 		
-	case 285: // STATE 530
+	case 287: // STATE 530
 		;
 		now.C2_bo.prohib = trpt->bup.oval;
 		;
@@ -1211,7 +1224,7 @@
 		;
 		;
 		
-	case 289: // STATE 535
+	case 291: // STATE 535
 		;
 		now.C3_bo.prohib = trpt->bup.oval;
 		;
@@ -1221,13 +1234,13 @@
 		;
 		;
 		
-	case 292: // STATE 539
+	case 294: // STATE 539
 		;
 		now.all = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 293: // STATE 541
+	case 295: // STATE 541
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -1237,7 +1250,7 @@
 		;
 		;
 		
-	case 296: // STATE 548
+	case 298: // STATE 548
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -1249,7 +1262,7 @@
 		;
 		;
 		
-	case 300: // STATE 555
+	case 302: // STATE 555
 		;
 		now.C3_bo.prohib = trpt->bup.oval;
 		;
@@ -1261,7 +1274,7 @@
 		;
 		;
 		
-	case 304: // STATE 560
+	case 306: // STATE 560
 		;
 		now.C2_bo.prohib = trpt->bup.oval;
 		;
@@ -1271,13 +1284,13 @@
 		;
 		;
 		
-	case 307: // STATE 564
+	case 309: // STATE 564
 		;
 		now.all = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 308: // STATE 566
+	case 310: // STATE 566
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -1287,7 +1300,7 @@
 		;
 		;
 		
-	case 311: // STATE 573
+	case 313: // STATE 573
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -1299,7 +1312,7 @@
 		;
 		;
 		
-	case 315: // STATE 580
+	case 317: // STATE 580
 		;
 		now.C2_bo.prohib = trpt->bup.oval;
 		;
@@ -1311,7 +1324,7 @@
 		;
 		;
 		
-	case 319: // STATE 585
+	case 321: // STATE 585
 		;
 		now.C1_bo.prohib = trpt->bup.oval;
 		;
@@ -1323,7 +1336,7 @@
 		;
 		;
 		
-	case 323: // STATE 590
+	case 325: // STATE 590
 		;
 		now.C3_bo.prohib = trpt->bup.oval;
 		;
@@ -1333,13 +1346,13 @@
 		;
 		;
 		
-	case 326: // STATE 594
+	case 328: // STATE 594
 		;
 		now.all = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 327: // STATE 596
+	case 329: // STATE 596
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -1349,7 +1362,7 @@
 		;
 		;
 		
-	case 330: // STATE 603
+	case 332: // STATE 603
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -1361,7 +1374,7 @@
 		;
 		;
 		
-	case 334: // STATE 610
+	case 336: // STATE 610
 		;
 		now.C3_bo.prohib = trpt->bup.oval;
 		;
@@ -1373,7 +1386,7 @@
 		;
 		;
 		
-	case 338: // STATE 615
+	case 340: // STATE 615
 		;
 		now.C1_bo.prohib = trpt->bup.oval;
 		;
@@ -1383,13 +1396,13 @@
 		;
 		;
 		
-	case 341: // STATE 619
+	case 343: // STATE 619
 		;
 		now.all = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 342: // STATE 621
+	case 344: // STATE 621
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -1399,7 +1412,7 @@
 		;
 		;
 		
-	case 345: // STATE 628
+	case 347: // STATE 628
 		;
 		now.C3_bo.oblig = trpt->bup.oval;
 		;
@@ -1411,7 +1424,7 @@
 		;
 		;
 		
-	case 349: // STATE 635
+	case 351: // STATE 635
 		;
 		now.C3_bo.prohib = trpt->bup.oval;
 		;
@@ -1423,7 +1436,7 @@
 		;
 		;
 		
-	case 353: // STATE 640
+	case 355: // STATE 640
 		;
 		now.C2_bo.prohib = trpt->bup.oval;
 		;
@@ -1435,7 +1448,7 @@
 		;
 		;
 		
-	case 357: // STATE 645
+	case 359: // STATE 645
 		;
 		now.C1_bo.prohib = trpt->bup.oval;
 		;
@@ -1445,13 +1458,13 @@
 		;
 		;
 		
-	case 360: // STATE 649
+	case 362: // STATE 649
 		;
 		now.all = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 361: // STATE 651
+	case 363: // STATE 651
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -1461,7 +1474,7 @@
 		;
 		;
 		
-	case 364: // STATE 658
+	case 366: // STATE 658
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -1473,7 +1486,7 @@
 		;
 		;
 		
-	case 368: // STATE 665
+	case 370: // STATE 665
 		;
 		now.C1_bo.prohib = trpt->bup.oval;
 		;
@@ -1485,7 +1498,7 @@
 		;
 		;
 		
-	case 372: // STATE 670
+	case 374: // STATE 670
 		;
 		now.C2_bo.prohib = trpt->bup.oval;
 		;
@@ -1495,13 +1508,13 @@
 		;
 		;
 		
-	case 375: // STATE 674
+	case 377: // STATE 674
 		;
 		now.all = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 376: // STATE 676
+	case 378: // STATE 676
 		;
 		now.C2_bo.oblig = trpt->bup.oval;
 		;
@@ -1511,7 +1524,7 @@
 		;
 		;
 		
-	case 379: // STATE 683
+	case 381: // STATE 683
 		;
 		now.C1_bo.oblig = trpt->bup.oval;
 		;
@@ -1522,20 +1535,20 @@
 		;
 		;
 		
-	case 382: // STATE 691
+	case 384: // STATE 691
 		goto R999;
 ;
 		;
 		;
 		;
 		
-	case 385: // STATE 700
+	case 387: // STATE 700
 		;
 		_m = unsend(now.CRM2LEG);
 		;
 		goto R999;
 
-	case 386: // STATE 703
+	case 388: // STATE 703
 		;
 		_m = unsend(now.CRM2LEG);
 		;
@@ -1544,10 +1557,10 @@
 		;
 		;
 		
-	case 388: // STATE 709
+	case 390: // STATE 709
 		goto R999;
 
-	case 389: // STATE 717
+	case 391: // STATE 717
 		;
 		now.ChooseAccept_bo.oblig = trpt->bup.oval;
 		;
@@ -1557,7 +1570,7 @@
 		;
 		;
 		
-	case 392: // STATE 721
+	case 394: // STATE 721
 		;
 		now.ChooseReject_bo.oblig = trpt->bup.oval;
 		;
@@ -1568,22 +1581,22 @@
 		;
 		;
 		
-	case 395: // STATE 725
+	case 397: // STATE 725
 		goto R999;
 
-	case 396: // STATE 732
+	case 398: // STATE 732
 		;
 		_m = unsend(now.CRM2LEG);
 		;
 		goto R999;
 
-	case 397: // STATE 736
+	case 399: // STATE 736
 		;
 		_m = unsend(now.CRM2LEG);
 		;
 		goto R999;
 
-	case 398: // STATE 744
+	case 400: // STATE 744
 		;
 		p_restor(II);
 		;
@@ -1592,66 +1605,66 @@
 
 		 /* PROC LEG */
 
-	case 399: // STATE 1
+	case 401: // STATE 1
 		;
 		now.cntttr = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 400: // STATE 3
+	case 402: // STATE 3
 		;
 		now.STUDENTexTrace = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 401: // STATE 4
+	case 403: // STATE 4
 		;
 		now.cntttr = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 402: // STATE 6
+	case 404: // STATE 6
 		;
 		now.LMSexTrace = trpt->bup.oval;
 		;
 		goto R999;
-	case 403: // STATE 14
+	case 405: // STATE 14
 		sv_restor();
 		goto R999;
-	case 404: // STATE 23
+	case 406: // STATE 23
 		sv_restor();
 		goto R999;
-	case 405: // STATE 32
+	case 407: // STATE 32
 		sv_restor();
 		goto R999;
-	case 406: // STATE 41
+	case 408: // STATE 41
 		sv_restor();
 		goto R999;
-	case 407: // STATE 50
+	case 409: // STATE 50
 		sv_restor();
 		goto R999;
-	case 408: // STATE 59
+	case 410: // STATE 59
 		sv_restor();
 		goto R999;
-	case 409: // STATE 68
+	case 411: // STATE 68
 		sv_restor();
 		goto R999;
 ;
 		;
 		
-	case 411: // STATE 72
+	case 413: // STATE 72
 		;
 		now.RegReq_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 412: // STATE 73
+	case 414: // STATE 73
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 413: // STATE 75
+	case 415: // STATE 75
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1660,7 +1673,7 @@
 		;
 		goto R999;
 
-	case 414: // STATE 78
+	case 416: // STATE 78
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1669,7 +1682,7 @@
 		;
 		goto R999;
 
-	case 415: // STATE 81
+	case 417: // STATE 81
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1678,7 +1691,7 @@
 		;
 		goto R999;
 
-	case 416: // STATE 84
+	case 418: // STATE 84
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -1687,7 +1700,7 @@
 		;
 		goto R999;
 
-	case 417: // STATE 87
+	case 419: // STATE 87
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1696,7 +1709,7 @@
 		;
 		goto R999;
 
-	case 418: // STATE 90
+	case 420: // STATE 90
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1705,7 +1718,7 @@
 		;
 		goto R999;
 
-	case 419: // STATE 93
+	case 421: // STATE 93
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1714,7 +1727,7 @@
 		;
 		goto R999;
 
-	case 420: // STATE 96
+	case 422: // STATE 96
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1723,7 +1736,7 @@
 		;
 		goto R999;
 
-	case 421: // STATE 99
+	case 423: // STATE 99
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1732,7 +1745,7 @@
 		;
 		goto R999;
 
-	case 422: // STATE 102
+	case 424: // STATE 102
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1741,7 +1754,7 @@
 		;
 		goto R999;
 
-	case 423: // STATE 105
+	case 425: // STATE 105
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1750,7 +1763,7 @@
 		;
 		goto R999;
 
-	case 424: // STATE 108
+	case 426: // STATE 108
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1759,7 +1772,7 @@
 		;
 		goto R999;
 
-	case 425: // STATE 111
+	case 427: // STATE 111
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1770,19 +1783,19 @@
 ;
 		;
 		
-	case 427: // STATE 118
+	case 429: // STATE 118
 		;
 		now.RegReq_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 428: // STATE 119
+	case 430: // STATE 119
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 429: // STATE 121
+	case 431: // STATE 121
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1791,7 +1804,7 @@
 		;
 		goto R999;
 
-	case 430: // STATE 124
+	case 432: // STATE 124
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1800,7 +1813,7 @@
 		;
 		goto R999;
 
-	case 431: // STATE 127
+	case 433: // STATE 127
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1809,7 +1822,7 @@
 		;
 		goto R999;
 
-	case 432: // STATE 130
+	case 434: // STATE 130
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -1818,7 +1831,7 @@
 		;
 		goto R999;
 
-	case 433: // STATE 133
+	case 435: // STATE 133
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1827,7 +1840,7 @@
 		;
 		goto R999;
 
-	case 434: // STATE 136
+	case 436: // STATE 136
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1836,7 +1849,7 @@
 		;
 		goto R999;
 
-	case 435: // STATE 139
+	case 437: // STATE 139
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1845,7 +1858,7 @@
 		;
 		goto R999;
 
-	case 436: // STATE 142
+	case 438: // STATE 142
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1854,7 +1867,7 @@
 		;
 		goto R999;
 
-	case 437: // STATE 145
+	case 439: // STATE 145
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1863,7 +1876,7 @@
 		;
 		goto R999;
 
-	case 438: // STATE 148
+	case 440: // STATE 148
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1872,7 +1885,7 @@
 		;
 		goto R999;
 
-	case 439: // STATE 151
+	case 441: // STATE 151
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1881,7 +1894,7 @@
 		;
 		goto R999;
 
-	case 440: // STATE 154
+	case 442: // STATE 154
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1890,7 +1903,7 @@
 		;
 		goto R999;
 
-	case 441: // STATE 157
+	case 443: // STATE 157
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1901,19 +1914,19 @@
 ;
 		;
 		
-	case 443: // STATE 164
+	case 445: // STATE 164
 		;
 		now.RegReply_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 444: // STATE 165
+	case 446: // STATE 165
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 445: // STATE 167
+	case 447: // STATE 167
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1922,7 +1935,7 @@
 		;
 		goto R999;
 
-	case 446: // STATE 170
+	case 448: // STATE 170
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1931,7 +1944,7 @@
 		;
 		goto R999;
 
-	case 447: // STATE 173
+	case 449: // STATE 173
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1940,7 +1953,7 @@
 		;
 		goto R999;
 
-	case 448: // STATE 176
+	case 450: // STATE 176
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -1949,7 +1962,7 @@
 		;
 		goto R999;
 
-	case 449: // STATE 179
+	case 451: // STATE 179
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1958,7 +1971,7 @@
 		;
 		goto R999;
 
-	case 450: // STATE 182
+	case 452: // STATE 182
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1967,7 +1980,7 @@
 		;
 		goto R999;
 
-	case 451: // STATE 185
+	case 453: // STATE 185
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -1976,7 +1989,7 @@
 		;
 		goto R999;
 
-	case 452: // STATE 188
+	case 454: // STATE 188
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -1985,7 +1998,7 @@
 		;
 		goto R999;
 
-	case 453: // STATE 191
+	case 455: // STATE 191
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -1994,7 +2007,7 @@
 		;
 		goto R999;
 
-	case 454: // STATE 194
+	case 456: // STATE 194
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2003,7 +2016,7 @@
 		;
 		goto R999;
 
-	case 455: // STATE 197
+	case 457: // STATE 197
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2012,7 +2025,7 @@
 		;
 		goto R999;
 
-	case 456: // STATE 200
+	case 458: // STATE 200
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2021,7 +2034,7 @@
 		;
 		goto R999;
 
-	case 457: // STATE 203
+	case 459: // STATE 203
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2032,19 +2045,19 @@
 ;
 		;
 		
-	case 459: // STATE 210
+	case 461: // STATE 210
 		;
 		now.RegReply_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 460: // STATE 211
+	case 462: // STATE 211
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 461: // STATE 213
+	case 463: // STATE 213
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2053,7 +2066,7 @@
 		;
 		goto R999;
 
-	case 462: // STATE 216
+	case 464: // STATE 216
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2062,7 +2075,7 @@
 		;
 		goto R999;
 
-	case 463: // STATE 219
+	case 465: // STATE 219
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2071,7 +2084,7 @@
 		;
 		goto R999;
 
-	case 464: // STATE 222
+	case 466: // STATE 222
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -2080,7 +2093,7 @@
 		;
 		goto R999;
 
-	case 465: // STATE 225
+	case 467: // STATE 225
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2089,7 +2102,7 @@
 		;
 		goto R999;
 
-	case 466: // STATE 228
+	case 468: // STATE 228
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2098,7 +2111,7 @@
 		;
 		goto R999;
 
-	case 467: // STATE 231
+	case 469: // STATE 231
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2107,7 +2120,7 @@
 		;
 		goto R999;
 
-	case 468: // STATE 234
+	case 470: // STATE 234
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2116,7 +2129,7 @@
 		;
 		goto R999;
 
-	case 469: // STATE 237
+	case 471: // STATE 237
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2125,7 +2138,7 @@
 		;
 		goto R999;
 
-	case 470: // STATE 240
+	case 472: // STATE 240
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2134,7 +2147,7 @@
 		;
 		goto R999;
 
-	case 471: // STATE 243
+	case 473: // STATE 243
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2143,7 +2156,7 @@
 		;
 		goto R999;
 
-	case 472: // STATE 246
+	case 474: // STATE 246
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2152,7 +2165,7 @@
 		;
 		goto R999;
 
-	case 473: // STATE 249
+	case 475: // STATE 249
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2163,19 +2176,19 @@
 ;
 		;
 		
-	case 475: // STATE 256
+	case 477: // STATE 256
 		;
 		now.C1_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 476: // STATE 257
+	case 478: // STATE 257
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 477: // STATE 259
+	case 479: // STATE 259
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2184,7 +2197,7 @@
 		;
 		goto R999;
 
-	case 478: // STATE 262
+	case 480: // STATE 262
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2193,7 +2206,7 @@
 		;
 		goto R999;
 
-	case 479: // STATE 265
+	case 481: // STATE 265
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2202,7 +2215,7 @@
 		;
 		goto R999;
 
-	case 480: // STATE 268
+	case 482: // STATE 268
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -2211,7 +2224,7 @@
 		;
 		goto R999;
 
-	case 481: // STATE 271
+	case 483: // STATE 271
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2220,7 +2233,7 @@
 		;
 		goto R999;
 
-	case 482: // STATE 274
+	case 484: // STATE 274
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2229,7 +2242,7 @@
 		;
 		goto R999;
 
-	case 483: // STATE 277
+	case 485: // STATE 277
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2238,7 +2251,7 @@
 		;
 		goto R999;
 
-	case 484: // STATE 280
+	case 486: // STATE 280
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2247,7 +2260,7 @@
 		;
 		goto R999;
 
-	case 485: // STATE 283
+	case 487: // STATE 283
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2256,7 +2269,7 @@
 		;
 		goto R999;
 
-	case 486: // STATE 286
+	case 488: // STATE 286
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2265,7 +2278,7 @@
 		;
 		goto R999;
 
-	case 487: // STATE 289
+	case 489: // STATE 289
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2274,7 +2287,7 @@
 		;
 		goto R999;
 
-	case 488: // STATE 292
+	case 490: // STATE 292
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2283,7 +2296,7 @@
 		;
 		goto R999;
 
-	case 489: // STATE 295
+	case 491: // STATE 295
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2294,19 +2307,19 @@
 ;
 		;
 		
-	case 491: // STATE 302
+	case 493: // STATE 302
 		;
 		now.C1_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 492: // STATE 303
+	case 494: // STATE 303
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 493: // STATE 305
+	case 495: // STATE 305
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2315,7 +2328,7 @@
 		;
 		goto R999;
 
-	case 494: // STATE 308
+	case 496: // STATE 308
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2324,7 +2337,7 @@
 		;
 		goto R999;
 
-	case 495: // STATE 311
+	case 497: // STATE 311
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2333,7 +2346,7 @@
 		;
 		goto R999;
 
-	case 496: // STATE 314
+	case 498: // STATE 314
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -2342,7 +2355,7 @@
 		;
 		goto R999;
 
-	case 497: // STATE 317
+	case 499: // STATE 317
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2351,7 +2364,7 @@
 		;
 		goto R999;
 
-	case 498: // STATE 320
+	case 500: // STATE 320
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2360,7 +2373,7 @@
 		;
 		goto R999;
 
-	case 499: // STATE 323
+	case 501: // STATE 323
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2369,7 +2382,7 @@
 		;
 		goto R999;
 
-	case 500: // STATE 326
+	case 502: // STATE 326
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2378,7 +2391,7 @@
 		;
 		goto R999;
 
-	case 501: // STATE 329
+	case 503: // STATE 329
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2387,7 +2400,7 @@
 		;
 		goto R999;
 
-	case 502: // STATE 332
+	case 504: // STATE 332
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2396,7 +2409,7 @@
 		;
 		goto R999;
 
-	case 503: // STATE 335
+	case 505: // STATE 335
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2405,7 +2418,7 @@
 		;
 		goto R999;
 
-	case 504: // STATE 338
+	case 506: // STATE 338
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2414,7 +2427,7 @@
 		;
 		goto R999;
 
-	case 505: // STATE 341
+	case 507: // STATE 341
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2425,19 +2438,19 @@
 ;
 		;
 		
-	case 507: // STATE 348
+	case 509: // STATE 348
 		;
 		now.C1_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 508: // STATE 349
+	case 510: // STATE 349
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 509: // STATE 351
+	case 511: // STATE 351
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2446,7 +2459,7 @@
 		;
 		goto R999;
 
-	case 510: // STATE 354
+	case 512: // STATE 354
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2455,7 +2468,7 @@
 		;
 		goto R999;
 
-	case 511: // STATE 357
+	case 513: // STATE 357
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2464,7 +2477,7 @@
 		;
 		goto R999;
 
-	case 512: // STATE 360
+	case 514: // STATE 360
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -2473,7 +2486,7 @@
 		;
 		goto R999;
 
-	case 513: // STATE 363
+	case 515: // STATE 363
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2482,7 +2495,7 @@
 		;
 		goto R999;
 
-	case 514: // STATE 366
+	case 516: // STATE 366
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2491,7 +2504,7 @@
 		;
 		goto R999;
 
-	case 515: // STATE 369
+	case 517: // STATE 369
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2500,7 +2513,7 @@
 		;
 		goto R999;
 
-	case 516: // STATE 372
+	case 518: // STATE 372
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2509,7 +2522,7 @@
 		;
 		goto R999;
 
-	case 517: // STATE 375
+	case 519: // STATE 375
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2518,7 +2531,7 @@
 		;
 		goto R999;
 
-	case 518: // STATE 378
+	case 520: // STATE 378
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2527,7 +2540,7 @@
 		;
 		goto R999;
 
-	case 519: // STATE 381
+	case 521: // STATE 381
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2536,7 +2549,7 @@
 		;
 		goto R999;
 
-	case 520: // STATE 384
+	case 522: // STATE 384
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2545,7 +2558,7 @@
 		;
 		goto R999;
 
-	case 521: // STATE 387
+	case 523: // STATE 387
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2556,19 +2569,19 @@
 ;
 		;
 		
-	case 523: // STATE 394
+	case 525: // STATE 394
 		;
 		now.C2_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 524: // STATE 395
+	case 526: // STATE 395
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 525: // STATE 397
+	case 527: // STATE 397
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2577,7 +2590,7 @@
 		;
 		goto R999;
 
-	case 526: // STATE 400
+	case 528: // STATE 400
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2586,7 +2599,7 @@
 		;
 		goto R999;
 
-	case 527: // STATE 403
+	case 529: // STATE 403
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2595,7 +2608,7 @@
 		;
 		goto R999;
 
-	case 528: // STATE 406
+	case 530: // STATE 406
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -2604,7 +2617,7 @@
 		;
 		goto R999;
 
-	case 529: // STATE 409
+	case 531: // STATE 409
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2613,7 +2626,7 @@
 		;
 		goto R999;
 
-	case 530: // STATE 412
+	case 532: // STATE 412
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2622,7 +2635,7 @@
 		;
 		goto R999;
 
-	case 531: // STATE 415
+	case 533: // STATE 415
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2631,7 +2644,7 @@
 		;
 		goto R999;
 
-	case 532: // STATE 418
+	case 534: // STATE 418
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2640,7 +2653,7 @@
 		;
 		goto R999;
 
-	case 533: // STATE 421
+	case 535: // STATE 421
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2649,7 +2662,7 @@
 		;
 		goto R999;
 
-	case 534: // STATE 424
+	case 536: // STATE 424
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2658,7 +2671,7 @@
 		;
 		goto R999;
 
-	case 535: // STATE 427
+	case 537: // STATE 427
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2667,7 +2680,7 @@
 		;
 		goto R999;
 
-	case 536: // STATE 430
+	case 538: // STATE 430
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2676,7 +2689,7 @@
 		;
 		goto R999;
 
-	case 537: // STATE 433
+	case 539: // STATE 433
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2687,19 +2700,19 @@
 ;
 		;
 		
-	case 539: // STATE 440
+	case 541: // STATE 440
 		;
 		now.C2_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 540: // STATE 441
+	case 542: // STATE 441
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 541: // STATE 443
+	case 543: // STATE 443
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2708,7 +2721,7 @@
 		;
 		goto R999;
 
-	case 542: // STATE 446
+	case 544: // STATE 446
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2717,7 +2730,7 @@
 		;
 		goto R999;
 
-	case 543: // STATE 449
+	case 545: // STATE 449
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2726,7 +2739,7 @@
 		;
 		goto R999;
 
-	case 544: // STATE 452
+	case 546: // STATE 452
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -2735,7 +2748,7 @@
 		;
 		goto R999;
 
-	case 545: // STATE 455
+	case 547: // STATE 455
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2744,7 +2757,7 @@
 		;
 		goto R999;
 
-	case 546: // STATE 458
+	case 548: // STATE 458
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2753,7 +2766,7 @@
 		;
 		goto R999;
 
-	case 547: // STATE 461
+	case 549: // STATE 461
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2762,7 +2775,7 @@
 		;
 		goto R999;
 
-	case 548: // STATE 464
+	case 550: // STATE 464
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2771,7 +2784,7 @@
 		;
 		goto R999;
 
-	case 549: // STATE 467
+	case 551: // STATE 467
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2780,7 +2793,7 @@
 		;
 		goto R999;
 
-	case 550: // STATE 470
+	case 552: // STATE 470
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2789,7 +2802,7 @@
 		;
 		goto R999;
 
-	case 551: // STATE 473
+	case 553: // STATE 473
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2798,7 +2811,7 @@
 		;
 		goto R999;
 
-	case 552: // STATE 476
+	case 554: // STATE 476
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2807,7 +2820,7 @@
 		;
 		goto R999;
 
-	case 553: // STATE 479
+	case 555: // STATE 479
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2818,19 +2831,19 @@
 ;
 		;
 		
-	case 555: // STATE 486
+	case 557: // STATE 486
 		;
 		now.C2_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 556: // STATE 487
+	case 558: // STATE 487
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 557: // STATE 489
+	case 559: // STATE 489
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2839,7 +2852,7 @@
 		;
 		goto R999;
 
-	case 558: // STATE 492
+	case 560: // STATE 492
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2848,7 +2861,7 @@
 		;
 		goto R999;
 
-	case 559: // STATE 495
+	case 561: // STATE 495
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2857,7 +2870,7 @@
 		;
 		goto R999;
 
-	case 560: // STATE 498
+	case 562: // STATE 498
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -2866,7 +2879,7 @@
 		;
 		goto R999;
 
-	case 561: // STATE 501
+	case 563: // STATE 501
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2875,7 +2888,7 @@
 		;
 		goto R999;
 
-	case 562: // STATE 504
+	case 564: // STATE 504
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2884,7 +2897,7 @@
 		;
 		goto R999;
 
-	case 563: // STATE 507
+	case 565: // STATE 507
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2893,7 +2906,7 @@
 		;
 		goto R999;
 
-	case 564: // STATE 510
+	case 566: // STATE 510
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2902,7 +2915,7 @@
 		;
 		goto R999;
 
-	case 565: // STATE 513
+	case 567: // STATE 513
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2911,7 +2924,7 @@
 		;
 		goto R999;
 
-	case 566: // STATE 516
+	case 568: // STATE 516
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2920,7 +2933,7 @@
 		;
 		goto R999;
 
-	case 567: // STATE 519
+	case 569: // STATE 519
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2929,7 +2942,7 @@
 		;
 		goto R999;
 
-	case 568: // STATE 522
+	case 570: // STATE 522
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2938,7 +2951,7 @@
 		;
 		goto R999;
 
-	case 569: // STATE 525
+	case 571: // STATE 525
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2949,19 +2962,19 @@
 ;
 		;
 		
-	case 571: // STATE 532
+	case 573: // STATE 532
 		;
 		now.C3_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 572: // STATE 533
+	case 574: // STATE 533
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 573: // STATE 535
+	case 575: // STATE 535
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -2970,7 +2983,7 @@
 		;
 		goto R999;
 
-	case 574: // STATE 538
+	case 576: // STATE 538
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -2979,7 +2992,7 @@
 		;
 		goto R999;
 
-	case 575: // STATE 541
+	case 577: // STATE 541
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -2988,7 +3001,7 @@
 		;
 		goto R999;
 
-	case 576: // STATE 544
+	case 578: // STATE 544
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -2997,7 +3010,7 @@
 		;
 		goto R999;
 
-	case 577: // STATE 547
+	case 579: // STATE 547
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3006,7 +3019,7 @@
 		;
 		goto R999;
 
-	case 578: // STATE 550
+	case 580: // STATE 550
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3015,7 +3028,7 @@
 		;
 		goto R999;
 
-	case 579: // STATE 553
+	case 581: // STATE 553
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3024,7 +3037,7 @@
 		;
 		goto R999;
 
-	case 580: // STATE 556
+	case 582: // STATE 556
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3033,7 +3046,7 @@
 		;
 		goto R999;
 
-	case 581: // STATE 559
+	case 583: // STATE 559
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3042,7 +3055,7 @@
 		;
 		goto R999;
 
-	case 582: // STATE 562
+	case 584: // STATE 562
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3051,7 +3064,7 @@
 		;
 		goto R999;
 
-	case 583: // STATE 565
+	case 585: // STATE 565
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3060,7 +3073,7 @@
 		;
 		goto R999;
 
-	case 584: // STATE 568
+	case 586: // STATE 568
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3069,7 +3082,7 @@
 		;
 		goto R999;
 
-	case 585: // STATE 571
+	case 587: // STATE 571
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3080,19 +3093,19 @@
 ;
 		;
 		
-	case 587: // STATE 578
+	case 589: // STATE 578
 		;
 		now.C3_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 588: // STATE 579
+	case 590: // STATE 579
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 589: // STATE 581
+	case 591: // STATE 581
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3101,7 +3114,7 @@
 		;
 		goto R999;
 
-	case 590: // STATE 584
+	case 592: // STATE 584
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3110,7 +3123,7 @@
 		;
 		goto R999;
 
-	case 591: // STATE 587
+	case 593: // STATE 587
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3119,7 +3132,7 @@
 		;
 		goto R999;
 
-	case 592: // STATE 590
+	case 594: // STATE 590
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -3128,7 +3141,7 @@
 		;
 		goto R999;
 
-	case 593: // STATE 593
+	case 595: // STATE 593
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3137,7 +3150,7 @@
 		;
 		goto R999;
 
-	case 594: // STATE 596
+	case 596: // STATE 596
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3146,7 +3159,7 @@
 		;
 		goto R999;
 
-	case 595: // STATE 599
+	case 597: // STATE 599
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3155,7 +3168,7 @@
 		;
 		goto R999;
 
-	case 596: // STATE 602
+	case 598: // STATE 602
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3164,7 +3177,7 @@
 		;
 		goto R999;
 
-	case 597: // STATE 605
+	case 599: // STATE 605
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3173,7 +3186,7 @@
 		;
 		goto R999;
 
-	case 598: // STATE 608
+	case 600: // STATE 608
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3182,7 +3195,7 @@
 		;
 		goto R999;
 
-	case 599: // STATE 611
+	case 601: // STATE 611
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3191,7 +3204,7 @@
 		;
 		goto R999;
 
-	case 600: // STATE 614
+	case 602: // STATE 614
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3200,7 +3213,7 @@
 		;
 		goto R999;
 
-	case 601: // STATE 617
+	case 603: // STATE 617
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3211,19 +3224,19 @@
 ;
 		;
 		
-	case 603: // STATE 624
+	case 605: // STATE 624
 		;
 		now.C3_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 604: // STATE 625
+	case 606: // STATE 625
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 605: // STATE 627
+	case 607: // STATE 627
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3232,7 +3245,7 @@
 		;
 		goto R999;
 
-	case 606: // STATE 630
+	case 608: // STATE 630
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3241,7 +3254,7 @@
 		;
 		goto R999;
 
-	case 607: // STATE 633
+	case 609: // STATE 633
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3250,7 +3263,7 @@
 		;
 		goto R999;
 
-	case 608: // STATE 636
+	case 610: // STATE 636
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -3259,7 +3272,7 @@
 		;
 		goto R999;
 
-	case 609: // STATE 639
+	case 611: // STATE 639
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3268,7 +3281,7 @@
 		;
 		goto R999;
 
-	case 610: // STATE 642
+	case 612: // STATE 642
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3277,7 +3290,7 @@
 		;
 		goto R999;
 
-	case 611: // STATE 645
+	case 613: // STATE 645
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3286,7 +3299,7 @@
 		;
 		goto R999;
 
-	case 612: // STATE 648
+	case 614: // STATE 648
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3295,7 +3308,7 @@
 		;
 		goto R999;
 
-	case 613: // STATE 651
+	case 615: // STATE 651
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3304,7 +3317,7 @@
 		;
 		goto R999;
 
-	case 614: // STATE 654
+	case 616: // STATE 654
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3313,7 +3326,7 @@
 		;
 		goto R999;
 
-	case 615: // STATE 657
+	case 617: // STATE 657
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3322,7 +3335,7 @@
 		;
 		goto R999;
 
-	case 616: // STATE 660
+	case 618: // STATE 660
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3331,7 +3344,7 @@
 		;
 		goto R999;
 
-	case 617: // STATE 663
+	case 619: // STATE 663
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3342,19 +3355,19 @@
 ;
 		;
 		
-	case 619: // STATE 670
+	case 621: // STATE 670
 		;
 		now.ChooseAccept_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 620: // STATE 671
+	case 622: // STATE 671
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 621: // STATE 673
+	case 623: // STATE 673
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3363,7 +3376,7 @@
 		;
 		goto R999;
 
-	case 622: // STATE 676
+	case 624: // STATE 676
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3372,7 +3385,7 @@
 		;
 		goto R999;
 
-	case 623: // STATE 679
+	case 625: // STATE 679
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3381,7 +3394,7 @@
 		;
 		goto R999;
 
-	case 624: // STATE 682
+	case 626: // STATE 682
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -3390,7 +3403,7 @@
 		;
 		goto R999;
 
-	case 625: // STATE 685
+	case 627: // STATE 685
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3399,7 +3412,7 @@
 		;
 		goto R999;
 
-	case 626: // STATE 688
+	case 628: // STATE 688
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3408,7 +3421,7 @@
 		;
 		goto R999;
 
-	case 627: // STATE 691
+	case 629: // STATE 691
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3417,7 +3430,7 @@
 		;
 		goto R999;
 
-	case 628: // STATE 694
+	case 630: // STATE 694
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3426,7 +3439,7 @@
 		;
 		goto R999;
 
-	case 629: // STATE 697
+	case 631: // STATE 697
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3435,7 +3448,7 @@
 		;
 		goto R999;
 
-	case 630: // STATE 700
+	case 632: // STATE 700
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3444,7 +3457,7 @@
 		;
 		goto R999;
 
-	case 631: // STATE 703
+	case 633: // STATE 703
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3453,7 +3466,7 @@
 		;
 		goto R999;
 
-	case 632: // STATE 706
+	case 634: // STATE 706
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3462,7 +3475,7 @@
 		;
 		goto R999;
 
-	case 633: // STATE 709
+	case 635: // STATE 709
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3473,19 +3486,19 @@
 ;
 		;
 		
-	case 635: // STATE 716
+	case 637: // STATE 716
 		;
 		now.ChooseAccept_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 636: // STATE 717
+	case 638: // STATE 717
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 637: // STATE 719
+	case 639: // STATE 719
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3494,7 +3507,7 @@
 		;
 		goto R999;
 
-	case 638: // STATE 722
+	case 640: // STATE 722
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3503,7 +3516,7 @@
 		;
 		goto R999;
 
-	case 639: // STATE 725
+	case 641: // STATE 725
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3512,7 +3525,7 @@
 		;
 		goto R999;
 
-	case 640: // STATE 728
+	case 642: // STATE 728
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -3521,7 +3534,7 @@
 		;
 		goto R999;
 
-	case 641: // STATE 731
+	case 643: // STATE 731
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3530,7 +3543,7 @@
 		;
 		goto R999;
 
-	case 642: // STATE 734
+	case 644: // STATE 734
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3539,7 +3552,7 @@
 		;
 		goto R999;
 
-	case 643: // STATE 737
+	case 645: // STATE 737
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3548,7 +3561,7 @@
 		;
 		goto R999;
 
-	case 644: // STATE 740
+	case 646: // STATE 740
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3557,7 +3570,7 @@
 		;
 		goto R999;
 
-	case 645: // STATE 743
+	case 647: // STATE 743
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3566,7 +3579,7 @@
 		;
 		goto R999;
 
-	case 646: // STATE 746
+	case 648: // STATE 746
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3575,7 +3588,7 @@
 		;
 		goto R999;
 
-	case 647: // STATE 749
+	case 649: // STATE 749
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3584,7 +3597,7 @@
 		;
 		goto R999;
 
-	case 648: // STATE 752
+	case 650: // STATE 752
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3593,7 +3606,7 @@
 		;
 		goto R999;
 
-	case 649: // STATE 755
+	case 651: // STATE 755
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3604,19 +3617,19 @@
 ;
 		;
 		
-	case 651: // STATE 762
+	case 653: // STATE 762
 		;
 		now.ChooseReject_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 652: // STATE 763
+	case 654: // STATE 763
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 653: // STATE 765
+	case 655: // STATE 765
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3625,7 +3638,7 @@
 		;
 		goto R999;
 
-	case 654: // STATE 768
+	case 656: // STATE 768
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3634,7 +3647,7 @@
 		;
 		goto R999;
 
-	case 655: // STATE 771
+	case 657: // STATE 771
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3643,7 +3656,7 @@
 		;
 		goto R999;
 
-	case 656: // STATE 774
+	case 658: // STATE 774
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -3652,7 +3665,7 @@
 		;
 		goto R999;
 
-	case 657: // STATE 777
+	case 659: // STATE 777
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3661,7 +3674,7 @@
 		;
 		goto R999;
 
-	case 658: // STATE 780
+	case 660: // STATE 780
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3670,7 +3683,7 @@
 		;
 		goto R999;
 
-	case 659: // STATE 783
+	case 661: // STATE 783
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3679,7 +3692,7 @@
 		;
 		goto R999;
 
-	case 660: // STATE 786
+	case 662: // STATE 786
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3688,7 +3701,7 @@
 		;
 		goto R999;
 
-	case 661: // STATE 789
+	case 663: // STATE 789
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3697,7 +3710,7 @@
 		;
 		goto R999;
 
-	case 662: // STATE 792
+	case 664: // STATE 792
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3706,7 +3719,7 @@
 		;
 		goto R999;
 
-	case 663: // STATE 795
+	case 665: // STATE 795
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3715,7 +3728,7 @@
 		;
 		goto R999;
 
-	case 664: // STATE 798
+	case 666: // STATE 798
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3724,7 +3737,7 @@
 		;
 		goto R999;
 
-	case 665: // STATE 801
+	case 667: // STATE 801
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3735,19 +3748,19 @@
 ;
 		;
 		
-	case 667: // STATE 808
+	case 669: // STATE 808
 		;
 		now.ChooseReject_bo.status = trpt->bup.oval;
 		;
 		goto R999;
 
-	case 668: // STATE 809
+	case 670: // STATE 809
 		;
 		_m = unsend(now.LEG2CRM);
 		;
 		goto R999;
 
-	case 669: // STATE 811
+	case 671: // STATE 811
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3756,7 +3769,7 @@
 		;
 		goto R999;
 
-	case 670: // STATE 814
+	case 672: // STATE 814
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3765,7 +3778,7 @@
 		;
 		goto R999;
 
-	case 671: // STATE 817
+	case 673: // STATE 817
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3774,7 +3787,7 @@
 		;
 		goto R999;
 
-	case 672: // STATE 820
+	case 674: // STATE 820
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 6, 1);
@@ -3783,7 +3796,7 @@
 		;
 		goto R999;
 
-	case 673: // STATE 823
+	case 675: // STATE 823
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3792,7 +3805,7 @@
 		;
 		goto R999;
 
-	case 674: // STATE 826
+	case 676: // STATE 826
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3801,7 +3814,7 @@
 		;
 		goto R999;
 
-	case 675: // STATE 829
+	case 677: // STATE 829
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3810,7 +3823,7 @@
 		;
 		goto R999;
 
-	case 676: // STATE 832
+	case 678: // STATE 832
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3819,7 +3832,7 @@
 		;
 		goto R999;
 
-	case 677: // STATE 835
+	case 679: // STATE 835
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3828,7 +3841,7 @@
 		;
 		goto R999;
 
-	case 678: // STATE 838
+	case 680: // STATE 838
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3837,7 +3850,7 @@
 		;
 		goto R999;
 
-	case 679: // STATE 841
+	case 681: // STATE 841
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 9, 1);
@@ -3846,7 +3859,7 @@
 		;
 		goto R999;
 
-	case 680: // STATE 844
+	case 682: // STATE 844
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 8, 1);
@@ -3855,7 +3868,7 @@
 		;
 		goto R999;
 
-	case 681: // STATE 847
+	case 683: // STATE 847
 		;
 		XX = 1;
 		unrecv(now.CRM2LEG, XX-1, 0, 7, 1);
@@ -3864,7 +3877,7 @@
 		;
 		goto R999;
 
-	case 682: // STATE 856
+	case 684: // STATE 856
 		;
 		p_restor(II);
 		;

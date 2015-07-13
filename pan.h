@@ -102,6 +102,7 @@
 #ifndef NFAIR
 	#define NFAIR	2	/* must be >= 2 */
 #endif
+#define HAS_LTL	1
 #define HAS_CODE	1
 #if defined(RANDSTORE) && !defined(RANDSTOR)
 	#define RANDSTOR	RANDSTORE
@@ -120,7 +121,13 @@
 #endif
 #ifdef NP
 	#define HAS_NP	2
-	#define VERI	3	/* np_ */
+	#define VERI	4	/* np_ */
+#endif
+#ifndef NOCLAIM
+	#define NCLAIMS	1
+	#ifndef NP
+		#define VERI	3
+	#endif
 #endif
 
 typedef struct S_F_MAP {
@@ -128,6 +135,11 @@ typedef struct S_F_MAP {
 	int from;
 	int upto;
 } S_F_MAP;
+
+#define nstates3	11	/* ltlCheck */
+#define minseq3	1604
+#define maxseq3	1613
+#define endstate3	10
 
 #define nstates2	5	/* :init: */
 #define minseq2	1600
@@ -144,16 +156,18 @@ typedef struct S_F_MAP {
 #define maxseq0	855
 #define endstate0	856
 
+extern short src_ln3[];
 extern short src_ln2[];
 extern short src_ln1[];
 extern short src_ln0[];
+extern S_F_MAP src_file3[];
 extern S_F_MAP src_file2[];
 extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
 
 #define T_ID	unsigned short
-#define _T5	683
-#define _T2	684
+#define _T5	685
+#define _T2	686
 #define WS		4 /* word size in bytes */
 #define SYNC	1
 #define ASYNC	1
@@ -181,10 +195,20 @@ struct LN_EVENT { /* user defined type */
 	uchar id;
 	uchar status;
 };
+typedef struct P3 { /* ltlCheck */
+	unsigned _pid : 8;  /* 0..255 */
+	unsigned _t   : 4; /* proctype */
+	unsigned _p   : 11; /* state    */
+#ifdef HAS_PRIORITY
+	unsigned _priority : 8; /* 0..255 */
+#endif
+} P3;
+#define Air3	(sizeof(P3) - 3)
+
 #define Pinit	((P2 *)this)
 typedef struct P2 { /* :init: */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 3; /* proctype */
+	unsigned _t   : 4; /* proctype */
 	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
@@ -195,7 +219,7 @@ typedef struct P2 { /* :init: */
 #define PCRM	((P1 *)this)
 typedef struct P1 { /* CRM */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 3; /* proctype */
+	unsigned _t   : 4; /* proctype */
 	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
@@ -206,7 +230,7 @@ typedef struct P1 { /* CRM */
 #define PLEG	((P0 *)this)
 typedef struct P0 { /* LEG */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 3; /* proctype */
+	unsigned _t   : 4; /* proctype */
 	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
@@ -214,15 +238,15 @@ typedef struct P0 { /* LEG */
 } P0;
 #define Air0	(sizeof(P0) - 3)
 
-typedef struct P3 { /* np_ */
+typedef struct P4 { /* np_ */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 3; /* proctype */
+	unsigned _t   : 4; /* proctype */
 	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
-} P3;
-#define Air3	(sizeof(P3) - 3)
+} P4;
+#define Air4	(sizeof(P4) - 3)
 
 #define Pclaim	P0
 #ifndef NCLAIMS
@@ -458,18 +482,19 @@ typedef struct TRIX_v6 {
 #define FORWARD_MOVES	"pan.m"
 #define BACKWARD_MOVES	"pan.b"
 #define TRANSITIONS	"pan.t"
-#define _NP_	3
-#define nstates3	3 /* np_ */
-#define endstate3	2 /* np_ */
+#define _NP_	4
+#define nstates4	3 /* np_ */
+#define endstate4	2 /* np_ */
 
-#define start3	0 /* np_ */
+#define start4	0 /* np_ */
+#define start3	6
 #define start2	3
 #define start1	1
 #define start0	70
 #ifdef NP
 	#define ACCEPT_LAB	1 /* at least 1 in np_ */
 #else
-	#define ACCEPT_LAB	0 /* user-defined accept labels */
+	#define ACCEPT_LAB	1 /* user-defined accept labels */
 #endif
 #ifdef MEMCNT
 	#ifdef MEMLIM
@@ -834,7 +859,7 @@ void qsend(int, int, int, int, int);
 #define GLOBAL	7
 #define BAD	8
 #define ALPHA_F	9
-#define NTRANS	685
+#define NTRANS	687
 #if defined(BFS_PAR) || NCORE>1
 	void e_critical(int);
 	void x_critical(int);

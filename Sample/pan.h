@@ -2,7 +2,7 @@
 #define PAN_H
 
 #define SpinVersion	"Spin Version 6.4.3 -- 16 December 2014"
-#define PanSource	"Case2.pml"
+#define PanSource	"Case3.pml"
 
 #define G_long	4
 #define G_int	4
@@ -102,7 +102,6 @@
 #ifndef NFAIR
 	#define NFAIR	2	/* must be >= 2 */
 #endif
-#define HAS_LTL	1
 #define HAS_CODE	1
 #if defined(RANDSTORE) && !defined(RANDSTOR)
 	#define RANDSTOR	RANDSTORE
@@ -121,13 +120,7 @@
 #endif
 #ifdef NP
 	#define HAS_NP	2
-	#define VERI	4	/* np_ */
-#endif
-#ifndef NOCLAIM
-	#define NCLAIMS	1
-	#ifndef NP
-		#define VERI	3
-	#endif
+	#define VERI	3	/* np_ */
 #endif
 
 typedef struct S_F_MAP {
@@ -136,38 +129,31 @@ typedef struct S_F_MAP {
 	int upto;
 } S_F_MAP;
 
-#define nstates3	11	/* P1 */
-#define minseq3	1604
-#define maxseq3	1613
-#define endstate3	10
-
 #define nstates2	5	/* :init: */
-#define minseq2	1600
-#define maxseq2	1603
+#define minseq2	2347
+#define maxseq2	2350
 #define endstate2	4
 
-#define nstates1	745	/* CRM */
-#define minseq1	856
-#define maxseq1	1599
-#define endstate1	744
+#define nstates1	812	/* CRM */
+#define minseq1	1536
+#define maxseq1	2346
+#define endstate1	811
 
-#define nstates0	857	/* LEG */
+#define nstates0	1537	/* LEG */
 #define minseq0	0
-#define maxseq0	855
-#define endstate0	856
+#define maxseq0	1535
+#define endstate0	1536
 
-extern short src_ln3[];
 extern short src_ln2[];
 extern short src_ln1[];
 extern short src_ln0[];
-extern S_F_MAP src_file3[];
 extern S_F_MAP src_file2[];
 extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
 
 #define T_ID	unsigned short
-#define _T5	685
-#define _T2	686
+#define _T5	925
+#define _T2	926
 #define WS		4 /* word size in bytes */
 #define SYNC	1
 #define ASYNC	1
@@ -195,21 +181,11 @@ struct LN_EVENT { /* user defined type */
 	uchar id;
 	uchar status;
 };
-typedef struct P3 { /* P1 */
-	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
-	unsigned _p   : 11; /* state    */
-#ifdef HAS_PRIORITY
-	unsigned _priority : 8; /* 0..255 */
-#endif
-} P3;
-#define Air3	(sizeof(P3) - 3)
-
 #define Pinit	((P2 *)this)
 typedef struct P2 { /* :init: */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
-	unsigned _p   : 11; /* state    */
+	unsigned _t   : 3; /* proctype */
+	unsigned _p   : 12; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -219,8 +195,8 @@ typedef struct P2 { /* :init: */
 #define PCRM	((P1 *)this)
 typedef struct P1 { /* CRM */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
-	unsigned _p   : 11; /* state    */
+	unsigned _t   : 3; /* proctype */
+	unsigned _p   : 12; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -230,23 +206,23 @@ typedef struct P1 { /* CRM */
 #define PLEG	((P0 *)this)
 typedef struct P0 { /* LEG */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
-	unsigned _p   : 11; /* state    */
+	unsigned _t   : 3; /* proctype */
+	unsigned _p   : 12; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
 } P0;
 #define Air0	(sizeof(P0) - 3)
 
-typedef struct P4 { /* np_ */
+typedef struct P3 { /* np_ */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 4; /* proctype */
-	unsigned _p   : 11; /* state    */
+	unsigned _t   : 3; /* proctype */
+	unsigned _p   : 12; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
-} P4;
-#define Air4	(sizeof(P4) - 3)
+} P3;
+#define Air3	(sizeof(P3) - 3)
 
 #define Pclaim	P0
 #ifndef NCLAIMS
@@ -438,22 +414,25 @@ typedef struct State {
 		unsigned short _event;
 	#endif
 #endif
-	unsigned choose1 : 1;
-	unsigned choose2 : 1;
-	unsigned choose3 : 1;
-	unsigned all : 1;
 	uchar cntttr;
 	uchar LEG2CRM;
 	uchar CRM2LEG;
+	int LCount;
+	int CwCount;
+	int ExamCount;
 	int STUDENTexTrace;
 	int LMSexTrace;
-	struct LN_EVENT RegReq_bo;
-	struct LN_EVENT RegReply_bo;
-	struct LN_EVENT C1_bo;
-	struct LN_EVENT C2_bo;
-	struct LN_EVENT C3_bo;
-	struct LN_EVENT ChooseAccept_bo;
-	struct LN_EVENT ChooseReject_bo;
+	struct LN_EVENT START_bo;
+	struct LN_EVENT L1_bo;
+	struct LN_EVENT L2_bo;
+	struct LN_EVENT L3_bo;
+	struct LN_EVENT L4_bo;
+	struct LN_EVENT L5_bo;
+	struct LN_EVENT L6_bo;
+	struct LN_EVENT L7_bo;
+	struct LN_EVENT CW1_bo;
+	struct LN_EVENT CW2_bo;
+	struct LN_EVENT EXAM_bo;
 #ifdef TRIX
 	/* room for 512 proc+chan ptrs, + safety margin */
 	char *_ids_[MAXPROC+MAXQ+4];
@@ -478,23 +457,26 @@ typedef struct TRIX_v6 {
 /* hidden variable: */	uchar rTemp;
 /* hidden variable: */	uchar oTemp;
 /* hidden variable: */	uchar pTemp;
+/* hidden variable: */	uchar fail;
 /* hidden variable: */	int executionTrace;
+/* hidden variable: */	int lectures;
+/* hidden variable: */	int cw;
+/* hidden variable: */	int exam;
 #define FORWARD_MOVES	"pan.m"
 #define BACKWARD_MOVES	"pan.b"
 #define TRANSITIONS	"pan.t"
-#define _NP_	4
-#define nstates4	3 /* np_ */
-#define endstate4	2 /* np_ */
+#define _NP_	3
+#define nstates3	3 /* np_ */
+#define endstate3	2 /* np_ */
 
-#define start4	0 /* np_ */
-#define start3	6
+#define start3	0 /* np_ */
 #define start2	3
 #define start1	1
-#define start0	70
+#define start0	106
 #ifdef NP
 	#define ACCEPT_LAB	1 /* at least 1 in np_ */
 #else
-	#define ACCEPT_LAB	1 /* user-defined accept labels */
+	#define ACCEPT_LAB	0 /* user-defined accept labels */
 #endif
 #ifdef MEMCNT
 	#ifdef MEMLIM
@@ -859,7 +841,7 @@ void qsend(int, int, int, int, int);
 #define GLOBAL	7
 #define BAD	8
 #define ALPHA_F	9
-#define NTRANS	687
+#define NTRANS	927
 #if defined(BFS_PAR) || NCORE>1
 	void e_critical(int);
 	void x_critical(int);
