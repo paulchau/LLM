@@ -1,7 +1,5 @@
 package mainGUI;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
@@ -28,6 +26,7 @@ import javax.swing.JTextPane;
 import ncl.b1037041.LTL.entites.LTLDefinition;
 import ncl.b1037041.dao.ImplLTLDao;
 
+@SuppressWarnings("serial")
 public class VerifyFrame extends JFrame {
 
 	private JPanel contentPane;
@@ -186,9 +185,7 @@ public class VerifyFrame extends JFrame {
 				Files.copy(sor.toPath(), des.toPath());
 			}
 		}
-		String command1 = "./spin -a \"./test.pml\"";
-		String command2 = "cc -o pan pan.c";
-		String command3 = "./pan -a -m50000";
+		String command1 = "./spin -run -m50000 \"./test.pml\"";
 		Runtime runtime = Runtime.getRuntime();
 		Process proc1 = runtime.exec(command1);
 		try {
@@ -197,20 +194,12 @@ public class VerifyFrame extends JFrame {
 			System.out.println("proc1 error");
 		}
 		proc1.getOutputStream().close();
-		Process proc2 = runtime.exec(command2);
-		try {
-			proc2.waitFor();
-		} catch (InterruptedException e) {
-			System.out.println("proc2 error");
-		}
-		proc2.getOutputStream().close();
-		Process proc3 = runtime.exec(command3);
-		proc3.getOutputStream().close();
-		System.out.println("proc3");
+
+		System.out.println("Verify");
 		output = "Verification Result: <br>";
 		String line = "";
 		BufferedReader stdout = new BufferedReader(new InputStreamReader(
-				proc3.getInputStream()));
+				proc1.getInputStream()));
 		boolean found = false;
 		while ((line = stdout.readLine()) != null) {
 			Matcher matcher = NO_ERROR_PATTERN.matcher(line);
@@ -252,7 +241,7 @@ public class VerifyFrame extends JFrame {
 		stdout.close();
 		output = output + "<br> Error: <br>";
 		BufferedReader stderr = new BufferedReader(new InputStreamReader(
-				proc3.getErrorStream()));
+				proc1.getErrorStream()));
 		while ((line = stderr.readLine()) != null) {
 			output = output + line + "<br>";
 		}
@@ -260,9 +249,6 @@ public class VerifyFrame extends JFrame {
 		System.out.println("Done");
 
 		proc1.getOutputStream().close();
-		proc2.getOutputStream().close();
-		proc3.getOutputStream().close();
-
 		setText(output);
 	}
 }

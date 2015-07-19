@@ -9,10 +9,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
-import javax.swing.JTextField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -22,8 +20,6 @@ import javax.swing.JScrollPane;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JLabel;
@@ -35,8 +31,6 @@ import ncl.b1037041.dao.ImplLTLDao;
 import java.awt.Font;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class LPromelaWindow {
 
@@ -139,28 +133,7 @@ public class LPromelaWindow {
 						"Error! Fail to load the content.");
 			}
 			ltlList = dao.getAllLTLDefinition();
-			try {
-				File fileLTL = new File(fileRoot + "file.ltl");
-				FileInputStream fis3 = new FileInputStream(fileLTL);
-				ObjectInputStream ois = new ObjectInputStream(fis3);
-				try {
-					ltlList = (ArrayList<LTLDefinition>) ois.readObject();
-				} catch (ClassNotFoundException e) {
-					FileOutputStream fos = new FileOutputStream(fileLTL);
-					ObjectOutputStream oos = new ObjectOutputStream(fos);
-					oos.writeObject(ltlList);
-					oos.close();
-					fos.close();
-				}
-				ois.close();
-				fis3.close();
-			} catch (FileNotFoundException fne) {
-				JOptionPane.showMessageDialog(frmLpromela,
-						"Error! LTL File not found.");
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(frmLpromela,
-						"Error! Fail to load the LTL.");
-			}
+
 		}
 	}
 
@@ -198,12 +171,6 @@ public class LPromelaWindow {
 							file2));
 					bw2.write(rule.getText());
 					bw2.close();
-					FileOutputStream fos = new FileOutputStream(fileRoot
-							+ "file.ltl");
-					ObjectOutputStream oos = new ObjectOutputStream(fos);
-					oos.writeObject(ltlList);
-					oos.close();
-					fos.close();
 					JOptionPane.showMessageDialog(frmLpromela, "File saved.");
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(
@@ -229,7 +196,6 @@ public class LPromelaWindow {
 					filePath = sf.getDirectory() + sf.getFile() + "Rules.h";
 					File file = new File(fileDir);
 					File file2 = new File(filePath);
-					File fileLTL = new File(fileRoot + "file.ltl");
 					files.add(file2.getName());
 					try {
 						BufferedWriter bw = new BufferedWriter(new FileWriter(
@@ -240,38 +206,13 @@ public class LPromelaWindow {
 								file2));
 						bw2.write(rule.getText());
 						bw2.close();
-						FileOutputStream fos = new FileOutputStream(fileLTL);
-						ObjectOutputStream oos = new ObjectOutputStream(fos);
-						oos.writeObject(ltlList);
-						oos.close();
-						fos.close();
 						JOptionPane.showMessageDialog(frmLpromela, "Path set.");
 					} catch (IOException e1) {
 						JOptionPane.showMessageDialog(frmLpromela,
 								"Error! Fail to set the Path.");
 						System.exit(0);
 					}
-					String[] options = { "OK" };
-					JPanel panel = new JPanel();
-					JLabel lbl = new JLabel(
-							"Number of Learning Events to have: ");
-					JTextField txt = new JTextField(10);
-					panel.add(lbl);
-					panel.add(txt);
-					int selectedOption = JOptionPane.showOptionDialog(null,
-							panel, "LPromela Setup Wizard",
-							JOptionPane.YES_OPTION,
-							JOptionPane.QUESTION_MESSAGE, null, options,
-							options[0]);
-					if (selectedOption == 0) {
-						try {
-							int events = Integer.parseInt(txt.getText());
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(null,
-									"Invalid setup. Program terminate");
-							System.exit(1);
-						}
-					}
+
 				}
 			}
 		});
@@ -325,12 +266,6 @@ public class LPromelaWindow {
 							file2));
 					bw2.write(rule.getText());
 					bw2.close();
-					FileOutputStream fos = new FileOutputStream(fileRoot
-							+ "file.ltl");
-					ObjectOutputStream oos = new ObjectOutputStream(fos);
-					oos.writeObject(ltlList);
-					oos.close();
-					fos.close();
 					JOptionPane.showMessageDialog(frmLpromela, "File saved.");
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(

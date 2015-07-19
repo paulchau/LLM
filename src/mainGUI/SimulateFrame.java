@@ -1,7 +1,6 @@
 package mainGUI;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
@@ -15,7 +14,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JFormattedTextField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -28,6 +26,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
+@SuppressWarnings("serial")
 public class SimulateFrame extends JFrame {
 
 	private JPanel contentPane;
@@ -35,7 +34,6 @@ public class SimulateFrame extends JFrame {
 	private JPanel panel;
 	private JLabel lblNewLabel;
 	private JButton btnNewButton;
-	private JFormattedTextField formattedTextField;
 	private JTextField textField;
 
 	/**
