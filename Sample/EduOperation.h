@@ -391,7 +391,6 @@ inline When_Event(name){
   ::LEG2CRM ? [name,TO]  -> LEG2CRM ? _,_ 
   ::LEG2CRM ? [name,TF]  -> LEG2CRM ? _,_ 
   ::LEG2CRM ? [name,LF]  -> LEG2CRM ? _,_ 
-  ::LEG2CRM ? [name,P]  -> LEG2CRM ? _,_ 
  fi;
 }
 #define When_Event(name) \
@@ -463,9 +462,6 @@ name##_##bo.status==TF
 
 #define TO(name) \
 name##_##bo.status==TO
-
-#define P(name) \
-name##_##bo.status==P
 
 #define EVENT(name,msg1,msg2) \
 ((msg1==1)&&(msg2==1));

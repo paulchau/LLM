@@ -2,7 +2,7 @@
 #define PAN_H
 
 #define SpinVersion	"Spin Version 6.4.3 -- 16 December 2014"
-#define PanSource	"Case3.pml"
+#define PanSource	"Case2.pml"
 
 #define G_long	4
 #define G_int	4
@@ -130,19 +130,19 @@ typedef struct S_F_MAP {
 } S_F_MAP;
 
 #define nstates2	5	/* :init: */
-#define minseq2	2347
-#define maxseq2	2350
+#define minseq2	1590
+#define maxseq2	1593
 #define endstate2	4
 
-#define nstates1	812	/* CRM */
-#define minseq1	1536
-#define maxseq1	2346
-#define endstate1	811
+#define nstates1	735	/* CRM */
+#define minseq1	856
+#define maxseq1	1589
+#define endstate1	734
 
-#define nstates0	1537	/* LEG */
+#define nstates0	857	/* LEG */
 #define minseq0	0
-#define maxseq0	1535
-#define endstate0	1536
+#define maxseq0	855
+#define endstate0	856
 
 extern short src_ln2[];
 extern short src_ln1[];
@@ -152,8 +152,8 @@ extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
 
 #define T_ID	unsigned short
-#define _T5	925
-#define _T2	926
+#define _T5	672
+#define _T2	673
 #define WS		4 /* word size in bytes */
 #define SYNC	1
 #define ASYNC	1
@@ -185,7 +185,7 @@ struct LN_EVENT { /* user defined type */
 typedef struct P2 { /* :init: */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 12; /* state    */
+	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -196,7 +196,7 @@ typedef struct P2 { /* :init: */
 typedef struct P1 { /* CRM */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 12; /* state    */
+	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -207,7 +207,7 @@ typedef struct P1 { /* CRM */
 typedef struct P0 { /* LEG */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 12; /* state    */
+	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -217,7 +217,7 @@ typedef struct P0 { /* LEG */
 typedef struct P3 { /* np_ */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 12; /* state    */
+	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -414,25 +414,22 @@ typedef struct State {
 		unsigned short _event;
 	#endif
 #endif
+	unsigned choose1 : 1;
+	unsigned choose2 : 1;
+	unsigned choose3 : 1;
+	unsigned all : 1;
 	uchar cntttr;
 	uchar LEG2CRM;
 	uchar CRM2LEG;
-	int LCount;
-	int CwCount;
-	int ExamCount;
 	int STUDENTexTrace;
 	int LMSexTrace;
-	struct LN_EVENT START_bo;
-	struct LN_EVENT L1_bo;
-	struct LN_EVENT L2_bo;
-	struct LN_EVENT L3_bo;
-	struct LN_EVENT L4_bo;
-	struct LN_EVENT L5_bo;
-	struct LN_EVENT L6_bo;
-	struct LN_EVENT L7_bo;
-	struct LN_EVENT CW1_bo;
-	struct LN_EVENT CW2_bo;
-	struct LN_EVENT EXAM_bo;
+	struct LN_EVENT RegReq_bo;
+	struct LN_EVENT RegReply_bo;
+	struct LN_EVENT C1_bo;
+	struct LN_EVENT C2_bo;
+	struct LN_EVENT C3_bo;
+	struct LN_EVENT ChooseAccept_bo;
+	struct LN_EVENT ChooseReject_bo;
 #ifdef TRIX
 	/* room for 512 proc+chan ptrs, + safety margin */
 	char *_ids_[MAXPROC+MAXQ+4];
@@ -457,11 +454,7 @@ typedef struct TRIX_v6 {
 /* hidden variable: */	uchar rTemp;
 /* hidden variable: */	uchar oTemp;
 /* hidden variable: */	uchar pTemp;
-/* hidden variable: */	uchar fail;
 /* hidden variable: */	int executionTrace;
-/* hidden variable: */	int lectures;
-/* hidden variable: */	int cw;
-/* hidden variable: */	int exam;
 #define FORWARD_MOVES	"pan.m"
 #define BACKWARD_MOVES	"pan.b"
 #define TRANSITIONS	"pan.t"
@@ -472,7 +465,7 @@ typedef struct TRIX_v6 {
 #define start3	0 /* np_ */
 #define start2	3
 #define start1	1
-#define start0	106
+#define start0	70
 #ifdef NP
 	#define ACCEPT_LAB	1 /* at least 1 in np_ */
 #else
@@ -841,7 +834,7 @@ void qsend(int, int, int, int, int);
 #define GLOBAL	7
 #define BAD	8
 #define ALPHA_F	9
-#define NTRANS	927
+#define NTRANS	674
 #if defined(BFS_PAR) || NCORE>1
 	void e_critical(int);
 	void x_critical(int);

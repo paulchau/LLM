@@ -1,47 +1,8 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
- * Case2.pml: EPROMELA code of a 
+ * Case1.pml: EPROMELA code of a 
  * contract between a STUDENT and LMS. This model 
  * is meant to correctly implement the English 
  * contract of Fig 4 of this techical report, thus 
@@ -71,20 +32,26 @@
 
 #include "setting.h"      /* macro definition */
 #include "EduOperation.h" /* macro definition */
-#include "Case2Rules.h"        /* ECA rule code    */
+#include "Case3Rules.h"        /* ECA rule code    */
 
 #define TRUE  1
 #define FALSE 0
 #define YES   1
 #define NO    0
 
+#define PassEnd (fail==FALSE)
+#define Finish (lectures==LCount && cw==CwCount && exam==ExamCount)
+
 /* var for recording occurrences of executions 
  * with S and LF outcomes                      
  */
-bool choose1=FALSE;
-bool choose2=FALSE;
-bool choose3=FALSE;
-bool all=FALSE;
+bool fail=FALSE;
+int lectures=8;
+int LCount=0;
+int cw=2;
+int CwCount=0;
+int exam=1;
+int ExamCount=0;
 
 /* declaration of the role players involved */
 RolePlayer(STUDENT, LMS);
@@ -93,14 +60,19 @@ RolePlayer(STUDENT, LMS);
  * in this ex, we use only S, TF, TO and P  */
 RuleMessage(S,LF,TF,TO,P); 
 
-/* 7 operations are involved in the contract */
-LN_EVENT(RegReq);
-LN_EVENT(RegReply);
-LN_EVENT(C1);
-LN_EVENT(C2);
-LN_EVENT(C3);
-LN_EVENT(ChooseAccept);
-LN_EVENT(ChooseReject);
+/* 3 operations are involved in the contract */
+LN_EVENT(START);
+LN_EVENT(L1);
+LN_EVENT(L2);
+LN_EVENT(L3);
+LN_EVENT(L4);
+LN_EVENT(L5);
+LN_EVENT(L6);
+LN_EVENT(L7);
+LN_EVENT(L8);
+LN_EVENT(CW1);
+LN_EVENT(CW2);
+LN_EVENT(EXAM);
 
 /*
  * LTLs for expressing, mutual exclusion of 
@@ -123,44 +95,54 @@ proctype LEG()
   * granted to STUDENT or LMS */
   DONE(STUDENT);
   DONE(LMS);
-  INIT(RegReq, STUDENT, 1,0,0);
-  INIT(RegReply,  LMS, 0,0,0);
-  INIT(C1, STUDENT, 0,0,0);
-  INIT(C2, STUDENT, 0,0,0);
-  INIT(C3, STUDENT, 0,0,0);
-  INIT(ChooseAccept, LMS, 0,0,0);
-  INIT(ChooseReject, LMS, 0,0,0);
+  INIT(START, LMS, 1,0,0);
+  INIT(L1,  STUDENT, 0,0,1);
+  INIT(L2,  STUDENT, 0,0,1);
+  INIT(L3,  STUDENT, 0,0,1); 
+  INIT(L4,  STUDENT, 0,0,1); 
+  INIT(L5,  STUDENT, 0,0,1);   
+  INIT(L6,  STUDENT, 0,0,1); 
+  INIT(L7,  STUDENT, 0,0,1);   
+  INIT(L8,  STUDENT, 0,0,1);     
+  INIT(CW1, STUDENT, 0,0,1);
+  INIT(CW2, STUDENT, 0,0,1);  
+  INIT(EXAM, STUDENT, 0,0,1);
  }
  END_INIT:
 
  /* generation of learning events.
   * For each of the 5 operations, 2 possible exec
   * are modelled: exec with S and exec with TF */ 
- end:do
- :: L_E(STUDENT, RegReq, S);
- :: L_E(STUDENT, RegReq, TF);
- 
- :: L_E(LMS, RegReply, S);
- :: L_E(LMS, RegReply, TF);
- 
- :: L_E(STUDENT, C1,  S);  
- :: L_E(STUDENT, C1,  P);  
- :: L_E(STUDENT, C1,  TF);             
-
- :: L_E(STUDENT, C2, S);  
- :: L_E(STUDENT, C2, P);  
- :: L_E(STUDENT, C2, TF); 
- 
- :: L_E(STUDENT, C3, S);    
- :: L_E(STUDENT, C3, P);  
- :: L_E(STUDENT, C3, TF); 
- 
- :: L_E(LMS, ChooseAccept, S);
- :: L_E(LMS, ChooseAccept, TF);
- 
- :: L_E(LMS, ChooseReject, S);
- :: L_E(LMS, ChooseReject, TF);
- 
+ end:do 
+ ::
+ if
+ :: L_E(LMS, START, S);
+ :: L_E(STUDENT, L1,  S) ->  L_E(STUDENT, L2,  S); 
+ :: L_E(STUDENT, L1,  TF) -> L_E(STUDENT, L1,  S);   
+ :: L_E(STUDENT, L2,  S) -> L_E(STUDENT, L3,  S);
+ :: L_E(STUDENT, L2,  TF) -> L_E(STUDENT, L2, S);  
+ :: L_E(STUDENT, L3,  S) -> L_E(STUDENT, CW1,  S);
+ :: L_E(STUDENT, L3,  TF) -> L_E(STUDENT, L3,  S); 
+ :: L_E(STUDENT, L4,  S) -> L_E(STUDENT, L5,  S);  
+ :: L_E(STUDENT, L4,  TF) -> L_E(STUDENT, L4,  S); 
+ :: L_E(STUDENT, L5,  S) -> L_E(STUDENT, L6,  S);  
+ :: L_E(STUDENT, L5,  TF) -> L_E(STUDENT, L5,  S); 
+ :: L_E(STUDENT, L6,  S) -> L_E(STUDENT, CW2,  S);  
+ :: L_E(STUDENT, L6,  TF) -> L_E(STUDENT, L6,  S); 
+ :: L_E(STUDENT, L7,  S) -> L_E(STUDENT, L8,  S);  
+ :: L_E(STUDENT, L7,  TF) -> L_E(STUDENT, L7,  S);  
+ :: L_E(STUDENT, L8,  S) -> L_E(STUDENT, EXAM,  S);  
+ :: L_E(STUDENT, L8,  TF) -> L_E(STUDENT, L8,  S); 
+ :: L_E(STUDENT, CW1, S) -> L_E(STUDENT, L4,  S);  
+ :: L_E(STUDENT, CW1, TO); 
+ :: L_E(STUDENT, CW1, LF); 
+ :: L_E(STUDENT, CW2, S) -> L_E(STUDENT, L7,  S);  
+ :: L_E(STUDENT, CW2, TO);
+ :: L_E(STUDENT, CW2, LF); 
+ :: L_E(STUDENT, EXAM, S);  
+ :: L_E(STUDENT, EXAM, TO);
+ :: L_E(STUDENT, EXAM, LF); 
+ fi;
  od; 
 }
 
@@ -170,24 +152,27 @@ proctype LEG()
  * time) needed to respond to the event under
  * process                                    
  */ 
-proctype CRM()
-{
+proctype CRM(){
  printf("CONTRACT RULE MANAGER"); 
  end:do
-  :: CONTRACT(RegReq);
-  :: CONTRACT(RegReply); 
-  :: CONTRACT(C1);
-  :: CONTRACT(C2);
-  :: CONTRACT(C3);
-  :: CONTRACT(ChooseAccept);  
-  :: CONTRACT(ChooseReject);
+  :: CONTRACT(START);
+  :: CONTRACT(L1); 
+  :: CONTRACT(L2);
+  :: CONTRACT(L3);  
+  :: CONTRACT(L4);   
+  :: CONTRACT(L5); 
+  :: CONTRACT(L6);
+  :: CONTRACT(L7);   
+  :: CONTRACT(L8);  
+  :: CONTRACT(CW1);
+  :: CONTRACT(CW2);  
+  :: CONTRACT(EXAM);
  od;
 }
 
-init
-{
+init{
   atomic /* start exec of BRG and CRM */
   { 
    run LEG(); run CRM(); 
   }
-}ltl ltlCheck {  [] IS_P( C1 )}
+}

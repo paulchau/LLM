@@ -105,7 +105,7 @@ RULE(LECTURES){
      RD(LECTURES,STUDENT,CCO,CO);/*repeat*/
 	}
 	 /*Handle prohibited action*/
- ::EVENT(LECTURES,IS_P(LECTURES,STUDENT),P(LECTURES))
+ ::EVENT(LECTURES,IS_P(LECTURES,STUDENT),TF(LECTURES))
 	->{
 		printf("Prohibited action");
 		RD(LECTURES,STUDENT,CCP,CO);
@@ -176,7 +176,7 @@ RULE(CW){
 	 fail=TRUE;
      RD(CW,STUDENT,CCO,CND);/*abnormal cont end*/
     }
- ::EVENT(CW,IS_P(CW,STUDENT),P(CW))
+ ::EVENT(CW,IS_P(CW,STUDENT),TF(CW))
 	->{
 		printf("Prohibited action");
 		RD(CW,STUDENT,CCP,CO);
@@ -240,7 +240,7 @@ RULE(EXAM){
 	 fail=TRUE;
      RD(EXAM,STUDENT,CCO,CND);/*abnormal cont end*/
     }
- ::EVENT(EXAM,IS_P(EXAM,STUDENT),P(EXAM))
+ ::EVENT(EXAM,IS_P(EXAM,STUDENT),SC(EXAM))
 	->{
 		printf("Prohibited action");
 		RD(EXAM,STUDENT,CCP,CO);

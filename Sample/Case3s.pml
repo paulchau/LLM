@@ -114,50 +114,40 @@ proctype LEG()
   * are modelled: exec with S and exec with TF */ 
  end:do
  :: L_E(LMS, START, S);
- if
- :: L_E(STUDENT, L1,  S) ->  :: L_E(STUDENT, L2,  S); L_E(STUDENT, L2,  TF);
- :: L_E(STUDENT, L1,  TF) -> L_E(STUDENT, L1,  S);   
- fi;
- if
- :: L_E(STUDENT, L2,  S) -> L_E(STUDENT, L3,  S); L_E(STUDENT, L3,  TF); 
- :: L_E(STUDENT, L2,  TF) -> L_E(STUDENT, L2, S);  
- fi;
- if
- :: L_E(STUDENT, L3,  S) -> L_E(STUDENT, CW1,  S); L_E(STUDENT, CW1, TO);
- :: L_E(STUDENT, L3,  TF) -> L_E(STUDENT, L3,  S); 
- fi;
- if
- :: L_E(STUDENT, L4,  S) -> L_E(STUDENT, L5,  S);  
- :: L_E(STUDENT, L4,  TF) -> L_E(STUDENT, L4,  S); 
- fi; 
- if
- :: L_E(STUDENT, L5,  S) -> L_E(STUDENT, L6,  S);  
- :: L_E(STUDENT, L5,  TF) -> L_E(STUDENT, L5,  S); 
- fi;
- if
- :: L_E(STUDENT, L6,  S) -> L_E(STUDENT, CW2,  S);  
- :: L_E(STUDENT, L6,  TF) -> L_E(STUDENT, L6,  S); 
- fi;
- if
- :: L_E(STUDENT, L7,  S) -> L_E(STUDENT, L8,  S);  
- :: L_E(STUDENT, L7,  TF) -> L_E(STUDENT, L7,  S);  
- fi;
- if
- :: L_E(STUDENT, L8,  S) -> L_E(STUDENT, EXAM,  S);  
- :: L_E(STUDENT, L8,  TF) -> L_E(STUDENT, L8,  S); 
- fi;
- if
- :: L_E(STUDENT, CW1, S) -> L_E(STUDENT, L4,  S);  
- :: L_E(STUDENT, CW1, TO) -> printf("timeout");  
- fi;
- if
- :: L_E(STUDENT, CW2, S) -> L_E(STUDENT, L7,  S);  
- :: L_E(STUDENT, CW2, TO) -> printf("timeout");; 
- fi;
- if
- :: L_E(STUDENT, EXAM, S) -> printf("Valid end");;    
- :: L_E(STUDENT, EXAM, TO) -> printf("timeout");; 
- fi;
+ 
+ :: L_E(STUDENT, L1,  S);
+ :: L_E(STUDENT, L1,  TF);   
+
+ :: L_E(STUDENT, L2,  S);  
+ :: L_E(STUDENT, L2,  TF);  
+
+ 
+ :: L_E(STUDENT, L3,  S);  
+ :: L_E(STUDENT, L3,  TF); 
+ 
+ :: L_E(STUDENT, L4,  S);  
+ :: L_E(STUDENT, L4,  TF); 
+ 
+ :: L_E(STUDENT, L5,  S);  
+ :: L_E(STUDENT, L5,  TF); 
+ 
+ :: L_E(STUDENT, L6,  S);  
+ :: L_E(STUDENT, L6,  TF); 
+ 
+ :: L_E(STUDENT, L7,  S);  
+ :: L_E(STUDENT, L7,  TF);  
+ 
+ :: L_E(STUDENT, L8,  S);  
+ :: L_E(STUDENT, L8,  TF); 
+
+ :: L_E(STUDENT, CW1, S);  
+
+ 
+ :: L_E(STUDENT, CW2, S);  
+
+ 
+ :: L_E(STUDENT, EXAM, S);    
+
  od; 
 }
 
@@ -193,4 +183,3 @@ init
    run LEG(); run CRM(); 
   }
 }
-

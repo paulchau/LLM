@@ -1,4 +1,3 @@
-
 /*
  * EPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
@@ -88,7 +87,12 @@ RULE(L1){
 
      RD(L1,STUDENT,CCO,CO);/*repeat*/
 	}
-
+	 /*Handle prohibited action*/
+ ::EVENT(L1,IS_P(L1,STUDENT),TF(L1))
+	->{
+		printf("Prohibited action");
+		RD(L1,STUDENT,CCP,CO);
+	}
     
  END(L1);		 
 }
@@ -139,7 +143,7 @@ RULE(L2){
      RD(L2,STUDENT,CCO,CO);/*repeat*/
 	}
 	 /*Handle prohibited action*/
- ::EVENT(L2,IS_P(L2,STUDENT),SC(L2))
+ ::EVENT(L2,IS_P(L2,STUDENT),TF(L2))
 	->{
 		printf("Prohibited action");
 		RD(L2,STUDENT,CCP,CO);
@@ -194,7 +198,7 @@ RULE(L3){
      RD(L3,STUDENT,CCO,CO);/*repeat*/
 	}
 	 /*Handle prohibited action*/
- ::EVENT(L3,IS_P(L3,STUDENT),SC(L3))
+ ::EVENT(L3,IS_P(L3,STUDENT),TF(L3))
 	->{
 		printf("Prohibited action");
 		RD(L3,STUDENT,CCP,CO);
@@ -249,7 +253,7 @@ RULE(L4){
      RD(L4,STUDENT,CCO,CO);/*repeat*/
 	}
 	 /*Handle prohibited action*/
- ::EVENT(L4,IS_P(L4,STUDENT),SC(L4))
+ ::EVENT(L4,IS_P(L4,STUDENT),TF(L4))
 	->{
 		printf("Prohibited action");
 		RD(L4,STUDENT,CCP,CO);
@@ -305,7 +309,7 @@ RULE(L5){
      RD(L5,STUDENT,CCO,CO);/*repeat*/
 	}
 	 /*Handle prohibited action*/
- ::EVENT(L5,IS_P(L5,STUDENT),SC(L5))
+ ::EVENT(L5,IS_P(L5,STUDENT),TF(L5))
 	->{
 		printf("Prohibited action");
 		RD(L5,STUDENT,CCP,CO);
@@ -360,7 +364,7 @@ RULE(L6){
      RD(L6,STUDENT,CCO,CO);/*repeat*/
 	}
 	 /*Handle prohibited action*/
- ::EVENT(L6,IS_P(L6,STUDENT),SC(L6))
+ ::EVENT(L6,IS_P(L6,STUDENT),TF(L6))
 	->{
 		printf("Prohibited action");
 		RD(L6,STUDENT,CCP,CO);
@@ -415,7 +419,7 @@ RULE(L7){
      RD(L7,STUDENT,CCO,CO);/*repeat*/
 	}
 	 /*Handle prohibited action*/
- ::EVENT(L7,IS_P(L7,STUDENT),SC(L7))
+ ::EVENT(L7,IS_P(L7,STUDENT),TF(L7))
 	->{
 		printf("Prohibited action");
 		RD(L7,STUDENT,CCP,CO);
@@ -470,7 +474,7 @@ RULE(L8){
      RD(L8,STUDENT,CCO,CO);/*repeat*/
 	}
 	 /*Handle prohibited action*/
- ::EVENT(L8,IS_P(L8,STUDENT),SC(L8))
+ ::EVENT(L8,IS_P(L8,STUDENT),TF(L8))
 	->{
 		printf("Prohibited action");
 		RD(L8,STUDENT,CCP,CO);
@@ -528,31 +532,7 @@ RULE(CW1){
 	 fail=TRUE;
      RD(CW1,STUDENT,CCO,CND);/*abnormal cont end*/
     }
- /* handle CW1 with fail outcome */
- ::EVENT(CW1,IS_O(CW1,STUDENT),LF(CW1))->{
-     atomic{
-     printf("\n\n");
-     printf("<originator>STUDENT</originator>\n");
-     printf("<responder>LMS</responder>\n");
-     printf("<type>CW1</type>\n");
-     printf("<status>Learning Fail</status>\n");
-     printf("\n\n")
-     } 
- 
-     printf("Coursework 1 failed"); 
-     SET_O(L4,0);
-     SET_O(CW1,0);
-     atomic{
-     printf("\n\n");
-     printf("<originator>reset</originator>\n");
-     printf("<responder>reset</responder>\n");
-     printf("<type>reset</type>\n");
-     printf("<status>reset</status>\n");
-     printf("\n\n")}
-	 fail=TRUE;
-     RD(CW1,STUDENT,CCO,CND);/*abnormal cont end*/
-    }		
- ::EVENT(CW1,IS_P(CW1,STUDENT),SC(CW1))
+ ::EVENT(CW1,IS_P(CW1,STUDENT),TF(CW1))
 	->{
 		printf("Prohibited action");
 		RD(CW1,STUDENT,CCP,CO);
@@ -609,31 +589,7 @@ RULE(CW2){
 	 fail=TRUE;
      RD(CW2,STUDENT,CCO,CND);/*abnormal cont end*/
     }
- /* handle CW2 with fail outcome */
- ::EVENT(CW2,IS_O(CW2,STUDENT),LF(CW2))->{
-     atomic{
-     printf("\n\n");
-     printf("<originator>STUDENT</originator>\n");
-     printf("<responder>LMS</responder>\n");
-     printf("<type>CW2</type>\n");
-     printf("<status>Learning Fail</status>\n");
-     printf("\n\n")
-     } 
- 
-     printf("Coursework 2 failed"); 
-     SET_O(EXAM,0);
-     SET_O(CW2,0);
-     atomic{
-     printf("\n\n");
-     printf("<originator>reset</originator>\n");
-     printf("<responder>reset</responder>\n");
-     printf("<type>reset</type>\n");
-     printf("<status>reset</status>\n");
-     printf("\n\n")}
-	 fail=TRUE;
-     RD(CW2,STUDENT,CCO,CND);/*abnormal cont end*/
-    }	
- ::EVENT(CW2,IS_P(CW2,STUDENT),SC(CW2))
+ ::EVENT(CW2,IS_P(CW2,STUDENT),TF(CW2))
 	->{
 		printf("Prohibited action");
 		RD(CW2,STUDENT,CCP,CO);
@@ -669,7 +625,7 @@ RULE(EXAM){
 				printf("\n\n")}
 				RD(EXAM,STUDENT,CCO,CND);
     }	
- /* handle EXAM with timeout outcome */
+ /* handle CW with technical failure outcome */
  ::EVENT(EXAM,IS_O(EXAM,STUDENT),TO(EXAM))
   ->{
      atomic{
@@ -693,31 +649,7 @@ RULE(EXAM){
 	 fail=TRUE;
      RD(EXAM,STUDENT,CCO,CND);/*abnormal cont end*/
     }
- /* handle CW with fail outcome */
- ::EVENT(EXAM,IS_O(EXAM,STUDENT),LF(EXAM))
-  ->{
-     atomic{
-     printf("\n\n");
-     printf("<originator>STUDENT</originator>\n");
-     printf("<responder>LMS</responder>\n");
-     printf("<type>EXAM</type>\n");
-     printf("<status>Learning Fail</status>\n");
-     printf("\n\n")
-     } 
- 
-     printf("Exam -- fail"); 
-     SET_O(EXAM,0);
-     atomic{
-     printf("\n\n");
-     printf("<originator>reset</originator>\n");
-     printf("<responder>reset</responder>\n");
-     printf("<type>reset</type>\n");
-     printf("<status>reset</status>\n");
-     printf("\n\n")}
-	 fail=TRUE;
-     RD(EXAM,STUDENT,CCO,CND);/*abnormal cont end*/
-    }	
- ::EVENT(EXAM,IS_P(EXAM,STUDENT), SC(EXAM))
+ ::EVENT(EXAM,IS_P(EXAM,STUDENT), TF(EXAM))
 	->{
 		printf("Prohibited action");
 		RD(EXAM,STUDENT,CCP,CO);

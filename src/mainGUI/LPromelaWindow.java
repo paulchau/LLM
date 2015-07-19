@@ -53,9 +53,6 @@ public class LPromelaWindow {
 	private ArrayList<String> files = new ArrayList<String>();
 	private ArrayList<LTLDefinition> ltlList = new ArrayList<LTLDefinition>();
 	private ImplLTLDao dao = new ImplLTLDao();
-	private static final Pattern NO_ERROR_PATTERN = Pattern
-			.compile("State-vector \\d+ byte, depth reached \\d+, errors: 0");
-	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -78,237 +75,6 @@ public class LPromelaWindow {
 	 */
 	public LPromelaWindow() {
 		initialize();
-	}
-
-	private String Simulator() throws IOException {
-		String output = "";
-		File des;
-		for (String s : files) {
-			File sor = new File(fileRoot + s);
-			des = new File("./" + s);
-			try {
-				Files.copy(sor.toPath(), des.toPath());
-			} catch (Exception ee) {
-				Files.delete(des.toPath());
-				Files.copy(sor.toPath(), des.toPath());
-			}
-		}
-		File temp = new File("./test.pml");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
-		bw.write(pml.getText());
-		bw.close();
-		String command1 = "./spin \"./test.pml\"";
-		Runtime runtime = Runtime.getRuntime();
-		Process proc1 = runtime.exec(command1);
-		System.out.println("proc1");
-		output = "Output: \n";
-		String line = "";
-		BufferedReader stdout = new BufferedReader(new InputStreamReader(
-				proc1.getInputStream()));
-		while ((line = stdout.readLine()) != null) {
-			output = output + line + "\n";
-		}
-		stdout.close();
-		output = output + "\n Error: \n";
-		BufferedReader stderr = new BufferedReader(new InputStreamReader(
-				proc1.getErrorStream()));
-		while ((line = stderr.readLine()) != null) {
-			output = output + line + "\n";
-		}
-		stderr.close();
-		System.out.println("Done");
-
-		proc1.getOutputStream().close();
-
-		return output;
-	}
-
-	private String Verifier() throws IOException {
-		LTLDefinition chooseLTL = null;
-		ltlList = dao.getAllLTLDefinition();
-		if (ltlList.size() != 0) {
-			LTLDefinition[] temp = new LTLDefinition[ltlList.size()];
-			for (int i = 0; i < ltlList.size(); i++) {
-				temp[i] = ltlList.get(i);
-			}
-			chooseLTL = (LTLDefinition) JOptionPane.showInputDialog(
-					frmLpromela,
-					"Choose the LTL to test. Press cancel if not required.",
-					"Add LTL to model", JOptionPane.QUESTION_MESSAGE, null,
-					temp, temp[0]);
-		}
-		if (!(chooseLTL == null)) {
-			ArrayList<String> var = new ArrayList<String>();
-			for (String s : pml.getText().split("\\n")) {
-				if (s.contains("LN_EVENT")) {
-					var.add(s.substring(9, s.length() - 2));
-				}
-			}
-			String[] choice = new String[var.size()];
-			for (int i = 0; i < var.size(); i++) {
-				choice[i] = var.get(i);
-			}
-			int id = 0;
-			String formula = "";
-			String[] text = chooseLTL.getFormula().split(" ");
-			for (String temp : text) {
-				if (temp.contains("@")) {
-					id++;
-					String input = (String) JOptionPane.showInputDialog(
-							frmLpromela, chooseLTL.getDescription(),
-							"Choose variable " + id,
-							JOptionPane.QUESTION_MESSAGE, null, choice,
-							choice[0]);
-					System.out.println(input);
-					while (input == null) {
-						input = (String) JOptionPane.showInputDialog(
-								frmLpromela, chooseLTL.getDescription(),
-								"Choose variable " + id,
-								JOptionPane.QUESTION_MESSAGE, null, choice,
-								choice[0]);
-					}
-					formula = formula + " " + input;
-				} else {
-					formula = formula + " " + temp;
-				}
-				System.out.println("formula: " + formula);
-			}
-			chooseLTL.setFormula(formula);
-		}
-
-		System.out.println(chooseLTL.getFormula());
-		String output = "";
-		File des;
-		File file = new File(fileDir);
-		File file2 = new File(filePath);
-		File file3 = new File("./test.pml");
-		File dest;
-		for (String s : files) {
-			dest = new File("./" + s);
-			try {
-				Files.delete(dest.toPath());
-			} catch (IOException e1) {
-				// JOptionPane.showMessageDialog(frmLpromela,
-				// "Error! Fail in removing temp content.");
-			}
-		}
-		try {
-			Files.delete(new File("./test.pml").toPath());
-		} catch (Exception ee) {
-			JOptionPane.showMessageDialog(frmLpromela, ee.getMessage());
-		}
-		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-			bw.write(pml.getText());
-			bw.close();
-			BufferedWriter bw2 = new BufferedWriter(new FileWriter(file2));
-			bw2.write(rule.getText());
-			bw2.close();
-			BufferedWriter bw3 = new BufferedWriter(new FileWriter(file3));
-			String input = pml.getText();
-			if (!(chooseLTL == null)) {
-				input += "ltl ltlCheck {" + chooseLTL.getFormula() + "}";
-			}
-			bw3.write(input);
-			bw3.close();
-			FileOutputStream fos = new FileOutputStream(fileRoot + "file.ltl");
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(ltlList);
-			oos.close();
-			fos.close();
-			JOptionPane.showMessageDialog(frmLpromela, "File saved.");
-		} catch (IOException e1) {
-			JOptionPane.showMessageDialog(frmLpromela,
-					"Error! Fail to save the content. " + e1.getMessage());
-		}
-
-		for (String s : files) {
-			File sor = new File(fileRoot + s);
-			des = new File("./" + s);
-			System.out.println(s);
-			try {
-				Files.copy(sor.toPath(), des.toPath());
-			} catch (Exception ee) {
-				Files.delete(des.toPath());
-				Files.copy(sor.toPath(), des.toPath());
-			}
-		}
-		String command1 = "./spin -a \"./test.pml\"";
-		String command2 = "cc -o pan pan.c";
-		String command3 = "./pan -a";
-		Runtime runtime = Runtime.getRuntime();
-		Process proc1 = runtime.exec(command1);
-		try {
-			proc1.waitFor();
-		} catch (InterruptedException e) {
-			System.out.println("proc1 error");
-		}
-		proc1.getOutputStream().close();
-		Process proc2 = runtime.exec(command2);
-		try {
-			proc2.waitFor();
-		} catch (InterruptedException e) {
-			System.out.println("proc2 error");
-		}
-		proc2.getOutputStream().close();
-		Process proc3 = runtime.exec(command3);
-		proc3.getOutputStream().close();
-		System.out.println("proc3");
-		output = "Verification Result: <br>";
-		String line = "";
-		BufferedReader stdout = new BufferedReader(new InputStreamReader(
-				proc3.getInputStream()));
-		boolean found = false;
-		while ((line = stdout.readLine()) != null) {
-			Matcher matcher = NO_ERROR_PATTERN.matcher(line);
-			if (matcher.find()) {
-				found = true;
-			}
-			output = output + line + "<br>";
-		}
-		if (!found) {
-			JOptionPane.showMessageDialog(null, "Errors found");
-			sf = new SimulateFrame();
-			sf.setVisible(true);
-			String error = "";
-			String command0 = "./spin -t \"./test.pml\"";
-			Runtime runtime0 = Runtime.getRuntime();
-			Process proc0 = runtime0.exec(command0);
-			System.out.println("trail");
-			output = "Output: \n";
-			BufferedReader stdout1 = new BufferedReader(new InputStreamReader(
-					proc0.getInputStream()));
-			while ((line = stdout1.readLine()) != null) {
-				error = error + line + "\n";
-			}
-			stdout1.close();
-			error = error + "\n Error: \n";
-			BufferedReader stderr1 = new BufferedReader(new InputStreamReader(
-					proc0.getErrorStream()));
-			while ((line = stderr1.readLine()) != null) {
-				error = error + line + "\n";
-			}
-			stderr1.close();
-			System.out.println("Done");
-
-			proc0.getOutputStream().close();
-			sf.setText(error);
-		}
-		stdout.close();
-		output = output + "<br> Error: <br>";
-		BufferedReader stderr = new BufferedReader(new InputStreamReader(
-				proc3.getErrorStream()));
-		while ((line = stderr.readLine()) != null) {
-			output = output + line + "<br>";
-		}
-		stderr.close();
-		System.out.println("Done");
-
-		proc1.getOutputStream().close();
-		proc2.getOutputStream().close();
-		proc3.getOutputStream().close();
-
-		return output;
 	}
 
 	private void fileOpen() {
@@ -609,7 +375,7 @@ public class LPromelaWindow {
 				try {
 					sf = new SimulateFrame();
 					sf.setVisible(true);
-					sf.setText(Simulator());
+					sf.Simulator(pml.getText(), fileRoot, files);
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(frmLpromela,
 							"Error! Fail to simluate the content.");
@@ -629,7 +395,8 @@ public class LPromelaWindow {
 					vf = new VerifyFrame();
 					vf.setVisible(true);
 					vf.setText("");
-					vf.setText(Verifier());
+					vf.Verifier(ltlList, pml.getText(), rule.getText(),
+							fileDir, filePath, fileRoot, files);
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(
 							frmLpromela,
@@ -660,7 +427,7 @@ public class LPromelaWindow {
 				try {
 					sf = new SimulateFrame();
 					sf.setVisible(true);
-					sf.setText(Simulator());
+					sf.Simulator(pml.getText(), fileRoot, files);
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(frmLpromela,
 							"Error! Fail to simluate the content.");
@@ -677,7 +444,8 @@ public class LPromelaWindow {
 				try {
 					vf = new VerifyFrame();
 					vf.setVisible(true);
-					vf.setText(Verifier());
+					vf.Verifier(ltlList, pml.getText(), rule.getText(),
+							fileDir, filePath, fileRoot, files);
 				} catch (IOException e1) {
 					JOptionPane.showMessageDialog(frmLpromela,
 							"Error! Fail to verify the content.");

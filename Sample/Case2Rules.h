@@ -37,6 +37,12 @@
 
 
 
+
+
+
+
+
+
 /*
  * EPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
@@ -208,7 +214,7 @@ RULE(C1){
      printf("\n\n")}
      RD(C1,STUDENT,CCO,CO);/*repeat*/
     }
- ::EVENT(C1,IS_P(C1,STUDENT),P(C1))
+ ::EVENT(C1,IS_P(C1,STUDENT),SC(C1))
 	->{
 		printf("Prohibited choice");
 		RD(C1,STUDENT,CCP,CO);
@@ -263,7 +269,7 @@ RULE(C2){
      printf("\n\n")}
      RD(C2,STUDENT,CCO,CO);/*repeat*/
     }
- ::EVENT(C2,IS_P(C2,STUDENT),P(C2))
+ ::EVENT(C2,IS_P(C2,STUDENT),SC(C2))
 	->{
 		printf("Prohibited choice");
 		RD(C2,STUDENT,CCP,CO);
@@ -322,7 +328,7 @@ RULE(C3){
      printf("\n\n")}
      RD(C3,STUDENT,CCO,CO);/*repeat*/
     }
- ::EVENT(C3,IS_P(C3,STUDENT),P(C3))
+ ::EVENT(C3,IS_P(C3,STUDENT),SC(C3))
 	->{
 		printf("Prohibited choice");
 		RD(C3,STUDENT,CCP,CO);
@@ -347,6 +353,7 @@ RULE(ChooseAccept){
      }
      SET_X(ChooseAccept,LMS);
 	 SET_O(ChooseAccept,0);
+	 SET_O(ChooseReject,0);
 	 atomic{
 	 printf("\n\n");
 	 printf("<originator>reset</originator>\n");

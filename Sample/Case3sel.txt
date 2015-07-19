@@ -115,15 +115,15 @@ proctype LEG()
  end:do
  :: L_E(LMS, START, S);
  if
- :: L_E(STUDENT, L1,  S) ->  :: L_E(STUDENT, L2,  S); L_E(STUDENT, L2,  TF);
+ :: L_E(STUDENT, L1,  S) ->  :: L_E(STUDENT, L2,  S); 
  :: L_E(STUDENT, L1,  TF) -> L_E(STUDENT, L1,  S);   
  fi;
  if
- :: L_E(STUDENT, L2,  S) -> L_E(STUDENT, L3,  S); L_E(STUDENT, L3,  TF); 
+ :: L_E(STUDENT, L2,  S) -> L_E(STUDENT, L3,  S);  
  :: L_E(STUDENT, L2,  TF) -> L_E(STUDENT, L2, S);  
  fi;
  if
- :: L_E(STUDENT, L3,  S) -> L_E(STUDENT, CW1,  S); L_E(STUDENT, CW1, TO);
+ :: L_E(STUDENT, L3,  S) -> L_E(STUDENT, CW1,  S);  
  :: L_E(STUDENT, L3,  TF) -> L_E(STUDENT, L3,  S); 
  fi;
  if
@@ -148,15 +148,15 @@ proctype LEG()
  fi;
  if
  :: L_E(STUDENT, CW1, S) -> L_E(STUDENT, L4,  S);  
- :: L_E(STUDENT, CW1, TO) -> printf("timeout");  
+ :: L_E(STUDENT, CW1, TO) -> timeout;  
  fi;
  if
  :: L_E(STUDENT, CW2, S) -> L_E(STUDENT, L7,  S);  
- :: L_E(STUDENT, CW2, TO) -> printf("timeout");; 
+ :: L_E(STUDENT, CW2, TO) -> timeout; 
  fi;
  if
- :: L_E(STUDENT, EXAM, S) -> printf("Valid end");;    
- :: L_E(STUDENT, EXAM, TO) -> printf("timeout");; 
+ :: L_E(STUDENT, EXAM, S) -> timeout;    
+ :: L_E(STUDENT, EXAM, TO) -> timeout; 
  fi;
  od; 
 }
@@ -193,4 +193,3 @@ init
    run LEG(); run CRM(); 
   }
 }
-
