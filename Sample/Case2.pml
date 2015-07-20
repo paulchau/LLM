@@ -157,15 +157,12 @@ proctype LEG()
  :: L_E(LMS, RegReply, TF);
  
  :: L_E(STUDENT, C1,  S);  
- :: L_E(STUDENT, C1,  P);  
  :: L_E(STUDENT, C1,  TF);             
 
  :: L_E(STUDENT, C2, S);  
- :: L_E(STUDENT, C2, P);  
  :: L_E(STUDENT, C2, TF); 
  
  :: L_E(STUDENT, C3, S);    
- :: L_E(STUDENT, C3, P);  
  :: L_E(STUDENT, C3, TF); 
  
  :: L_E(LMS, ChooseAccept, S);

@@ -68,6 +68,7 @@ LN_EVENT(L4);
 LN_EVENT(L5);
 LN_EVENT(L6);
 LN_EVENT(L7);
+LN_EVENT(L8);
 LN_EVENT(CW1);
 LN_EVENT(CW2);
 LN_EVENT(EXAM);
@@ -100,7 +101,8 @@ proctype LEG()
   INIT(L4,  STUDENT, 0,0,1); 
   INIT(L5,  STUDENT, 0,0,1);   
   INIT(L6,  STUDENT, 0,0,1); 
-  INIT(L7,  STUDENT, 0,0,1);   
+  INIT(L7,  STUDENT, 0,0,1);
+  INIT(L8,  STUDENT, 0,0,1);   
   INIT(CW1, STUDENT, 0,0,1);
   INIT(CW2, STUDENT, 0,0,1);  
   INIT(EXAM, STUDENT, 0,0,1);
@@ -114,44 +116,40 @@ proctype LEG()
  :: L_E(LMS, START, S);
  
  :: L_E(STUDENT, L1,  S);  
- :: L_E(STUDENT, L1,  P);  
  :: L_E(STUDENT, L1,  TF);  
 
  :: L_E(STUDENT, L2,  S);  
- :: L_E(STUDENT, L2,  P);  
  :: L_E(STUDENT, L2,  TF);   
  
  :: L_E(STUDENT, L3,  S);  
- :: L_E(STUDENT, L3,  P);  
  :: L_E(STUDENT, L3,  TF);  
  
  :: L_E(STUDENT, L4,  S);  
- :: L_E(STUDENT, L4,  P);  
  :: L_E(STUDENT, L4,  TF);  
  
  :: L_E(STUDENT, L5,  S);  
- :: L_E(STUDENT, L5,  P);  
  :: L_E(STUDENT, L5,  TF);
  
  :: L_E(STUDENT, L6,  S);  
- :: L_E(STUDENT, L6,  P);  
  :: L_E(STUDENT, L6,  TF); 
  
  :: L_E(STUDENT, L7,  S);  
- :: L_E(STUDENT, L7,  P);  
  :: L_E(STUDENT, L7,  TF);  
 
+ :: L_E(STUDENT, L8,  S);  
+ :: L_E(STUDENT, L8,  TF);   
+ 
  :: L_E(STUDENT, CW1, S);  
- :: L_E(STUDENT, CW1, P);  
  :: L_E(STUDENT, CW1, TO); 
+ :: L_E(STUDENT, CW1, LF);  
  
  :: L_E(STUDENT, CW2, S);  
- :: L_E(STUDENT, CW2, P);  
- :: L_E(STUDENT, CW2, TO);  
+ :: L_E(STUDENT, CW2, TO);
+ :: L_E(STUDENT, CW2, LF);  
  
  :: L_E(STUDENT, EXAM, S);    
- :: L_E(STUDENT, EXAM, P);  
- :: L_E(STUDENT, EXAM, TO); 
+ :: L_E(STUDENT, EXAM, TO);
+ :: L_E(STUDENT, EXAM, LF);  
  od; 
 }
 
@@ -172,7 +170,8 @@ proctype CRM()
   :: CONTRACT(L4);   
   :: CONTRACT(L5); 
   :: CONTRACT(L6);
-  :: CONTRACT(L7);   
+  :: CONTRACT(L7); 
+  :: CONTRACT(L8);   
   :: CONTRACT(CW1);
   :: CONTRACT(CW2);  
   :: CONTRACT(EXAM);
