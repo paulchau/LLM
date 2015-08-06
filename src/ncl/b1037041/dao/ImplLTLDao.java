@@ -1,14 +1,12 @@
 package ncl.b1037041.dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import ncl.b1037041.LTL.entites.LPromelaModel;
-import ncl.b1037041.LTL.entites.ModelMessageInfo;
-import ncl.b1037041.LTL.entites.LTLDefinition;
-import ncl.b1037041.LTL.entites.LTLInstance;
-import ncl.b1037041.LTL.entites.StatisticsLTLUsage;
+import ncl.b1037041.LTL.entites.*;
 import ncl.b1037041.db.tool.DataBaseUtil;
 
 

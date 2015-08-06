@@ -1,8 +1,8 @@
 #ifndef PAN_H
 #define PAN_H
 
-#define SpinVersion	"Spin Version 6.2.2 -- 6 June 2012"
-#define PanSource	"Case2.pml"
+#define SpinVersion	"Spin Version 6.4.3 -- 16 December 2014"
+#define PanSource	"./test.pml"
 
 #define G_long	4
 #define G_int	4
@@ -10,8 +10,8 @@
 #define ulong	unsigned long
 #define ushort	unsigned short
 #ifdef WIN64
-	#define ONE_L	((unsigned long) 1)
-	#define long	long long
+	#define ONE_L	(1L)
+/*	#define long	long long */
 #else
 	#define ONE_L	(1L)
 #endif
@@ -32,7 +32,7 @@
 		#define HC /* default for USE_TDH */
 	#endif
 	#ifndef BFS_MAXPROCS
-		#define BFS_MAXPROCS	32	/* max nr of cores to use */
+		#define BFS_MAXPROCS	64	/* max nr of cores to use */
 	#endif
 	#define BFS_GLOB	0	/* global lock */
 	#define BFS_ORD		1	/* used with -DCOLLAPSE */
@@ -57,7 +57,7 @@
 	extern int Cores, who_am_i;
 	#ifndef SAFETY
 	  #if !defined(BFS_STAGGER) && !defined(BFS_DISK)
-		#define BFS_STAGGER	64 /* randomizer */
+		#define BFS_STAGGER	64 /* randomizer, was 16 */
 	  #endif
 	  #ifndef L_BOUND
 		#define L_BOUND 	10 /* default */
@@ -102,6 +102,7 @@
 #ifndef NFAIR
 	#define NFAIR	2	/* must be >= 2 */
 #endif
+#define HAS_LTL	1
 #define HAS_CODE	1
 #if defined(RANDSTORE) && !defined(RANDSTOR)
 	#define RANDSTOR	RANDSTORE
@@ -120,7 +121,13 @@
 #endif
 #ifdef NP
 	#define HAS_NP	2
-	#define VERI	3	/* np_ */
+	#define VERI	4	/* np_ */
+#endif
+#ifndef NOCLAIM
+	#define NCLAIMS	1
+	#ifndef NP
+		#define VERI	3
+	#endif
 #endif
 
 typedef struct S_F_MAP {
@@ -129,31 +136,38 @@ typedef struct S_F_MAP {
 	int upto;
 } S_F_MAP;
 
+#define nstates3	7	/* ltlCheck */
+#define minseq3	473
+#define maxseq3	478
+#define endstate3	6
+
 #define nstates2	5	/* :init: */
-#define minseq2	1452
-#define maxseq2	1455
+#define minseq2	469
+#define maxseq2	472
 #define endstate2	4
 
-#define nstates1	735	/* CRM */
-#define minseq1	718
-#define maxseq1	1451
-#define endstate1	734
+#define nstates1	239	/* CRM */
+#define minseq1	231
+#define maxseq1	468
+#define endstate1	238
 
-#define nstates0	719	/* LEG */
+#define nstates0	232	/* LEG */
 #define minseq0	0
-#define maxseq0	717
-#define endstate0	718
+#define maxseq0	230
+#define endstate0	231
 
+extern short src_ln3[];
 extern short src_ln2[];
 extern short src_ln1[];
 extern short src_ln0[];
+extern S_F_MAP src_file3[];
 extern S_F_MAP src_file2[];
 extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
 
 #define T_ID	unsigned short
-#define _T5	624
-#define _T2	625
+#define _T5	230
+#define _T2	231
 #define WS		4 /* word size in bytes */
 #define SYNC	1
 #define ASYNC	1
@@ -181,11 +195,21 @@ struct LN_EVENT { /* user defined type */
 	uchar id;
 	uchar status;
 };
+typedef struct P3 { /* ltlCheck */
+	unsigned _pid : 8;  /* 0..255 */
+	unsigned _t   : 4; /* proctype */
+	unsigned _p   : 9; /* state    */
+#ifdef HAS_PRIORITY
+	unsigned _priority : 8; /* 0..255 */
+#endif
+} P3;
+#define Air3	(sizeof(P3) - 3)
+
 #define Pinit	((P2 *)this)
 typedef struct P2 { /* :init: */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 11; /* state    */
+	unsigned _t   : 4; /* proctype */
+	unsigned _p   : 9; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -195,8 +219,8 @@ typedef struct P2 { /* :init: */
 #define PCRM	((P1 *)this)
 typedef struct P1 { /* CRM */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 11; /* state    */
+	unsigned _t   : 4; /* proctype */
+	unsigned _p   : 9; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -206,23 +230,23 @@ typedef struct P1 { /* CRM */
 #define PLEG	((P0 *)this)
 typedef struct P0 { /* LEG */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 11; /* state    */
+	unsigned _t   : 4; /* proctype */
+	unsigned _p   : 9; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
 } P0;
 #define Air0	(sizeof(P0) - 3)
 
-typedef struct P3 { /* np_ */
+typedef struct P4 { /* np_ */
 	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 11; /* state    */
+	unsigned _t   : 4; /* proctype */
+	unsigned _p   : 9; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
-} P3;
-#define Air3	(sizeof(P3) - 3)
+} P4;
+#define Air4	(sizeof(P4) - 3)
 
 #define Pclaim	P0
 #ifndef NCLAIMS
@@ -414,22 +438,15 @@ typedef struct State {
 		unsigned short _event;
 	#endif
 #endif
-	unsigned choose1 : 1;
-	unsigned choose2 : 1;
-	unsigned choose3 : 1;
-	unsigned all : 1;
 	uchar cntttr;
 	uchar LEG2CRM;
 	uchar CRM2LEG;
 	int STUDENTexTrace;
 	int LMSexTrace;
-	struct LN_EVENT RegReq_bo;
-	struct LN_EVENT RegReply_bo;
-	struct LN_EVENT C1_bo;
-	struct LN_EVENT C2_bo;
-	struct LN_EVENT C3_bo;
-	struct LN_EVENT ChooseAccept_bo;
-	struct LN_EVENT ChooseReject_bo;
+	struct LN_EVENT a_lo;
+	struct LN_EVENT b_lo;
+	struct LN_EVENT c_lo;
+	struct LN_EVENT d_lo;
 #ifdef TRIX
 	/* room for 512 proc+chan ptrs, + safety margin */
 	char *_ids_[MAXPROC+MAXQ+4];
@@ -454,22 +471,24 @@ typedef struct TRIX_v6 {
 /* hidden variable: */	uchar rTemp;
 /* hidden variable: */	uchar oTemp;
 /* hidden variable: */	uchar pTemp;
+/* hidden variable: */	uchar fail;
 /* hidden variable: */	int executionTrace;
 #define FORWARD_MOVES	"pan.m"
-#define REVERSE_MOVES	"pan.b"
+#define BACKWARD_MOVES	"pan.b"
 #define TRANSITIONS	"pan.t"
-#define _NP_	3
-#define nstates3	3 /* np_ */
-#define endstate3	2 /* np_ */
+#define _NP_	4
+#define nstates4	3 /* np_ */
+#define endstate4	2 /* np_ */
 
-#define start3	0 /* np_ */
+#define start4	0 /* np_ */
+#define start3	3
 #define start2	3
 #define start1	1
-#define start0	70
+#define start0	43
 #ifdef NP
 	#define ACCEPT_LAB	1 /* at least 1 in np_ */
 #else
-	#define ACCEPT_LAB	0 /* user-defined accept labels */
+	#define ACCEPT_LAB	1 /* user-defined accept labels */
 #endif
 #ifdef MEMCNT
 	#ifdef MEMLIM
@@ -530,7 +549,9 @@ int addqueue(int, int, int);
 int close(int);
 int delproc(int, int);
 int endstate(void);
+int find_claim(char *);
 int h_store(char *, int);
+int pan_rand(void);
 int q_cond(short, Trans *);
 int q_full(int);
 int q_len(int);
@@ -551,7 +572,6 @@ void crack(int, int, Trans *, short *);
 void d_sfh(uchar *, int);
 void d_hash(uchar *, int);
 void s_hash(uchar *, int);
-void r_hash(uchar *, int);
 void delq(int);
 void dot_crack(int, int, Trans *);
 void do_reach(void);
@@ -666,16 +686,24 @@ struct BFS_Trail {
 	uchar o_pm;
 	uchar tau;
 };
+	#if SYNC>0
+		#undef BFS_NOTRAIL
+	#endif
 #endif
 
 struct Trail {
 	int   st;	/* current state */
 	int   o_tt;
+#ifdef PERMUTED
+	uint  seed;
+	uchar oII;
+#endif
 	uchar pr;	/* process id */
 	uchar tau;	/* 8 bit-flags */
 	uchar o_pm;	/* 8 more bit-flags */
+
 	#if 0
-	Meaning of bit-flags:
+	Meaning of bit-flags on tau and o_pm:
 	tau&1   -> timeout enabled
 	tau&2   -> request to enable timeout 1 level up (in claim)
 	tau&4   -> current transition is a  claim move
@@ -693,58 +721,62 @@ struct Trail {
 	o_pm&64 -> the current proc applied rule2
 	o_pm&128 -> a fairness, dummy move - all procs blocked
 	#endif
+
 	#ifdef NSUCC
-		uchar n_succ;	/* nr of successor states */
+	 uchar n_succ;	/* nr of successor states */
 	#endif
 	#if defined(FULLSTACK) && defined(MA) && !defined(BFS)
-		uchar proviso;
+	 uchar proviso;
 	#endif
 	#ifndef BFS
-		uchar  o_n, o_ot;	/* to save locals */
+	 uchar  o_n, o_ot;	/* to save locals */
 	#endif
 	uchar  o_m;
 	#ifdef EVENT_TRACE
 		#if nstates_event<256
-			uchar o_event;
+		 uchar o_event;
 		#else
-			unsigned short o_event;
+		 unsigned short o_event;
 		#endif
 	#endif
 	#ifndef BFS
 		short o_To;
-		#ifdef T_RAND
-			short oo_i;
+		#if defined(T_RAND) || defined(RANDOMIZE)
+		 short oo_i;
 		#endif
 	#endif
 	#if defined(HAS_UNLESS) && !defined(BFS)
-		int e_state;	/* if escape trans - state of origin */
+	 int e_state;	/* if escape trans - state of origin */
 	#endif
 	#if (defined(FULLSTACK) && !defined(MA)) || defined(BFS) || (NCORE>1)
-		H_el *ostate;	/* pointer to stored state */
+	 H_el *ostate;	/* pointer to stored state */
 	#endif
 	#if defined(CNTRSTACK) && !defined(BFS)
-		long	j6, j7;
+	 long	j6, j7;
 	#endif
 	Trans *o_t;
 	#if !defined(BFS) && !defined(TRIX_ORIG)
-		char *p_bup;
-		char *q_bup;
+	 char *p_bup;
+	 char *q_bup;
 	#endif
 	#ifdef BCS
-		unsigned short sched_limit;
-		unsigned char  bcs; /* phase 1 or 2, or forced 4 */
-		unsigned char  b_pno; /* preferred pid */
+	 unsigned short sched_limit;
+	 unsigned char  bcs; /* phase 1 or 2, or forced 4 */
+	 unsigned char  b_pno; /* preferred pid */
 	#endif
 	#ifdef P_RAND
-		unsigned char p_left;	/* nr of procs left to explore */
-		short p_skip;	/* to find starting point in list */
+	 unsigned char p_left;	/* nr of procs left to explore */
+	 short p_skip;	/* to find starting point in list */
 	#endif
 	#ifdef HAS_SORTED
-		short ipt;
+	 short ipt;
+	#endif
+	#ifdef HAS_PRIORITY
+	 short o_priority;
 	#endif
 	union {
-		int oval;
-		int *ovals;
+	 int oval;
+	 int *ovals;
 	} bup;
 }; /* end of struct Trail */
 
@@ -794,7 +826,7 @@ typedef struct BFS_State {
  #if !defined(BFS_PAR) || NRUNS>0
 	EV_Hold *omask;
  #endif
- #ifdef Q_PROVISO
+ #if defined(Q_PROVISO) && !defined(NOREDUCE)
 	H_el *lstate;
  #endif
  #if !defined(BFS_PAR) || SYNC>0
@@ -803,13 +835,15 @@ typedef struct BFS_State {
  #ifdef VERBOSE
 	ulong nr;
  #endif
+ #ifndef BFS_PAR
 	struct BFS_State *nxt;
+ #endif
 } BFS_State;
 #endif
 
 void qsend(int, int, int, int, int);
 
-#define Addproc(x)	addproc(256, x)
+#define Addproc(x,y)	addproc(256, y, x)
 #define LOCAL	1
 #define Q_FULL_F	2
 #define Q_EMPT_F	3
@@ -819,7 +853,7 @@ void qsend(int, int, int, int, int);
 #define GLOBAL	7
 #define BAD	8
 #define ALPHA_F	9
-#define NTRANS	626
+#define NTRANS	232
 #if defined(BFS_PAR) || NCORE>1
 	void e_critical(int);
 	void x_critical(int);

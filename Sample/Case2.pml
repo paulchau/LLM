@@ -1,56 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
@@ -147,7 +95,7 @@ proctype LEG()
  END_INIT:
 
  /* generation of learning events.
-  * For each of the 5 operations, 2 possible exec
+  * For each of the 7 operations, 2 possible exec
   * are modelled: exec with S and exec with TF */ 
  end:do
  :: L_E(STUDENT, RegReq, S);
@@ -160,10 +108,10 @@ proctype LEG()
  :: L_E(STUDENT, C1,  TF);             
 
  :: L_E(STUDENT, C2, S);  
- :: L_E(STUDENT, C2, TF); 
+ :: L_E(STUDENT, C2, TF);
  
  :: L_E(STUDENT, C3, S);    
- :: L_E(STUDENT, C3, TF); 
+ :: L_E(STUDENT, C3, TF);
  
  :: L_E(LMS, ChooseAccept, S);
  :: L_E(LMS, ChooseAccept, TF);

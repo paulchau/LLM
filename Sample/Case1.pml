@@ -57,12 +57,20 @@ RolePlayer(STUDENT, LMS);
 
 /* account for S,LF,TF,TO execution outcome,
  * in this ex, we use only S, TF, TO and P  */
-RuleMessage(S,LF,TF,TO,P); 
+RuleMessage(S,LF,TF,TO); 
 
 /* 3 operations are involved in the contract */
 LN_EVENT(START);
-LN_EVENT(LECTURES);
-LN_EVENT(CW);
+LN_EVENT(L1);
+LN_EVENT(L2);
+LN_EVENT(L3);
+LN_EVENT(L4);
+LN_EVENT(L5);
+LN_EVENT(L6);
+LN_EVENT(L7);
+LN_EVENT(L8);
+LN_EVENT(CW1);
+LN_EVENT(CW2);
 LN_EVENT(EXAM);
 
 /*
@@ -87,8 +95,16 @@ proctype LEG()
   DONE(STUDENT);
   DONE(LMS);
   INIT(START, LMS, 1,0,0);
-  INIT(LECTURES,  STUDENT, 0,0,1);
-  INIT(CW, STUDENT, 0,0,1);
+  INIT(L1,  STUDENT, 0,0,1);
+  INIT(L2,  STUDENT, 0,0,1);
+  INIT(L3,  STUDENT, 0,0,1); 
+  INIT(L4,  STUDENT, 0,0,1); 
+  INIT(L5,  STUDENT, 0,0,1);   
+  INIT(L6,  STUDENT, 0,0,1); 
+  INIT(L7,  STUDENT, 0,0,1);
+  INIT(L8,  STUDENT, 0,0,1);   
+  INIT(CW1, STUDENT, 0,0,1);
+  INIT(CW2, STUDENT, 0,0,1);  
   INIT(EXAM, STUDENT, 0,0,1);
  }
  END_INIT:
@@ -99,17 +115,38 @@ proctype LEG()
  end:do
  :: L_E(LMS, START, S);
  
- :: L_E(STUDENT, LECTURES,  S);  
- :: L_E(STUDENT, LECTURES,  P);  
- :: L_E(STUDENT, LECTURES,  TF);             
+ :: L_E(STUDENT, L1,  S); 
+ :: L_E(STUDENT, L1,  TF) ->  L_E(STUDENT, L1,  S); 
+ :: L_E(STUDENT, L2,  S);
+ :: L_E(STUDENT, L2, TF) -> L_E(STUDENT, L2, S);
+ :: L_E(STUDENT, L3,  S); 
+ :: L_E(STUDENT, L3,  TF) -> L_E(STUDENT, L3,  S);  
+  :: L_E(STUDENT, CW1, S);  
+ :: L_E(STUDENT, CW1, TO); 
+ :: L_E(STUDENT, CW1, LF);   
+ :: L_E(STUDENT, L4,  S);  
+ :: L_E(STUDENT, L4,  TF) -> L_E(STUDENT, L4,  S);  
+ :: L_E(STUDENT, L5,  S);
+ :: L_E(STUDENT, L5, TF) -> L_E(STUDENT, L5, S);
+ :: L_E(STUDENT, L6,  S);  
+ :: L_E(STUDENT, L6,  TF) -> L_E(STUDENT, L6,  S);  
 
- :: L_E(STUDENT, CW, S);  
- :: L_E(STUDENT, CW, P);  
- :: L_E(STUDENT, CW, TO); 
+ :: L_E(STUDENT, CW2, S);  
+ :: L_E(STUDENT, CW2, TO);
+ :: L_E(STUDENT, CW2, LF);   
  
- :: L_E(STUDENT, EXAM, S);    
- :: L_E(STUDENT, EXAM, P);  
- :: L_E(STUDENT, EXAM, TO); 
+ :: L_E(STUDENT, L7,  S);  
+ :: L_E(STUDENT, L7,  TF) -> L_E(STUDENT, L7,  S);  
+
+ :: L_E(STUDENT, L8,  S); 
+ :: L_E(STUDENT, L8,  TF) -> L_E(STUDENT, L8,  S);    
+ 
+
+
+
+ :: L_E(STUDENT, EXAM, S);
+ :: L_E(STUDENT, EXAM, TO);
+ :: L_E(STUDENT, EXAM, LF);
  od; 
 }
 
@@ -124,8 +161,16 @@ proctype CRM()
  printf("CONTRACT RULE MANAGER"); 
  end:do
   :: CONTRACT(START);
-  :: CONTRACT(LECTURES); 
-  :: CONTRACT(CW);
+  :: CONTRACT(L1); 
+  :: CONTRACT(L2);
+  :: CONTRACT(L3);  
+  :: CONTRACT(L4);   
+  :: CONTRACT(L5); 
+  :: CONTRACT(L6);
+  :: CONTRACT(L7); 
+  :: CONTRACT(L8);   
+  :: CONTRACT(CW1);
+  :: CONTRACT(CW2);  
   :: CONTRACT(EXAM);
  od;
 }

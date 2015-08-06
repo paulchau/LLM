@@ -58,7 +58,7 @@ RolePlayer(STUDENT, LMS);
 
 /* account for S,LF,TF,TO execution outcome,
  * in this ex, we use only S, TF, TO and P  */
-RuleMessage(S,LF,TF,TO,P); 
+RuleMessage(S,LF,TF,TO); 
 
 /* 3 operations are involved in the contract */
 LN_EVENT(START);
@@ -116,32 +116,12 @@ proctype LEG()
  end:do 
  ::
  if
- :: L_E(LMS, START, S);
- :: L_E(STUDENT, L1,  S) ->  L_E(STUDENT, L2,  S); 
- :: L_E(STUDENT, L1,  TF) -> L_E(STUDENT, L1,  S);   
- :: L_E(STUDENT, L2,  S) -> L_E(STUDENT, L3,  S);
- :: L_E(STUDENT, L2,  TF) -> L_E(STUDENT, L2, S);  
- :: L_E(STUDENT, L3,  S) -> L_E(STUDENT, CW1,  S);
- :: L_E(STUDENT, L3,  TF) -> L_E(STUDENT, L3,  S); 
- :: L_E(STUDENT, L4,  S) -> L_E(STUDENT, L5,  S);  
- :: L_E(STUDENT, L4,  TF) -> L_E(STUDENT, L4,  S); 
- :: L_E(STUDENT, L5,  S) -> L_E(STUDENT, L6,  S);  
- :: L_E(STUDENT, L5,  TF) -> L_E(STUDENT, L5,  S); 
- :: L_E(STUDENT, L6,  S) -> L_E(STUDENT, CW2,  S);  
- :: L_E(STUDENT, L6,  TF) -> L_E(STUDENT, L6,  S); 
- :: L_E(STUDENT, L7,  S) -> L_E(STUDENT, L8,  S);  
- :: L_E(STUDENT, L7,  TF) -> L_E(STUDENT, L7,  S);  
- :: L_E(STUDENT, L8,  S) -> L_E(STUDENT, EXAM,  S);  
- :: L_E(STUDENT, L8,  TF) -> L_E(STUDENT, L8,  S); 
- :: L_E(STUDENT, CW1, S) -> L_E(STUDENT, L4,  S);  
- :: L_E(STUDENT, CW1, TO); 
- :: L_E(STUDENT, CW1, LF); 
- :: L_E(STUDENT, CW2, S) -> L_E(STUDENT, L7,  S);  
- :: L_E(STUDENT, CW2, TO);
- :: L_E(STUDENT, CW2, LF); 
- :: L_E(STUDENT, EXAM, S);  
- :: L_E(STUDENT, EXAM, TO);
- :: L_E(STUDENT, EXAM, LF); 
+ ::L_E(LMS, START, S) -> L_E(STUDENT, L1,  S) ->  L_E(STUDENT, L2,  S) -> L_E(STUDENT, L3,  S) -> L_E(STUDENT, CW1,  S) -> L_E(STUDENT, L4,  S)
+	-> L_E(STUDENT, L5,  S) -> L_E(STUDENT, L6,  S) -> L_E(STUDENT, CW2,  S) -> L_E(STUDENT, L7,  S) -> L_E(STUDENT, L8,  S)
+	-> L_E(STUDENT, EXAM,  S);
+ ::L_E(LMS, START, S)-> L_E(STUDENT, L5,  S) -> L_E(STUDENT, L1,  S) ->  L_E(STUDENT, L2,  S) -> L_E(STUDENT, L3,  S) -> L_E(STUDENT, CW1,  S) -> L_E(STUDENT, L4,  S)
+	 -> L_E(STUDENT, L6,  S) -> L_E(STUDENT, CW2,  S) -> L_E(STUDENT, L7,  S) -> L_E(STUDENT, L8,  S)
+	-> L_E(STUDENT, EXAM,  S);
  fi;
  od; 
 }

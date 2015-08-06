@@ -1,6 +1,5 @@
 
 
-
 /*
  * EPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
@@ -50,7 +49,6 @@ RULE(L1){
  /* handle L1 with success outcome */
  WHEN::EVENT(L1,IS_O(L1,STUDENT),SC(L1))
   ->{
-	 SET_X(L1,STUDENT); 
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -61,7 +59,6 @@ RULE(L1){
      }
 	 LCount=LCount+1; 
 	 SET_O(L1,0);
-	 SET_R(L1,0);
 	 SET_P(L2,0);
 	 SET_O(L2,1);
 	 RD(L1,STUDENT,CCO,CO);
@@ -102,8 +99,7 @@ RULE(L2){
  /* handle L2 with success outcome */
  WHEN::EVENT(L2,IS_O(L2,STUDENT),SC(L2))
   ->{
-     SET_X(L2,STUDENT); 
-	 atomic{
+     atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
      printf("<responder>LMS</responder>\n");
@@ -158,7 +154,6 @@ RULE(L3){
  /* handle L3 with success outcome */
  WHEN::EVENT(L3,IS_O(L3,STUDENT),SC(L3))
   ->{
-	 SET_X(L3,STUDENT);  
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -214,7 +209,6 @@ RULE(L4){
  /* handle L4 with success outcome */
  WHEN::EVENT(L4,IS_O(L4,STUDENT),SC(L4))
   ->{
-	 SET_X(L4,STUDENT);  
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -271,7 +265,6 @@ RULE(L5){
  /* handle L5 with success outcome */
  WHEN::EVENT(L5,IS_O(L5,STUDENT),SC(L5))
   ->{
-	 SET_X(L5,STUDENT);  
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -327,7 +320,6 @@ RULE(L6){
  /* handle L6 with success outcome */
  WHEN::EVENT(L6,IS_O(L6,STUDENT),SC(L6))
   ->{
-	 SET_X(L6,STUDENT);  
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -383,7 +375,6 @@ RULE(L7){
  /* handle L7 with success outcome */
  WHEN::EVENT(L7,IS_O(L7,STUDENT),SC(L7))
   ->{
-	 SET_X(L7,STUDENT);  
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -439,7 +430,6 @@ RULE(L8){
  /* handle L8 with success outcome */
  WHEN::EVENT(L8,IS_O(L8,STUDENT),SC(L8))
   ->{
-	 SET_X(L8,STUDENT);  
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -499,7 +489,6 @@ RULE(CW1){
  /* handle CW1 with success outcome */
  WHEN::EVENT(CW1,IS_O(CW1,STUDENT),SC(CW1))->{ 
      atomic{
-	 SET_X(CW1,STUDENT); 
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
      printf("<responder>LMS</responder>\n");
@@ -581,7 +570,6 @@ RULE(CW2){
  /* handle CW2 with success outcome */
  WHEN::EVENT(CW2,IS_O(CW2,STUDENT),SC(CW2))->{ 
      atomic{
-	 SET_X(CW2,STUDENT); 	 
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
      printf("<responder>LMS</responder>\n");
@@ -663,7 +651,6 @@ RULE(EXAM){
  /* handle Exam with success outcome */
  WHEN::EVENT(EXAM,IS_O(EXAM,STUDENT),SC(EXAM))->{ 
      atomic{
-	 SET_X(EXAM,STUDENT); 
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
      printf("<responder>LMS</responder>\n");

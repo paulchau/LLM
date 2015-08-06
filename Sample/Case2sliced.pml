@@ -1,7 +1,24 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
- * Case1.pml: EPROMELA code of a 
+ * Case2.pml: EPROMELA code of a 
  * contract between a STUDENT and LMS. This model 
  * is meant to correctly implement the English 
  * contract of Fig 4 of this techical report, thus 
@@ -31,32 +48,36 @@
 
 #include "setting.h"      /* macro definition */
 #include "EduOperation.h" /* macro definition */
-#include "goodRules.h"        /* ECA rule code    */
+#include "Case2Rules.h"        /* ECA rule code    */
 
 #define TRUE  1
 #define FALSE 0
 #define YES   1
 #define NO    0
 
-#define PassEnd (fail==FALSE)
-
 /* var for recording occurrences of executions 
  * with S and LF outcomes                      
  */
-bool fail=FALSE;
+bool choose1=FALSE;
+bool choose2=FALSE;
+bool choose3=FALSE;
+bool all=FALSE;
 
 /* declaration of the role players involved */
 RolePlayer(STUDENT, LMS);
 
 /* account for S,LF,TF,TO execution outcome,
  * in this ex, we use only S, TF, TO and P  */
-RuleMessage(S,LF,TF,TO); 
+RuleMessage(S,LF,TF,TO,P); 
 
-/* 3 operations are involved in the contract */
-LN_EVENT(a);
-LN_EVENT(b);
-LN_EVENT(c);
-LN_EVENT(d);
+/* 7 operations are involved in the contract */
+LN_EVENT(RegReq);
+LN_EVENT(RegReply);
+LN_EVENT(C1);
+LN_EVENT(C2);
+LN_EVENT(C3);
+LN_EVENT(ChooseAccept);
+LN_EVENT(ChooseReject);
 
 /*
  * LTLs for expressing, mutual exclusion of 
@@ -79,10 +100,13 @@ proctype LEG()
   * granted to STUDENT or LMS */
   DONE(STUDENT);
   DONE(LMS);
-  INIT(a, STUDENT, 1,0,0);
-  INIT(b,  STUDENT, 0,0,0);
-  INIT(c, STUDENT, 0,0,0);
-  INIT(d, STUDENT, 0,0,0);
+  INIT(RegReq, STUDENT, 1,0,0);
+  INIT(RegReply,  LMS, 0,0,0);
+  INIT(C1, STUDENT, 0,0,0);
+  INIT(C2, STUDENT, 0,0,0);
+  INIT(C3, STUDENT, 0,0,0);
+  INIT(ChooseAccept, LMS, 0,0,0);
+  INIT(ChooseReject, LMS, 0,0,0);
  }
  END_INIT:
 
@@ -90,10 +114,27 @@ proctype LEG()
   * For each of the 5 operations, 2 possible exec
   * are modelled: exec with S and exec with TF */ 
  end:do
- :: L_E(STUDENT, a, S);
- :: L_E(STUDENT, b, S);  
- :: L_E(STUDENT, c, S);  
- :: L_E(STUDENT, d, S);    
+ :: L_E(STUDENT, RegReq, S);
+ :: L_E(STUDENT, RegReq, TF) -> L_E(STUDENT, RegReq, S);
+ 
+ :: L_E(LMS, RegReply, S);
+ :: L_E(LMS, RegReply, TF) -> L_E(LMS, RegReply, S);
+ 
+ :: L_E(STUDENT, C1,  S);  
+ :: L_E(STUDENT, C1,  TF) -> L_E(STUDENT, C1,  S);              
+
+ :: L_E(STUDENT, C2, S);  
+ :: L_E(STUDENT, C2, TF) -> L_E(STUDENT, C2,  S);  
+ 
+ :: L_E(STUDENT, C3, S);    
+ :: L_E(STUDENT, C3, TF) -> L_E(STUDENT, C3, S); 
+ 
+ :: L_E(LMS, ChooseAccept, S);
+ :: L_E(LMS, ChooseAccept, TF);
+ 
+ :: L_E(LMS, ChooseReject, S);
+ :: L_E(LMS, ChooseReject, TF) -> L_E(LMS, ChooseReject, S);
+ 
  od; 
 }
 
@@ -107,10 +148,13 @@ proctype CRM()
 {
  printf("CONTRACT RULE MANAGER"); 
  end:do
-  :: CONTRACT(a);
-  :: CONTRACT(b); 
-  :: CONTRACT(c);
-  :: CONTRACT(d);
+  :: CONTRACT(RegReq);
+  :: CONTRACT(RegReply); 
+  :: CONTRACT(C1);
+  :: CONTRACT(C2);
+  :: CONTRACT(C3);
+  :: CONTRACT(ChooseAccept);  
+  :: CONTRACT(ChooseReject);
  od;
 }
 
@@ -121,4 +165,3 @@ init
    run LEG(); run CRM(); 
   }
 }
-

@@ -20,6 +20,16 @@ typedef struct BFS_Slot BFS_Slot;
 typedef struct BFS_shared BFS_shared;
 typedef struct BFS_data BFS_data;
 
+struct BFS_Slot {
+ #ifdef BFS_FIFO
+	enum bfs_types	type;		/* message type */
+ #endif
+	BFS_State	*s_data;	/* state data */
+ #ifndef BFS_QSZ
+	BFS_Slot	*nxt;		/* linked list */
+ #endif
+};
+
 struct BFS_data {
 	double memcnt;
 	double nstates;
@@ -30,7 +40,7 @@ struct BFS_data {
 	ulong memory_left;
 	ulong punted;
 	ulong errors;
-	int   override;	/* after a crash, when anoter process clears its locks */
+	int   override;	/* after crash, if another proc clears locks */
 };
 
 struct BFS_shared {	/* about 13K for BFS_MAXPROCS=16 and BFS_MAXLOCKS=1028 */
@@ -47,9 +57,27 @@ struct BFS_shared {	/* about 13K for BFS_MAXPROCS=16 and BFS_MAXLOCKS=1028 */
 	volatile BFS_data bfs_data[BFS_MAXPROCS];
 	volatile uchar	bfs_flag[BFS_MAXPROCS]; /* running 0, normal exit 1, abnormal 2 */
 	volatile uchar	bfs_idle[BFS_MAXPROCS]; /* set when all input queues are empty */
+#ifdef BFS_DISK
 	volatile uchar	bfs_out_cnt[BFS_MAXPROCS]; /* set when core writes a state */
+#endif
 
+#ifdef BFS_QSZ
+	#define BFS_NORECYCLE
+	#if BFS_QSZ<=0
+		#error BFS_QSZ must be positive
+	#endif
+	#ifdef BFS_FIFO
+		#error BFS_QSZ cannot be combined with BFS_FIFO
+	#endif
+	#ifdef BFS_DISK
+		#error BFS_QSZ cannot be combined with BFS_DISK
+	#endif
+	volatile BFS_Slot bfsq[BFS_GEN][BFS_MAXPROCS][BFS_MAXPROCS][BFS_QSZ];
+	volatile uint bfs_ix[BFS_GEN][BFS_MAXPROCS][BFS_MAXPROCS];
+#else
 	volatile BFS_Slot *head[BFS_GEN][BFS_MAXPROCS][BFS_MAXPROCS];
+#endif
+
 #ifdef BFS_FIFO
 	volatile BFS_Slot *tail[BFS_GEN][BFS_MAXPROCS][BFS_MAXPROCS];
 	volatile BFS_Slot *dels[BFS_GEN][BFS_MAXPROCS][BFS_MAXPROCS];
@@ -63,18 +91,11 @@ struct BFS_shared {	/* about 13K for BFS_MAXPROCS=16 and BFS_MAXLOCKS=1028 */
 
 enum bfs_types { EMPTY = 0, STATE, DELETED };
 
-struct BFS_Slot {
- #ifdef BFS_FIFO
-	enum bfs_types	type;		/* message type */
- #endif
-	BFS_State	*s_data;	/* state data */
-	BFS_Slot	*nxt;		/* linked list */
-};
-
 extern volatile uchar *bfs_get_shared_mem(key_t, size_t);
 extern BFS_Slot  * bfs_new_slot(BFS_Trail *);
+extern BFS_Slot  * bfs_prep_slot(BFS_Trail *, BFS_Slot *);
 extern BFS_Slot  * bfs_next(void);
-extern BFS_Slot  * bfs_pack_state(Trail *, BFS_Trail *, int);
+extern BFS_Slot  * bfs_pack_state(Trail *, BFS_Trail *, int, BFS_Slot *);
 extern SV_Hold   * bfs_new_sv(int);
 #if NRUNS>0
 extern EV_Hold   * bfs_new_sv_mask(int);
@@ -127,7 +148,9 @@ extern void	bfs_update(void);
 #endif
 
 static BFS_shared *shared_memory;
+#ifndef BFS_QSZ
 static BFS_Slot   *bfs_free_slot; /* local free list */
+#endif
 static BFS_Slot    bfs_null;
 static SV_Hold    *bfs_svfree[VECTORSZ];
 static uchar	*bfs_heap;	/* local pointer into heap */
@@ -141,7 +164,6 @@ static long	bfs_sleep_cnt;	/* stats */
 static long	bfs_wcount;
 static long	bfs_gcount;
 static ulong	bfs_total_shared;
-static ulong	bfs_pre_allocated;
 #ifdef BFS_STAGGER
  static int	bfs_stage_cnt = 0;
  static void	bfs_stagger_flush(void);
@@ -260,6 +282,9 @@ bfs_main(int ncores, int cycles)
 	bfs_mark_done(1);
 	if (who_am_i == 0)
 	{	report_time();
+#ifdef BFS_DISK
+		bfs_disk_stop();
+#endif
 	}
 #ifdef C_EXIT
 	C_EXIT; /* trust that it defines a fct */
@@ -290,13 +315,20 @@ bfs_setup_mem(void)
 }
 
 ulong bfs_LowLim;
+#ifndef BFS_RESERVE
+	#define BFS_RESERVE 5
+#else
+	#if BFS_RESERVE<1
+	#error BFS_RESERVE must be at least 1
+	#endif
+#endif
 
 void
 bfs_setup(void)	/* executed by root */
 {	int i, j;
 	ulong n;	/* share of shared memory allocated to each core */
 
-	n = shared_memory->mem_left / Cores;
+	n = shared_memory->mem_left / (Cores + Cores/(BFS_RESERVE)); /* keep some reserve */
 
 	if ((n%sizeof(void *)) != 0)
 	{       n -= (n%sizeof(void *)); /* align, without exceeding total */
@@ -339,8 +371,11 @@ bfs_run(void)
 	#endif
 	bfs_disk_oclose();
 #endif
+#ifdef BFS_FIFO
+	static int i_count;
+#endif
 
-	srand(321);
+	srand(s_rand+HASH_NR);
 	bfs_qscan = 0;
 	bfs_toggle = 1 - bfs_toggle; /* after initial state */
 	e_critical(BFS_GLOB);
@@ -366,7 +401,7 @@ bfs_run(void)
 				v->s_data->t_info->o_tt, v->s_data->nr);
 #endif
 			/* last resort: start dropping states when out of memory */
-			if (bfs_left > 10*1024)
+			if (bfs_left > 1024 || shared_memory->mem_left > 1024)
 			{	bfs_explore_state(v);
 			} else
 			{	static int warned_loss = 0;
@@ -376,21 +411,25 @@ bfs_run(void)
 				}
 				bfs_punt++;
 			}
-#if !defined(BFS_FIFO)
+#if !defined(BFS_FIFO) && !defined(BFS_NORECYCLE)
 			bfs_recycle(v);
+#endif
+#ifdef BFS_FIFO
+			i_count = 0;
 #endif
 		} else
 		{	bfs_count[EMPTY]++;
-#ifdef BFS_FIFO
-			static int i_count;
-#endif
 #if defined(BFS_FIFO) && defined(BFS_CHECK)
 			assert(v->type == EMPTY);
 #endif
 #ifdef BFS_FIFO
-			if (who_am_i == 0 && bfs_idle_and_empty())
-			{	if (i_count++ > 10) shared_memory->quit = 1;
-				else usleep(1);
+			if (who_am_i == 0)
+			{	if (bfs_idle_and_empty())
+				{	if (i_count++ > 10)
+					{	shared_memory->quit = 1;
+					}
+					else usleep(1);
+				}
 			} else if (!bfs_all_running())
 			{	bfs_shutdown("early termination");
 			}
@@ -411,7 +450,8 @@ bfs_run(void)
 				while (shared_memory->bfs_idle[who_am_i] == 1
 				&&     shared_memory->quit == 0)
 				{	if (bfs_all_running())
-					{	bfs_sleep_cnt++; /* avoid a real sleep */
+					{	bfs_sleep_cnt++;
+						usleep(10);	/* new 6.2.3 */
 					} else
 					{	bfs_shutdown("early termination");
 						/* no return */
@@ -443,8 +483,7 @@ void
 bfs_report_mem(void)	/* called from within wrapup() */
 {
 	printf("%9.3f	total shared memory usage\n\n",
-		((double) bfs_total_shared - (double) bfs_left +
-		 (double) bfs_pre_allocated)/(1024.*1024.));
+		((double) bfs_total_shared - (double) bfs_left)/(1024.*1024.));
 }
 
 void
@@ -727,45 +766,24 @@ bfs_initial_state(void)
 #ifdef BFS_SEP_HASH
 int
 bfs_seen_before(void)
-{
-	#ifdef VERI
-		if (!trpt->ostate		/* initial state */
-		|| ((trpt->tau&4)		/* starting claim moves(s) */
-		&& !(((BFS_Trail *)trpt->ostate)->tau&4))) /* previous move was prog */
-		{	return 0; /* claim move: intermediate state not stored */
-		} /* else */
-	#endif
+{	/* cannot set trpt->tau |= 64 to mark successors outside stack */
+	/* since the check is done remotely and the trpt value is gone */
+ #ifdef VERI
+	if (!trpt->ostate		/* initial state */
+	|| ((trpt->tau&4)		/* starting claim moves(s) */
+	&& !(((BFS_Trail *)trpt->ostate)->tau&4))) /* prev move: prog */
+	{	return 0; /* claim move: mid-state not stored */
+	} /* else */
+ #endif
 	if (!bfs_do_store((char *)&now, vsize))	/* sep_hash */
-	{	nstates++;			/* local count */
-		trpt->tau |= 64;		/* bfs: succ outside stack */
-	#if SYNC
-		if (boq == -1 && oboq != -1)	/* post-rv */
-		{	BFS_Trail *x = 
-		  	(BFS_Trail *) trpt->ostate; /* pre-rv state */
-		  	if (x)
-			{	x->o_pm |= 4;	/* rv complete */
-		}	}
-	#endif
-		bfs_push_state(trpt, NULL, trpt->o_tt+1); /* successor - sep_hash */
-		return 0;	/* new state */
+	{	nstates++;		/* local count */
+		return 0;		/* new state */
 	}
-	#if defined(Q_PROVISO) && !defined(BITSTATE) && defined(FULLSTACK)
-		/* Lstate is set in bfs_do_store */
-		#ifdef USE_TDH
-			if (Lstate)
-			{	trpt->tau |= 64;
-			}
-		#else
-			if (Lstate && Lstate->tagged)
-			{	trpt->tau |= 64;
-			}
-		#endif
-	#endif
-	#ifdef BFS_CHECK
-		bfs_printf("seen before\n");
-	#endif
+ #ifdef BFS_CHECK
+	bfs_printf("seen before\n");
+ #endif
 	truncs++;
-	return 1;	/* old state */
+	return 1;			/* old state */
 }
 #endif
 
@@ -869,7 +887,7 @@ Repeat_two: /* MainLoop */
 		trpt->o_event = now._event;
 #endif
 #ifdef HAS_PRIORITY
-		if (!highest_priority(((P0 *)this)->_pid, t))
+		if (!highest_priority(((P0 *)this)->_pid, II, t))
 		{	continue;
 		}
 #else
@@ -936,7 +954,11 @@ Repeat_two: /* MainLoop */
 			{	((P0 *)this)->_p = t->st;
 			}
 			/* use the ostate ptr, with type *H_el, to temporarily store *BFS_Trail */
+#ifdef BFS_NOTRAIL
+			ntrpt->ostate = (H_el *) 0;	/* no error-traces in this mode */
+#else
 			ntrpt->ostate = (H_el *) otrpt;	/* parent stackframe */
+#endif
 		/*	ntrpt->st = tt;		* was already set above */
 
 			if (boq == -1 && (t->atom&2))	/* atomic */
@@ -1060,20 +1082,23 @@ Repeat_two: /* MainLoop */
 		}
 #endif
 	}
+#ifdef BFS_NOTRAIL
+	bfs_release_trail(otrpt);
+#endif
 }
-#ifndef BFS_FIFO
+#if !defined(BFS_FIFO) && !defined(BFS_NORECYCLE)
 void
 bfs_recycle(BFS_Slot *n)
 {
 	#ifdef BFS_CHECK
-		assert(n != &bfs_null);
+	 assert(n != &bfs_null);
 	#endif
 	n->nxt = bfs_free_slot;
 	bfs_free_slot = n;
 
 	#ifdef BFS_CHECK
-		bfs_printf("recycles %s -- %p\n",
-			n->s_data?"STATE":"EMPTY", (void *) n);
+	 bfs_printf("recycles %s -- %p\n",
+		n->s_data?"STATE":"EMPTY", (void *) n);
 	#endif
 }
 #endif
@@ -1173,7 +1198,7 @@ bfs_source_disk(int fd, volatile BFS_Slot *n)
 
 	bfs_eread(fd, (void *) n->s_data->osv, (size_t) nb);
 #if NRUNS>0
-	bfs_eread(fd, (void *) n->s_data->omask, sizeof(EV_Hold));
+	bfs_eread(fd, (void *) &(n->s_data->omask), sizeof(EV_Hold *));
 #endif
 #ifdef Q_PROVISO
 	bfs_eread(fd, (void *) &(n->s_data->lstate), sizeof(H_el *));
@@ -1187,7 +1212,8 @@ bfs_source_disk(int fd, volatile BFS_Slot *n)
 }
 #endif
 
-#ifdef BFS_STAGGER
+#ifndef BFS_QSZ
+ #ifdef BFS_STAGGER
 static BFS_Slot *bfs_stage[BFS_STAGGER];
 
 static void
@@ -1198,13 +1224,13 @@ bfs_stagger_flush(void)
 	who_are_you = (rand()%Cores);
 	for (i = bfs_stage_cnt-1; i >= 0; i--)
 	{	n = bfs_stage[i];
-#ifdef BFS_DISK
+ #ifdef BFS_DISK
 		bfs_sink_disk(who_are_you, n);
 		bfs_stage[i] = (BFS_Slot *) 0;
-#endif
+ #endif
 		n->nxt = (BFS_Slot *) shared_memory->head[dst][who_are_you][who_am_i];
 		shared_memory->head[dst][who_are_you][who_am_i] = n;
-		bfs_sent++;
+		/* bfs_sent++; */
 	}
 	#ifdef VERBOSE
 		bfs_printf("stagger flush %d states to %d\n",
@@ -1221,21 +1247,43 @@ bfs_stagger_add(BFS_Slot *n)
 	}
 	bfs_stage[bfs_stage_cnt++] = n;
 }
+ #endif
 #endif
 
 void
 bfs_push_state(Trail *x, BFS_Trail *y, int tt)
 {	int who_are_you;
-	BFS_Slot *n = bfs_pack_state(x, y, tt);
 #ifdef BFS_FIFO
 	const int dst = 0;
 #else
 	int dst = 1 - bfs_toggle;
 #endif
-
-#ifdef BFS_GREEDY
-	who_are_you = who_am_i; /* for testing only */
+#ifdef BFS_QSZ
+	uint z;
+	if (bfs_keep_state > 0)
+	{	who_are_you = bfs_keep_state - 1;
+	} else
+	{	who_are_you = (rand()%Cores);
+	}
+	z = shared_memory->bfs_ix[dst][who_are_you][who_am_i];
+	if (z >= BFS_QSZ)
+	{	static int warned_qloss = 0;
+		if (warned_qloss == 0 && who_am_i == 0)
+		{	warned_qloss++;
+			bfs_printf("BFS_QSZ too small - losing states\n");
+		}
+		bfs_punt++;
+		return;
+	}
+	shared_memory->bfs_ix[dst][who_are_you][who_am_i] = z+1;
+	BFS_Slot *n = bfs_pack_state(x, y, tt, bfs_prep_slot(y, 
+		(BFS_Slot *) &(shared_memory->bfsq[dst][who_are_you][who_am_i][z])));
 #else
+	BFS_Slot *n = bfs_pack_state(x, y, tt, bfs_new_slot(y));
+
+ #ifdef BFS_GREEDY
+	who_are_you = who_am_i; /* for testing only */
+ #else
 	if (bfs_keep_state > 0)
 	{	who_are_you = bfs_keep_state - 1;
 	} else
@@ -1248,8 +1296,8 @@ bfs_push_state(Trail *x, BFS_Trail *y, int tt)
 		who_are_you = (rand()%Cores);
 	#endif
 	}
-#endif
-#ifdef BFS_FIFO
+ #endif
+ #ifdef BFS_FIFO
 	  if (!shared_memory->tail[dst][who_are_you][who_am_i])
 	  {	shared_memory->dels[dst][who_are_you][who_am_i] =
 		shared_memory->tail[dst][who_are_you][who_am_i] =
@@ -1259,15 +1307,16 @@ bfs_push_state(Trail *x, BFS_Trail *y, int tt)
 		shared_memory->tail[dst][who_are_you][who_am_i] = n;
 	  }
 	  shared_memory->bfs_idle[who_are_you] = 0;
-#else
+ #else
   #ifdef BFS_DISK
 	  bfs_sink_disk(who_are_you, n);
   #endif
 	  n->nxt = (BFS_Slot *) shared_memory->head[dst][who_are_you][who_am_i];
 	  shared_memory->head[dst][who_are_you][who_am_i] = n;
-#endif
-#ifdef BFS_STAGGER
+ #endif
+ #ifdef BFS_STAGGER
 done:
+ #endif
 #endif
 #ifdef VERBOSE
 	bfs_printf("PUT STATE (depth %ld, nr %u) to %d -- s_data: %p\n",
@@ -1284,14 +1333,22 @@ bfs_next(void)
 	bfs_qscan = bfs_empty(who_am_i);
  #else
 	const int src = bfs_toggle;
+  #ifdef BFS_QSZ
+	while (bfs_qscan < Cores
+	&& shared_memory->bfs_ix[src][who_am_i][bfs_qscan] == 0)
+	{	bfs_qscan++;
+	}
+  #else
 	while (bfs_qscan < Cores
 	&& shared_memory->head[src][who_am_i][bfs_qscan] == (BFS_Slot *) 0)
 	{	bfs_qscan++;
 	}
+  #endif
  #endif
 	if (bfs_qscan < Cores)
 	{
  #ifdef BFS_FIFO
+		shared_memory->bfs_idle[who_am_i] = 0;
 		for (n = shared_memory->head[src][who_am_i][bfs_qscan]; n; n = n->nxt)
 		{	if (n->type != DELETED)
 			{	break;
@@ -1304,12 +1361,17 @@ bfs_next(void)
 		}
 		n->type = DELETED;
  #else
+	#ifdef BFS_QSZ
+		uint x = --shared_memory->bfs_ix[src][who_am_i][bfs_qscan];
+		n = &(shared_memory->bfsq[src][who_am_i][bfs_qscan][x]);
+	#else
 		n = shared_memory->head[src][who_am_i][bfs_qscan];
 		shared_memory->head[src][who_am_i][bfs_qscan] = n->nxt;
-	#if defined(BFS_FIFO) && defined(BFS_CHECK)
-		assert(n->type == STATE);
-	#endif
+		#if defined(BFS_FIFO) && defined(BFS_CHECK)
+			assert(n->type == STATE);
+		#endif
 		n->nxt = (BFS_Slot *) 0;
+	#endif
 	#ifdef BFS_DISK
 		/* the states actually show up in reverse order (FIFO iso LIFO) here */
 		/* but that doesnt really matter as long as the count is right */
@@ -1323,7 +1385,7 @@ bfs_next(void)
 		bfs_rcvd++;
 	} else
 	{
- #ifdef BFS_STAGGER
+ #if defined(BFS_STAGGER) && !defined(BFS_QSZ)
 		if (bfs_stage_cnt > 0)
 		{	bfs_stagger_flush();
 		}
@@ -1357,7 +1419,11 @@ bfs_all_empty(void)
   #endif
 	for (p = 0; p < Cores; p++)
 	for (i = 0; i < Cores; i++)
+  #ifdef BFS_QSZ
+	{	if (shared_memory->bfs_ix[dst][p][i] > 0)
+  #else
 	{	if (shared_memory->head[dst][p][i] != (BFS_Slot *) 0)
+  #endif
 		{	return 0;
 	}	}
 #endif
@@ -1421,7 +1487,7 @@ bfs_grab_trail(void)
 	return t;
 }
 
-#ifdef BFS_DISK
+#if defined(BFS_DISK) || defined(BFS_NOTRAIL)
 void
 bfs_release_trail(BFS_Trail *t)
 {	BFS_T_Hold *h;
@@ -1446,6 +1512,7 @@ bfs_release_trail(BFS_Trail *t)
 }
 #endif
 
+#ifndef BFS_QSZ
 BFS_Slot *
 bfs_new_slot(BFS_Trail *f)
 {	BFS_Slot *t;
@@ -1478,6 +1545,23 @@ bfs_new_slot(BFS_Trail *f)
 	}
 	return t;
 }
+#else
+BFS_Slot *
+bfs_prep_slot(BFS_Trail *f, BFS_Slot *t)
+{
+	if (t->s_data)
+	{	memset(t->s_data, 0, sizeof(BFS_State));
+	} else
+	{	t->s_data = (BFS_State *) sh_malloc((ulong) sizeof(BFS_State));
+	}
+	if (f)
+	{	t->s_data->t_info = f;
+	} else
+	{	t->s_data->t_info = bfs_grab_trail();
+	}
+	return t;
+}
+#endif
 
 SV_Hold *
 bfs_new_sv(int n)
@@ -1594,9 +1678,8 @@ bfs_new_sv_mask(int n)
 }
 #endif
 BFS_Slot *
-bfs_pack_state(Trail *f, BFS_Trail *g, int search_depth)
-{	BFS_Slot *t = bfs_new_slot(g);
-
+bfs_pack_state(Trail *f, BFS_Trail *g, int search_depth, BFS_Slot *t)
+{
 #ifdef BFS_CHECK
 	assert(t->s_data != NULL);
 	assert(t->s_data->t_info != NULL);
@@ -1639,7 +1722,7 @@ bfs_pack_state(Trail *f, BFS_Trail *g, int search_depth)
 	t->s_data->omask = bfs_new_sv_mask(vsize);
 #endif
 
-#if defined(Q_PROVISO) && !defined(BITSTATE)
+#if defined(Q_PROVISO) && !defined(BITSTATE) && !defined(NOREDUCE)
 	t->s_data->lstate = Lstate;	/* Lstate is set in o_store or h_store */
 #endif
 #ifdef BFS_FIFO
@@ -1662,7 +1745,14 @@ bfs_store_state(Trail *t, short oboq)
 #endif
 
 #ifdef BFS_SEP_HASH
-	d_sfh((uchar *)&now, (int) vsize);	/* sets K1 */
+	#if SYNC
+	if (boq == -1 && oboq != -1)	/* post-rv */
+	{	BFS_Trail *x =  (BFS_Trail *) trpt->ostate; /* pre-rv state */
+	 	if (x)
+		{	x->o_pm |= 4;	/* rv complete */
+	}	}
+	#endif
+	d_sfh((uchar *)&now, (int) vsize); /* sep-hash -- sets K1 -- overkill */
 	bfs_keep_state = K1%Cores + 1;
 	bfs_push_state(t, NULL, trpt->o_tt+1);	/* bfs_store_state - sep_hash */
 	bfs_keep_state = 0;
@@ -1806,7 +1896,8 @@ int
 bfs_idle_and_empty(void)
 {	int p;	/* read-only */
 	for (p = 0; p < Cores; p++)
-	{	if (shared_memory->bfs_idle[p] == 0)
+	{	if (shared_memory->bfs_flag[p] == 0
+		&&  shared_memory->bfs_idle[p] == 0)
 		{	return 0;
 	}	}
 	for (p = 0; p < Cores; p++)
@@ -1956,12 +2047,21 @@ sh_pre_malloc(ulong n)	/* used before the local heaps are populated */
 	}
 
 	e_critical(BFS_MEM);	/* needed? */
-		if (shared_memory->mem_left < n)
+		if (shared_memory->mem_left < n + 7)
 		{	x_critical(BFS_MEM);
+			bfs_printf("want %lu, have %lu\n",
+				n, shared_memory->mem_left);
 			bfs_shutdown("out of shared memory");
 			assert(0); /* should be unreachable */
 		}
 		ptr = shared_memory->allocator;
+#if WS>4
+		{	int b = (int) ((uint64_t) ptr)&7;
+			if (b != 0)
+			{	ptr += (8-b);
+				shared_memory->allocator = ptr;
+		}	}
+#endif
 		shared_memory->allocator += n;
 		shared_memory->mem_left -= n;
 	x_critical(BFS_MEM);
@@ -1986,7 +2086,15 @@ sh_malloc(ulong n)
 
 	/* local heap -- no locks needed */
 	if (bfs_left < n)
-	{
+	{	e_critical(BFS_MEM);
+		if (shared_memory->mem_left >= n)
+		{	ptr = (uchar *) shared_memory->allocator;
+			shared_memory->allocator += n;
+			shared_memory->mem_left  -= n;
+			x_critical(BFS_MEM);
+			return ptr;
+		}
+		x_critical(BFS_MEM);
 #ifdef BFS_LOGMEM
 		int i;
 		e_critical(BFS_MEM);
@@ -2225,7 +2333,6 @@ bfs_putter(BFS_Trail *t, int fd)
 void
 bfs_nuerror(char *str)
 {	int fd = make_trail();
-	BFS_Trail x;
 
 	if (fd < 0) return;
 #ifdef VERI
@@ -2237,14 +2344,15 @@ bfs_nuerror(char *str)
 	bfs_write_snap(fd);
 #endif
 	trcnt = 1;
-	memset((char *) &x, 0, sizeof(BFS_Trail));
-	x.pr = trpt->pr;
-	x.t_id = (trpt->o_t)?trpt->o_t->t_id:0;
-	x.ostate = trpt->ostate;
 	if (strstr(str, "invalid"))
 	{	bfs_putter((BFS_Trail *) trpt->ostate, fd);
 	} else
-	{	bfs_putter(&x, fd);
+	{	BFS_Trail x;
+		memset((char *) &x, 0, sizeof(BFS_Trail));
+		x.pr = trpt->pr;
+		x.t_id = (trpt->o_t)?trpt->o_t->t_id:0;
+		x.ostate = trpt->ostate;
+		bfs_putter(&x, fd);
 	}
 	close(fd);
 	if (errors >= upto && upto != 0)
@@ -2257,11 +2365,11 @@ bfs_uerror(char *str)
 {	static char laststr[256];
 
 	errors++;
-	if (strncmp(str, laststr, 254))
-	{	bfs_printf("pan:%d: %s (at depth %ld)\n", errors, str,
-			((depthfound == -1)?depth:depthfound));
+	if (strncmp(str, laststr, 254) != 0)
+	{	bfs_printf("pan:%d: %s (at depth %ld)\n",
+			errors, str, ((depthfound == -1)?depth:depthfound));
+		strncpy(laststr, str, 254);
 	}
-	strncpy(laststr, str, 254);
 #ifdef HAS_CODE
 	if (readtrail) { wrap_trail(); return; }
 #endif

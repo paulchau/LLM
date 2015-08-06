@@ -5,6 +5,7 @@ package ncl.b1037041.LTL.entites;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class LTLDefinition implements Serializable{
 
 	private int id;

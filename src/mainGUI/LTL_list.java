@@ -1,13 +1,9 @@
 package mainGUI;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -24,9 +20,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+@SuppressWarnings("serial")
 public class LTL_list extends JFrame {
 
 	private JPanel contentPane;

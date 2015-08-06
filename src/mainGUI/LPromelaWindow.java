@@ -2,35 +2,37 @@ package mainGUI;
 
 import java.awt.EventQueue;
 import java.awt.FileDialog;
-
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
-
-import javax.swing.JScrollPane;
-
-import java.io.*;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
-import javax.swing.ScrollPaneConstants;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 import ncl.b1037041.LTL.entites.LPromelaModel;
 import ncl.b1037041.LTL.entites.LTLDefinition;
 import ncl.b1037041.dao.ImplLTLDao;
-
-import java.awt.Font;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class LPromelaWindow {
 
@@ -103,21 +105,24 @@ public class LPromelaWindow {
 				while ((codes = br.readLine()) != null) {
 					pml.setText(pml.getText() + "\n" + codes);
 					if (codes.contains("#include")) {
-						String file2name = codes.substring(10,
-								codes.indexOf(".h") + 2);
-						files.add(file2name);
-						if ((file2name.indexOf("Operation") == -1)
-								&& (file2name.indexOf("setting") == -1)) {
-							filePath = filePath + file2name;
-							File file2 = new File(filePath);
-							FileInputStream fis2 = new FileInputStream(file2);
-							BufferedReader br2 = new BufferedReader(
-									new InputStreamReader(fis2));
-							while ((rules = br2.readLine()) != null) {
-								rule.setText(rule.getText() + "\n" + rules);
+						if (!codes.contains("/*#include")) {
+							String file2name = codes.substring(10,
+									codes.indexOf(".h") + 2);
+							files.add(file2name);
+							if ((file2name.indexOf("Operation") == -1)
+									&& (file2name.indexOf("setting") == -1)) {
+								filePath = filePath + file2name;
+								File file2 = new File(filePath);
+								FileInputStream fis2 = new FileInputStream(
+										file2);
+								BufferedReader br2 = new BufferedReader(
+										new InputStreamReader(fis2));
+								while ((rules = br2.readLine()) != null) {
+									rule.setText(rule.getText() + "\n" + rules);
+								}
+								br2.close();
+								fis2.close();
 							}
-							br2.close();
-							fis2.close();
 						}
 					}
 				}

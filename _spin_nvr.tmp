@@ -1,9 +1,7 @@
-never ltlCheck {    /* !([] (ChooseAccept)) */
+never ltlCheck {    /* !(! ([] ((! (((a_lo.right==1)) && ((a_lo.role_pl==STUDENT)))) || (((c_lo.prohib==1)) && ((c_lo.role_pl==STUDENT)))))) */
+accept_init:
 T0_init:
 	do
-	:: atomic { (! ((ChooseAccept))) -> assert(!(! ((ChooseAccept)))) }
-	:: (1) -> goto T0_init
+	:: (((! (((a_lo.right==1)) && ((a_lo.role_pl==STUDENT)))) || (((c_lo.prohib==1)) && ((c_lo.role_pl==STUDENT))))) -> goto T0_init
 	od;
-accept_all:
-	skip
 }

@@ -31,7 +31,7 @@
 
 #include "setting.h"      /* macro definition */
 #include "EduOperation.h" /* macro definition */
-#include "goodRules.h"        /* ECA rule code    */
+#include "Case1Rules.h"        /* ECA rule code    */
 
 #define TRUE  1
 #define FALSE 0
@@ -39,24 +39,31 @@
 #define NO    0
 
 #define PassEnd (fail==FALSE)
+#define Finish (lectures==LCount && cw==CwCount && exam==ExamCount)
 
 /* var for recording occurrences of executions 
  * with S and LF outcomes                      
  */
 bool fail=FALSE;
+int lectures=8;
+int LCount=0;
+int cw=2;
+int CwCount=0;
+int exam=1;
+int ExamCount=0;
 
 /* declaration of the role players involved */
 RolePlayer(STUDENT, LMS);
 
 /* account for S,LF,TF,TO execution outcome,
  * in this ex, we use only S, TF, TO and P  */
-RuleMessage(S,LF,TF,TO); 
+RuleMessage(S,LF,TF,TO,P); 
 
 /* 3 operations are involved in the contract */
-LN_EVENT(a);
-LN_EVENT(b);
-LN_EVENT(c);
-LN_EVENT(d);
+LN_EVENT(START);
+LN_EVENT(LECTURES);
+LN_EVENT(CW);
+LN_EVENT(EXAM);
 
 /*
  * LTLs for expressing, mutual exclusion of 
@@ -79,10 +86,10 @@ proctype LEG()
   * granted to STUDENT or LMS */
   DONE(STUDENT);
   DONE(LMS);
-  INIT(a, STUDENT, 1,0,0);
-  INIT(b,  STUDENT, 0,0,0);
-  INIT(c, STUDENT, 0,0,0);
-  INIT(d, STUDENT, 0,0,0);
+  INIT(START, LMS, 1,0,0);
+  INIT(LECTURES,  STUDENT, 0,0,1);
+  INIT(CW, STUDENT, 0,0,1);
+  INIT(EXAM, STUDENT, 0,0,1);
  }
  END_INIT:
 
@@ -90,10 +97,19 @@ proctype LEG()
   * For each of the 5 operations, 2 possible exec
   * are modelled: exec with S and exec with TF */ 
  end:do
- :: L_E(STUDENT, a, S);
- :: L_E(STUDENT, b, S);  
- :: L_E(STUDENT, c, S);  
- :: L_E(STUDENT, d, S);    
+ :: L_E(LMS, START, S);
+ 
+ :: L_E(STUDENT, LECTURES,  S);  
+ :: L_E(STUDENT, LECTURES,  P);  
+ :: L_E(STUDENT, LECTURES,  TF);             
+
+ :: L_E(STUDENT, CW, S);  
+ :: L_E(STUDENT, CW, P);  
+ :: L_E(STUDENT, CW, TO); 
+ 
+ :: L_E(STUDENT, EXAM, S);    
+ :: L_E(STUDENT, EXAM, P);  
+ :: L_E(STUDENT, EXAM, TO); 
  od; 
 }
 
@@ -107,10 +123,10 @@ proctype CRM()
 {
  printf("CONTRACT RULE MANAGER"); 
  end:do
-  :: CONTRACT(a);
-  :: CONTRACT(b); 
-  :: CONTRACT(c);
-  :: CONTRACT(d);
+  :: CONTRACT(START);
+  :: CONTRACT(LECTURES); 
+  :: CONTRACT(CW);
+  :: CONTRACT(EXAM);
  od;
 }
 
@@ -121,4 +137,3 @@ init
    run LEG(); run CRM(); 
   }
 }
-

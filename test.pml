@@ -1,3 +1,8 @@
+
+
+
+
+
 /*
  * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
@@ -31,7 +36,8 @@
 
 #include "setting.h"      /* macro definition */
 #include "EduOperation.h" /* macro definition */
-#include "goodRules.h"        /* ECA rule code    */
+#include "goodRules.h"        /* ECA rule code    successful*/
+/*#include "badRules.h"*/        /* ECA rule code    with error*/
 
 #define TRUE  1
 #define FALSE 0
@@ -120,5 +126,4 @@ init
   { 
    run LEG(); run CRM(); 
   }
-}
-
+}ltl ltlCheck {  !( []( IS_R( a , STUDENT ) -> IS_P( c , STUDENT )))}

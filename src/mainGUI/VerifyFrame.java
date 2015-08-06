@@ -2,26 +2,29 @@ package mainGUI;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
 
 import ncl.b1037041.LTL.entites.LTLDefinition;
 import ncl.b1037041.dao.ImplLTLDao;
@@ -33,6 +36,10 @@ public class VerifyFrame extends JFrame {
 	private JTextPane textPane;
 	private SimulateFrame sf;
 	private ImplLTLDao dao = new ImplLTLDao();
+	int id = -1;// iterator
+	int rid = -1;// iterator
+	int ite = -1; // iterator
+	int itr = -1;// iterator
 	private static final Pattern NO_ERROR_PATTERN = Pattern
 			.compile("State-vector \\d+ byte, depth reached \\d+, errors: 0");
 
@@ -91,43 +98,109 @@ public class VerifyFrame extends JFrame {
 		}
 		if (!(chooseLTL == null)) {
 			ArrayList<String> var = new ArrayList<String>();
+			ArrayList<String> role = new ArrayList<String>();
 			for (String s : pml.split("\\n")) {
 				if (s.contains("LN_EVENT")) {
 					var.add(s.substring(9, s.length() - 2));
+				} else if (s.contains("RolePlayer(")) {
+					String rolePlayers = s.substring(11, s.length() - 2);
+					for (String ss : rolePlayers.split(",")) {
+						role.add(ss.trim());
+					}
 				}
 			}
 			String[] choice = new String[var.size()];
 			for (int i = 0; i < var.size(); i++) {
 				choice[i] = var.get(i);
 			}
-			int id = 0;
+			String[] roles = new String[role.size()];
+			for (int i = 0; i < role.size(); i++) {
+				roles[i] = role.get(i);
+			}
+			JOptionPane paramLTL = new JOptionPane();
+			JPanel content = new JPanel();
+			paramLTL.setMessageType(JOptionPane.QUESTION_MESSAGE);
+			paramLTL.setOptionType(JOptionPane.OK_CANCEL_OPTION);
 			String formula = "";
-			String[] text = chooseLTL.getFormula().split(" ");
-			for (String temp : text) {
+			String[] descText = chooseLTL.getDescription().split(" ");
+			String[] formulaText = chooseLTL.getFormula().split(" ");
+			for (String temp : descText) {
 				if (temp.contains("@")) {
 					id++;
-					String input = (String) JOptionPane.showInputDialog(null,
-							chooseLTL.getDescription(),
-							"Choose variable " + id,
-							JOptionPane.QUESTION_MESSAGE, null, choice,
-							choice[0]);
-					System.out.println(input);
-					while (input == null) {
-						input = (String) JOptionPane.showInputDialog(null,
-								chooseLTL.getDescription(), "Choose variable "
-										+ id, JOptionPane.QUESTION_MESSAGE,
-								null, choice, choice[0]);
-					}
-					formula = formula + " " + input;
-				} else {
-					formula = formula + " " + temp;
+				} else if (temp.contains("#")) {
+					rid++;
 				}
-				System.out.println("formula: " + formula);
+			}
+			ArrayList<JComboBox<String>> selVar = new ArrayList<JComboBox<String>>();
+			ArrayList<JComboBox<String>> selRole = new ArrayList<JComboBox<String>>();
+			final ArrayList<String> chosenVar = new ArrayList<String>();
+			final ArrayList<String> chosenRole = new ArrayList<String>();
+			ite = 0;
+			itr = 0;
+			for (String temp : descText) {
+				if (temp.contains("@")) {
+					ite++;
+					JComboBox<String> box = new JComboBox<String>(choice);
+					selVar.add(box);
+					chosenVar.add((String) box.getSelectedItem());
+					final int no = selVar.size() - 1;
+					selVar.get(selVar.size() - 1).addItemListener(
+							new ItemListener() {
+								@Override
+								public void itemStateChanged(ItemEvent event) {
+									if (event.getStateChange() == ItemEvent.SELECTED) {
+										chosenVar.set(no,
+												(String) event.getItem());
+									}
+								}
+							});
+					content.add(selVar.get(selVar.size() - 1));
+				} else if (temp.contains("#")) {
+					itr++;
+					JComboBox<String> box = new JComboBox<String>(roles);
+					selRole.add(box);
+					chosenRole.add((String) box.getSelectedItem());
+					final int num = selRole.size() - 1;
+					selRole.get(selRole.size() - 1).addItemListener(
+							new ItemListener() {
+								@Override
+								public void itemStateChanged(ItemEvent event) {
+									if (event.getStateChange() == ItemEvent.SELECTED) {
+										chosenRole.set(num,
+												(String) event.getItem());
+									}
+								}
+							});
+					content.add(selRole.get(selRole.size() - 1));
+				} else {
+					content.add(new JLabel(temp));
+				}
 			}
 			chooseLTL.setFormula(formula);
-		}
-		if (chooseLTL != null) {
-			System.out.println(chooseLTL.getFormula());
+			paramLTL.setMessage(content);
+			JDialog dialog = paramLTL.createDialog(null,
+					"Select variables in the LTL");
+			dialog.setVisible(true);
+			int reply = ((Integer) paramLTL.getValue()).intValue();
+			if (reply == JOptionPane.CANCEL_OPTION) {
+				chooseLTL = null;
+			} else {
+				int it = -1;
+				int ir = -1;
+				for (String temp : formulaText) {
+					if (temp.contains("@")) {
+						it++;
+						formula = formula + " " + chosenVar.get(it);
+					} else if (temp.contains("#")) {
+						ir++;
+						formula = formula + " " + chosenRole.get(ir);
+					} else {
+						formula = formula + " " + temp;
+					}
+				}
+				System.out.println(formula);
+				chooseLTL.setFormula(formula);
+			}
 		}
 		String output = "";
 		File des;
@@ -147,7 +220,7 @@ public class VerifyFrame extends JFrame {
 		try {
 			Files.delete(new File("./test.pml").toPath());
 		} catch (Exception ee) {
-			JOptionPane.showMessageDialog(null, ee.getMessage());
+			// JOptionPane.showMessageDialog(null, ee.getMessage());
 		}
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -160,15 +233,10 @@ public class VerifyFrame extends JFrame {
 			String input = pml;
 			if (!(chooseLTL == null)) {
 				input += "ltl ltlCheck {" + chooseLTL.getFormula() + "}";
+				System.out.println(chooseLTL.getFormula());
 			}
 			bw3.write(input);
 			bw3.close();
-			FileOutputStream fos = new FileOutputStream(fileRoot + "file.ltl");
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(ltlList);
-			oos.close();
-			fos.close();
-			JOptionPane.showMessageDialog(null, "File saved.");
 		} catch (IOException e1) {
 			JOptionPane.showMessageDialog(null,
 					"Error! Fail to save the content. " + e1.getMessage());
@@ -185,21 +253,37 @@ public class VerifyFrame extends JFrame {
 				Files.copy(sor.toPath(), des.toPath());
 			}
 		}
-		String command1 = "./spin -run -m50000 \"./test.pml\"";
+		String command1 = "./spin -a \"./test.pml\"";
 		Runtime runtime = Runtime.getRuntime();
 		Process proc1 = runtime.exec(command1);
+		System.out.println("Start spin -a");
 		try {
 			proc1.waitFor();
 		} catch (InterruptedException e) {
 			System.out.println("proc1 error");
 		}
+		System.out.println("Finish spin -a");
 		proc1.getOutputStream().close();
-
+		String command2 = "cc -o pan pan.c";
+		Runtime runtime2 = Runtime.getRuntime();
+		Process proc2 = runtime2.exec(command2);
+		System.out.println("Start cc");
+		try {
+			proc2.waitFor();
+		} catch (InterruptedException e) {
+			System.out.println("proc2 error");
+		}
+		proc2.getOutputStream().close();
+		System.out.println("Finish cc");
+		String command3 = "./pan -a -m50000";
+		Runtime runtime3 = Runtime.getRuntime();
+		Process proc3 = runtime3.exec(command3);
+		System.out.println("Start ./pan");
 		System.out.println("Verify");
 		output = "Verification Result: <br>";
 		String line = "";
 		BufferedReader stdout = new BufferedReader(new InputStreamReader(
-				proc1.getInputStream()));
+				proc3.getInputStream()));
 		boolean found = false;
 		while ((line = stdout.readLine()) != null) {
 			Matcher matcher = NO_ERROR_PATTERN.matcher(line);
@@ -241,14 +325,14 @@ public class VerifyFrame extends JFrame {
 		stdout.close();
 		output = output + "<br> Error: <br>";
 		BufferedReader stderr = new BufferedReader(new InputStreamReader(
-				proc1.getErrorStream()));
+				proc3.getErrorStream()));
 		while ((line = stderr.readLine()) != null) {
 			output = output + line + "<br>";
 		}
 		stderr.close();
 		System.out.println("Done");
 
-		proc1.getOutputStream().close();
+		proc3.getOutputStream().close();
 		setText(output);
 	}
 }

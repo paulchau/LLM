@@ -2,20 +2,8 @@ package mainGUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JLabel;
-import javax.swing.Timer;
-
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
@@ -23,8 +11,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 import ncl.b1037041.LTL.entites.LTLDefinition;
 import ncl.b1037041.dao.ImplLTLDao;
@@ -119,6 +116,9 @@ class newLTL extends JPanel {
 							formula.getText(), name.getText());
 					JOptionPane.showMessageDialog(null, "New LTL added");
 					panel.reload();
+					description.setText("");
+					name.setText("");
+					formula.setText("");
 				} else {
 					JOptionPane
 							.showMessageDialog(null,
@@ -126,8 +126,19 @@ class newLTL extends JPanel {
 				}
 			}
 		});
-		btnAddNewLtl.setBounds(500, 167, 120, 20);
+		btnAddNewLtl.setBounds(500, 170, 120, 30);
 		this.add(btnAddNewLtl);
+
+		JButton btnHelp = new JButton("Help");
+		btnHelp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane
+						.showMessageDialog(null,
+								"Please remember to add blanket to standardise the LTL formula!");
+			}
+		});
+		btnHelp.setBounds(620, 170, 120, 30);
+		this.add(btnHelp);
 
 		final JButton bt_not = new JButton("!");
 		bt_not.setToolTipText("not");
@@ -209,7 +220,7 @@ class newLTL extends JPanel {
 		bt_until.setBounds(480, 236, 61, 25);
 		this.add(bt_until);
 
-		final JButton bt_variable = new JButton("@V@");
+		final JButton bt_variable = new JButton("@V2@");
 		bt_variable.setToolTipText("define replaceable variables, e.g. @V2@");
 		bt_variable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -219,44 +230,44 @@ class newLTL extends JPanel {
 		bt_variable.setBounds(180, 261, 61, 25);
 		this.add(bt_variable);
 
-		final JButton isx = new JButton("IS_X( @V@ )");
-		isx.setToolTipText("replaceable variables, e.g. @V@, is executed");
+		final JButton isx = new JButton("IS_X( @V2@ )");
+		isx.setToolTipText("replaceable variables, e.g. @V2@, is executed");
 		isx.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showButtonSymbol(isx);
 			}
 		});
-		isx.setBounds(240, 261, 67, 25);
+		isx.setBounds(240, 261, 70, 25);
 		this.add(isx);
 
-		final JButton isr = new JButton("IS_R( @V@ )");
+		final JButton isr = new JButton("IS_R( @V2@ , #V2# )");
 		isr.setToolTipText("replaceable variables, e.g. @V@, offer the right to execute");
 		isr.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showButtonSymbol(isr);
 			}
 		});
-		isr.setBounds(307, 261, 67, 25);
+		isr.setBounds(307, 261, 70, 25);
 		this.add(isr);
 
-		final JButton iso = new JButton("IS_O( @V@ )");
+		final JButton iso = new JButton("IS_O( @V2@ , #V2# )");
 		iso.setToolTipText("replaceable variables, e.g. @V@, is obliged");
 		iso.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showButtonSymbol(iso);
 			}
 		});
-		iso.setBounds(373, 261, 68, 25);
+		iso.setBounds(373, 261, 70, 25);
 		this.add(iso);
 
-		final JButton isp = new JButton("IS_P( @V@ )");
+		final JButton isp = new JButton("IS_P( @V2@ , #V2# )");
 		isp.setToolTipText("replaceable variables, e.g. @V@, is prohibited");
 		isp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				showButtonSymbol(isp);
 			}
 		});
-		isp.setBounds(440, 261, 67, 25);
+		isp.setBounds(440, 261, 70, 25);
 		this.add(isp);
 
 	}
@@ -265,22 +276,26 @@ class newLTL extends JPanel {
 		String curentString = formula.getText() == null ? "" : formula
 				.getText() + " " + button.getText();
 		String des = "";
-		if (button.getText().contains("@V@")) {
-			if (button.getText().equals("@V@")) {
+		if (button.getText().contains("@V2@")) {
+			if (button.getText().equals("@V2@")) {
 				des = description.getText() == null ? "" : description
-						.getText() + " @V@ ";
-			} else if (button.getText().equals("IS_X( @V@ )")) {
+						.getText() + " Learning Event @V2@ ";
+			} else if (button.getText().equals("IS_X( @V2@ , #V2# )")) {
+				des = description.getText() == null ? ""
+						: description.getText()
+								+ " Learning Event @V2@ of Role Player #V2# is executed";
+			} else if (button.getText().equals("IS_R( @V2@ , #V2# )")) {
+				des = description.getText() == null ? ""
+						: description.getText()
+								+ " Learning Event @V2@ of Role Player #V2# has right to be executed";
+			} else if (button.getText().equals("IS_O( @V2@ , #V2# )")) {
 				des = description.getText() == null ? "" : description
-						.getText() + " @V@ is executed";
-			} else if (button.getText().equals("IS_R( @V@ )")) {
-				des = description.getText() == null ? "" : description
-						.getText() + " @V@ has right to be executed";
-			} else if (button.getText().equals("IS_O( @V@ )")) {
-				des = description.getText() == null ? "" : description
-						.getText() + " @V@ is obliged";
-			} else if (button.getText().equals("IS_P( @V@ )")) {
-				des = description.getText() == null ? "" : description
-						.getText() + " @V@ is prohibited";
+						.getText()
+						+ " Learning Event @V2@ of Role Player #V2# is obliged";
+			} else if (button.getText().equals("IS_P( @V2@ , #V2# )")) {
+				des = description.getText() == null ? ""
+						: description.getText()
+								+ " Learning Event @V2@ of Role Player #V2# is prohibited";
 			}
 		} else {
 			des = description.getText() == null ? "" : description.getText()
@@ -292,13 +307,6 @@ class newLTL extends JPanel {
 		formula.setText("");
 		formula.setText(curentString);
 		formula.requestFocus();
-
-	}
-
-	private void refresh() {
-		invalidate();
-		validate();
-		repaint();
 	}
 
 	/* From Jim */
@@ -326,6 +334,7 @@ class newLTL extends JPanel {
 	}
 }
 
+@SuppressWarnings("serial")
 class LTLmang extends JPanel {
 	private ImplLTLDao dao = new ImplLTLDao();
 
@@ -362,6 +371,7 @@ class LTLmang extends JPanel {
 	}
 }
 
+@SuppressWarnings("serial")
 class LTLItemPanel extends JPanel {
 	private int id;
 	private ImplLTLDao dao = new ImplLTLDao();
