@@ -120,12 +120,15 @@ public class LPromelaWindow {
 								while ((rules = br2.readLine()) != null) {
 									rule.setText(rule.getText() + "\n" + rules);
 								}
+								rule.setCaretPosition(0);
 								br2.close();
 								fis2.close();
 							}
 						}
 					}
+
 				}
+				pml.setCaretPosition(0);
 				br.close();
 				fis.close();
 				files.add("bitvector.lpr");

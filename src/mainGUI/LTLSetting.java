@@ -230,7 +230,7 @@ class newLTL extends JPanel {
 		bt_variable.setBounds(180, 261, 61, 25);
 		this.add(bt_variable);
 
-		final JButton isx = new JButton("IS_X( @V2@ )");
+		final JButton isx = new JButton("IS_X( @V2@ , #V2# )");
 		isx.setToolTipText("replaceable variables, e.g. @V2@, is executed");
 		isx.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

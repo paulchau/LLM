@@ -9,7 +9,7 @@ import javax.swing.JTextField;
 
 public class DataBaseUtil {
 
-	private static String url = "jdbc:mysql://localhost:3307/LPromela?"+"user=root&password=root"+"&useUnicode=true&characterEncoding=utf-8";  
+	private static String url = "jdbc:mysql://db4free.net:3306/lpromela?"+"user=pcch&password=pi314e27"+"&useUnicode=true&characterEncoding=utf-8";  
 	
 	public static Connection getConnection() {
 		Connection con = null;

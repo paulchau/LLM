@@ -36,7 +36,8 @@ CREATE TABLE `lpromela_model` (
 
 LOCK TABLES `lpromela_model` WRITE;
 /*!40000 ALTER TABLE `lpromela_model` DISABLE KEYS */;
-INSERT INTO `lpromela_model` VALUES (1,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(16,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(17,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(18,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(19,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(20,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(21,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(22,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(23,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(24,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(25,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(26,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(27,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml'),(28,'Case2.pml','D:Google DriveworkspaceLPromelaSampleCase2.pml');
+INSERT INTO `lpromela_model` (`id`, `name`, `file_path`) VALUES
+(1, 'Case2.pml', 'D:Google DriveworkspaceLPromelaSampleCase2.pml');
 /*!40000 ALTER TABLE `lpromela_model` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +89,14 @@ CREATE TABLE `ltl_formula_definition` (
 
 LOCK TABLES `ltl_formula_definition` WRITE;
 /*!40000 ALTER TABLE `ltl_formula_definition` DISABLE KEYS */;
-INSERT INTO `ltl_formula_definition` VALUES (1,'always @V@','[]@V@','always'),(2,' not @B@','!@V@','Not'),(9,' eventually @V2@','<>@V@','eventually');
+INSERT INTO `ltl_formula_definition` (`id`, `description`, `formula`, `nickname`) VALUES
+(1, ' always Learning Event @V2@ ', ' [] @V2@', 'always'),
+(2, ' eventually Learning Event @V2@ ', ' <> @V2@', 'eventually'),
+(3, ' Learning Event @V2@ of Role Player #V2# has right to be executed', ' IS_R( @V2@ , #V2# )', 'right'),
+(4, ' Learning Event @V2@ of Role Player #V2# is obliged', ' IS_O( @V2@ , #V2# )', 'obligated'),
+(5, ' Learning Event @V2@ of Role Player #V2# is prohibited', ' IS_P( @V2@ , #V2# )', 'prohibited'),
+(6, ' Learning Event @V2@ of Role Player #V2# is executed', ' IS_X( @V2@ , #V2# )', 'Executed'),
+(7, ' not always Learning Event @V2@ ', ' ! [] @V2@', 'Not always');
 /*!40000 ALTER TABLE `ltl_formula_definition` ENABLE KEYS */;
 UNLOCK TABLES;
 
