@@ -13,6 +13,7 @@ To use the attached GCC,
 * 3. In User variables field, found path. Click Edit.
 * 4. Add "C:\GCC\bin;" in. Path variables are sperated through semicolon ';', plase notice.
 * 5. Click OK to confirm and restart the software.
+
 The program is developed in JAVA and the file is an executable Java. 
 A Java Runtime Environment (JRE) which support Java v1.7 or above is required to download. 
 You can download it from https://java.com/download .
