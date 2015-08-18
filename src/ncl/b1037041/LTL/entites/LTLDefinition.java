@@ -1,5 +1,5 @@
 /*The original code is made by Jim Sun
- * 
+ * Modifications have been done by Paul Chau
  */
 package ncl.b1037041.LTL.entites;
 
@@ -70,6 +70,6 @@ public class LTLDefinition implements Serializable{
 	}
 	
 	public String toString(){
-		return description;
+		return nickname + " (" + description + ")";
 	}
 }

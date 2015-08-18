@@ -33,3 +33,4 @@
  * Springer 2008, p 192.
  * #define IS_1(bv,i) (bv >> i & 1)
  */
+

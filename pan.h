@@ -130,19 +130,19 @@ typedef struct S_F_MAP {
 } S_F_MAP;
 
 #define nstates2	5	/* :init: */
-#define minseq2	2660
-#define maxseq2	2663
+#define minseq2	916
+#define maxseq2	919
 #define endstate2	4
 
-#define nstates1	978	/* CRM */
-#define minseq1	1683
-#define maxseq1	2659
-#define endstate1	977
+#define nstates1	401	/* CRM */
+#define minseq1	516
+#define maxseq1	915
+#define endstate1	400
 
-#define nstates0	1684	/* LEG */
+#define nstates0	517	/* BEG */
 #define minseq0	0
-#define maxseq0	1682
-#define endstate0	1683
+#define maxseq0	515
+#define endstate0	516
 
 extern short src_ln2[];
 extern short src_ln1[];
@@ -152,8 +152,8 @@ extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
 
 #define T_ID	unsigned short
-#define _T5	1039
-#define _T2	1040
+#define _T5	368
+#define _T2	369
 #define WS		4 /* word size in bytes */
 #define SYNC	1
 #define ASYNC	1
@@ -171,7 +171,7 @@ extern S_F_MAP src_file0[];
 struct RP_NAME { /* user defined type */
 	uchar rp_n;
 };
-struct LN_EVENT { /* user defined type */
+struct BIS_OP { /* user defined type */
 	uchar name;
 	uchar role_pl;
 	unsigned right : 1;
@@ -185,7 +185,7 @@ struct LN_EVENT { /* user defined type */
 typedef struct P2 { /* :init: */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 12; /* state    */
+	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -196,18 +196,18 @@ typedef struct P2 { /* :init: */
 typedef struct P1 { /* CRM */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 12; /* state    */
+	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
 } P1;
 #define Air1	(sizeof(P1) - 3)
 
-#define PLEG	((P0 *)this)
-typedef struct P0 { /* LEG */
+#define PBEG	((P0 *)this)
+typedef struct P0 { /* BEG */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 12; /* state    */
+	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -217,7 +217,7 @@ typedef struct P0 { /* LEG */
 typedef struct P3 { /* np_ */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 12; /* state    */
+	unsigned _p   : 11; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
@@ -414,26 +414,21 @@ typedef struct State {
 		unsigned short _event;
 	#endif
 #endif
+	unsigned ReqFailBefore : 1;
+	unsigned RejFailBefore : 1;
+	unsigned ConfFailBefore : 1;
+	unsigned PayFailBefore : 1;
+	unsigned CancFailBefore : 1;
 	uchar cntttr;
-	uchar LEG2CRM;
-	uchar CRM2LEG;
-	int LCount;
-	int CwCount;
-	int ExamCount;
-	int STUDENTexTrace;
-	int LMSexTrace;
-	struct LN_EVENT START_lo;
-	struct LN_EVENT L1_lo;
-	struct LN_EVENT L2_lo;
-	struct LN_EVENT L3_lo;
-	struct LN_EVENT L4_lo;
-	struct LN_EVENT L5_lo;
-	struct LN_EVENT L6_lo;
-	struct LN_EVENT L7_lo;
-	struct LN_EVENT L8_lo;
-	struct LN_EVENT CW1_lo;
-	struct LN_EVENT CW2_lo;
-	struct LN_EVENT EXAM_lo;
+	uchar BEG2CRM;
+	uchar CRM2BEG;
+	int BUYERexTrace;
+	int STOREexTrace;
+	struct BIS_OP BUYREQ_bo;
+	struct BIS_OP BUYREJ_bo;
+	struct BIS_OP BUYCONF_bo;
+	struct BIS_OP BUYPAY_bo;
+	struct BIS_OP BUYCANC_bo;
 #ifdef TRIX
 	/* room for 512 proc+chan ptrs, + safety margin */
 	char *_ids_[MAXPROC+MAXQ+4];
@@ -458,11 +453,8 @@ typedef struct TRIX_v6 {
 /* hidden variable: */	uchar rTemp;
 /* hidden variable: */	uchar oTemp;
 /* hidden variable: */	uchar pTemp;
-/* hidden variable: */	uchar fail;
+/* hidden variable: */	uchar abncoend;
 /* hidden variable: */	int executionTrace;
-/* hidden variable: */	int lectures;
-/* hidden variable: */	int cw;
-/* hidden variable: */	int exam;
 #define FORWARD_MOVES	"pan.m"
 #define BACKWARD_MOVES	"pan.b"
 #define TRANSITIONS	"pan.t"
@@ -473,7 +465,7 @@ typedef struct TRIX_v6 {
 #define start3	0 /* np_ */
 #define start2	3
 #define start1	1
-#define start0	115
+#define start0	52
 #ifdef NP
 	#define ACCEPT_LAB	1 /* at least 1 in np_ */
 #else
@@ -842,7 +834,7 @@ void qsend(int, int, int, int, int);
 #define GLOBAL	7
 #define BAD	8
 #define ALPHA_F	9
-#define NTRANS	1041
+#define NTRANS	370
 #if defined(BFS_PAR) || NCORE>1
 	void e_critical(int);
 	void x_critical(int);

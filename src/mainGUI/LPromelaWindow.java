@@ -33,6 +33,7 @@ import javax.swing.ScrollPaneConstants;
 import ncl.b1037041.LTL.entites.LPromelaModel;
 import ncl.b1037041.LTL.entites.LTLDefinition;
 import ncl.b1037041.dao.ImplLTLDao;
+import ncl.b1037041.db.tool.DataBaseUtil;
 
 public class LPromelaWindow {
 
@@ -85,9 +86,7 @@ public class LPromelaWindow {
 		}
 		final JFileChooser fc = new JFileChooser();
 		int returnVal = -1;
-		while (returnVal != 0) {
-			returnVal = fc.showOpenDialog(null);
-		}
+		returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
 			fileDir = file.getAbsolutePath();
@@ -142,6 +141,35 @@ public class LPromelaWindow {
 			}
 			ltlList = dao.getAllLTLDefinition();
 
+		} else {
+			JOptionPane.showMessageDialog(null,
+					"Please setup path for the new model");
+			FileDialog sf = new FileDialog(frmLpromela, "Select Path..",
+					FileDialog.SAVE);
+			sf.setVisible(true);
+			if (sf.getDirectory() == null) {
+				JOptionPane.showMessageDialog(null,
+						"No path is chosen. The system will now close");
+				System.exit(1);
+			}
+			fileDir = sf.getDirectory() + sf.getFile() + ".pml";
+			filePath = sf.getDirectory() + sf.getFile() + "Rules.h";
+			File file = new File(fileDir);
+			File file2 = new File(filePath);
+			files.add(file2.getName());
+			try {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+				bw.write(pml.getText());
+				bw.close();
+				BufferedWriter bw2 = new BufferedWriter(new FileWriter(file2));
+				bw2.write(rule.getText());
+				bw2.close();
+				JOptionPane.showMessageDialog(frmLpromela, "Path set.");
+			} catch (IOException e1) {
+				JOptionPane.showMessageDialog(frmLpromela,
+						"Error! Fail to set the Path.");
+				System.exit(0);
+			}
 		}
 	}
 
@@ -197,8 +225,11 @@ public class LPromelaWindow {
 				} else {
 					FileDialog sf = new FileDialog(frmLpromela,
 							"Select Path..", FileDialog.SAVE);
-					while (sf.getDirectory() == null) {
-						sf.setVisible(true);
+					sf.setVisible(true);
+					if (sf.getDirectory() == null) {
+						JOptionPane.showMessageDialog(null,
+								"No path is chosen. The system will now close");
+						System.exit(1);
 					}
 					fileDir = sf.getDirectory() + sf.getFile() + ".pml";
 					filePath = sf.getDirectory() + sf.getFile() + "Rules.h";
@@ -350,6 +381,18 @@ public class LPromelaWindow {
 			}
 		});
 		mnVerification.add(mntmStartVerification);
+
+		JMenu mnDatabase = new JMenu("Database");
+		menuBar.add(mnDatabase);
+
+		JMenuItem mntmSetupConnection = new JMenuItem("Setup Connection");
+		mntmSetupConnection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				DataBaseUtil.initialise();
+				DataBaseUtil.getConnection();
+			}
+		});
+		mnDatabase.add(mntmSetupConnection);
 
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);

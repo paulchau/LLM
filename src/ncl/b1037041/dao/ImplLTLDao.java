@@ -1,3 +1,6 @@
+/*The original code is made by Jim Sun
+ * 
+ */
 package ncl.b1037041.dao;
 
 import java.sql.Connection;
@@ -5,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import ncl.b1037041.LTL.entites.*;
 import ncl.b1037041.db.tool.DataBaseUtil;
@@ -55,7 +60,7 @@ public class ImplLTLDao implements InterfaceLTLDao {
 				results.add(definition);
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error in SQL connections. No Database detected.");
 		} finally {
 			if(rs != null) {
 				DataBaseUtil.closeResultSet(rs);
@@ -502,44 +507,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}
 	}
 	
-	@Override
-	public List<StatisticsLTLUsage> getLTLUsageStatistics() {
-		List<StatisticsLTLUsage> results = new ArrayList<StatisticsLTLUsage>();
-		Connection connection = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		String sql = "select d.id, d.nickname, a.num from "
-				+ "(select i.definition_id did, count(i.definition_id) num from "
-				+ " ltl_formula_instance i group by i.definition_id order by num desc limit 5) a "
-				+ " inner join ltl_formula_definition d on a.did = d.id ";
-		try {
-			connection = DataBaseUtil.getConnection();
-			ps = connection.prepareStatement(sql);
-			rs = ps.executeQuery();
-			StatisticsLTLUsage usage = null;
-			while(rs.next()) {
-				usage = new StatisticsLTLUsage();
-				usage.setId(rs.getInt("id"));
-				usage.setNickname(rs.getString("nickname"));
-				usage.setNum(rs.getInt("num"));
-				results.add(usage);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(rs != null) {
-				DataBaseUtil.closeResultSet(rs);
-			}
-			if(ps != null) {
-				DataBaseUtil.closeStatement(ps);				
-			}
-			if(connection != null) {
-				DataBaseUtil.closeConnection(connection);
-			}
-		}	
-		return results;
-	}
-
 	@Override
 	public List<LTLInstance> getNonConfigedInstances(int chorId) {
 		List<LTLInstance> results = new ArrayList<LTLInstance>();

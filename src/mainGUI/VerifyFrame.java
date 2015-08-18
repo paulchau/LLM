@@ -100,10 +100,13 @@ public class VerifyFrame extends JFrame {
 			ArrayList<String> var = new ArrayList<String>();
 			ArrayList<String> role = new ArrayList<String>();
 			for (String s : pml.split("\\n")) {
-				if (s.contains("LN_EVENT")) {
-					var.add(s.substring(9, s.length() - 2));
+				if (s.contains("INIT(")) {
+					if (!s.contains("*")) {
+						var.add(s.substring(s.indexOf("(") + 1, s.indexOf(",")));
+					}
 				} else if (s.contains("RolePlayer(")) {
-					String rolePlayers = s.substring(11, s.length() - 2);
+					String rolePlayers = s.substring(s.indexOf("(") + 1,
+							s.indexOf(")"));
 					for (String ss : rolePlayers.split(",")) {
 						role.add(ss.trim());
 					}

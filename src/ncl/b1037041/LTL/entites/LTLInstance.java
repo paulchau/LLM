@@ -1,3 +1,7 @@
+/*The original code is made by Jim Sun
+ * 
+ */
+
 package ncl.b1037041.LTL.entites;
 
 public class LTLInstance {

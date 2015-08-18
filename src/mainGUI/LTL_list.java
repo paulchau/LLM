@@ -1,3 +1,6 @@
+/*The original code is made by Ching Hay CHAU (Paul)
+ * 
+ */
 package mainGUI;
 
 import javax.swing.JFrame;
@@ -60,7 +63,7 @@ public class LTL_list extends JFrame {
 						+ "Description: " + item.getDescription());
 			}
 		});
-		comboBox.setBounds(346, 51, 102, 20);
+		comboBox.setBounds(10, 58, 481, 23);
 		contentPane.add(comboBox);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -76,7 +79,7 @@ public class LTL_list extends JFrame {
 
 		JLabel lblChooseLtlFormula = new JLabel("Choose LTL Formula:");
 		lblChooseLtlFormula.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblChooseLtlFormula.setBounds(137, 54, 175, 14);
+		lblChooseLtlFormula.setBounds(208, 24, 175, 14);
 		contentPane.add(lblChooseLtlFormula);
 
 		JButton btnDelete = new JButton("Remove");
@@ -89,7 +92,7 @@ public class LTL_list extends JFrame {
 				}
 			}
 		});
-		btnDelete.setBounds(502, 50, 89, 23);
+		btnDelete.setBounds(531, 58, 89, 23);
 		contentPane.add(btnDelete);
 	}
 

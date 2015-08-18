@@ -1,3 +1,7 @@
+/*The original code is made by Jim Sun
+ * 
+ */
+
 package ncl.b1037041.dao;
 
 import java.util.List;
@@ -6,7 +10,6 @@ import ncl.b1037041.LTL.entites.LPromelaModel;
 import ncl.b1037041.LTL.entites.ModelMessageInfo;
 import ncl.b1037041.LTL.entites.LTLDefinition;
 import ncl.b1037041.LTL.entites.LTLInstance;
-import ncl.b1037041.LTL.entites.StatisticsLTLUsage;
 
 public interface InterfaceLTLDao {
 
@@ -45,8 +48,6 @@ public interface InterfaceLTLDao {
 	public void updateLpmName(int chorId, String newName);
 	
 	public void deleteLpm(int chorId);
-	
-	public List<StatisticsLTLUsage> getLTLUsageStatistics();
 	
 	public ModelMessageInfo getInfoByMessage(int chorId, String message);
 	

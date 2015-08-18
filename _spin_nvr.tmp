@@ -1,7 +1,9 @@
-never ltlCheck {    /* !(! ([] ((! (((a_lo.right==1)) && ((a_lo.role_pl==STUDENT)))) || (((c_lo.prohib==1)) && ((c_lo.role_pl==STUDENT)))))) */
-accept_init:
+never ltlCheck {    /* !([] (BUYREQ)) */
 T0_init:
 	do
-	:: (((! (((a_lo.right==1)) && ((a_lo.role_pl==STUDENT)))) || (((c_lo.prohib==1)) && ((c_lo.role_pl==STUDENT))))) -> goto T0_init
+	:: atomic { (! ((BUYREQ))) -> assert(!(! ((BUYREQ)))) }
+	:: (1) -> goto T0_init
 	od;
+accept_all:
+	skip
 }

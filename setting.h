@@ -16,10 +16,10 @@
 /* global chan to send event to rules */
 
 /* chan to send event from filter to rules */
-chan LEG2CRM = [1] of {mtype,mtype}; 
+chan BEG2CRM = [1] of {mtype,mtype}; 
 
 /* chan to send Ack to request next msg */
-chan CRM2LEG = [0] of {mtype,mtype}; 
+chan CRM2BEG = [0] of {mtype,mtype}; 
 
 
 /* ltl s1 { []((c) -> <> !h) } */

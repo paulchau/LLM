@@ -55,6 +55,8 @@ public class LTLSetting extends JFrame {
 		scrollPane.setViewportView(manPanel);
 		splitPane.setLeftComponent(newPanel);
 		newPanel.setLayout(null);
+		JOptionPane.showMessageDialog(null,
+				"Please use the buttons to help constructing LTL formulae");
 	}
 
 	public void close() {
@@ -121,8 +123,9 @@ class newLTL extends JPanel {
 					formula.setText("");
 				} else {
 					JOptionPane
-							.showMessageDialog(null,
-									"Invalid input. May need to change the V inside variables to something else");
+							.showMessageDialog(
+									null,
+									"Invalid input. Variables should be of format @V2@ for operations/events and #V2# for Role Players");
 				}
 			}
 		});
@@ -132,9 +135,10 @@ class newLTL extends JPanel {
 		JButton btnHelp = new JButton("Help");
 		btnHelp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane
-						.showMessageDialog(null,
-								"Please remember to add blanket to standardise the LTL formula!");
+				JOptionPane.showMessageDialog(null,
+						"Please remember to add brackets to standardise the LTL formula! \n"
+								+ "Invalid:      IS_X @V2@ #V2# \n"
+								+ "Valid:        IS_X( @V2@ , #2# )");
 			}
 		});
 		btnHelp.setBounds(620, 170, 120, 30);

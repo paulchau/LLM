@@ -58,7 +58,7 @@ RolePlayer(STUDENT, LMS);
  * in this ex, we use only S, TF, TO and P  */
 RuleMessage(S,LF,TF,TO); 
 
-/* 3 operations are involved in the contract */
+/* 4 operations are involved in the contract */
 LN_EVENT(a);
 LN_EVENT(b);
 LN_EVENT(c);
