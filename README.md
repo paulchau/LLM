@@ -1,6 +1,6 @@
-# LPromela
+# LLM
 A tool for validating the logical consistency of adaptive e-learning system implemented at Newcastle Univ. UK
-LPromela is an IDE of extension of Promela, mainly served for the Adaptive e-Learning System. The name LPromela stands for Learning-verification Promela.
+LLM is a LTL Manager for extension of Promela, mainly served for the Adaptive e-Learning System. The name LLM stands for LPromela LTL Manager.
 
 ## Installation
 
