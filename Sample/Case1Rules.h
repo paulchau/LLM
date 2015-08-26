@@ -1,11 +1,6 @@
 
-
-
-
-
-
 /*
- * EPROMELA code of the ECA rules that implement a
+ * LPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
  * The code prints out messages with xml like
  * tags which can be used for signaling out
@@ -173,7 +168,7 @@ RULE(L3){
 	 SET_P(CW1,0);
 	 SET_O(CW1,1);
 	 SET_P(L4,0);
-	 SET_O(L4,1);
+	 SET_O(L4,1);	 
 	 RD(L3,STUDENT,CCO,CO);
     }	
  /* handle L3 with technical failure outcome */
@@ -341,7 +336,7 @@ RULE(L6){
 	 SET_P(CW2,0);
 	 SET_O(CW2,1);
 	 SET_P(L7,0);
-	 SET_O(L7,1);
+	 SET_O(L7,1);	 
 	 RD(L6,STUDENT,CCO,CO);
     }	
  /* handle L6 with technical failure outcome */
@@ -433,6 +428,7 @@ RULE(L7){
     
  END(L7);		 
 }
+
 
 RULE(L8){
  printf("L8");
@@ -528,9 +524,6 @@ RULE(CW1){
  
      printf("No submission at within required time"); 
      SET_O(CW1,0);
-	 SET_O(CW2,0);
-	 SET_O(EXAM,0);
-	 
      atomic{
      printf("\n\n");
      printf("<originator>reset</originator>\n");
@@ -554,8 +547,6 @@ RULE(CW1){
  
      printf("Coursework 1 failed"); 
      SET_O(CW1,0);
-	 SET_O(CW2,0);
-	 SET_O(EXAM,0);
      atomic{
      printf("\n\n");
      printf("<originator>reset</originator>\n");
@@ -596,12 +587,14 @@ RULE(CW2){
 	CwCount=CwCount+1;	 
 	SET_X(CW2,STUDENT);
 	SET_O(CW2,0);
+	SET_P(L7,0);
+	SET_O(L7,1);
 	if
 	 :: (IS_X(L8,STUDENT) && (IS_X(CW1,STUDENT))) -> SET_P(EXAM,0); SET_O(EXAM,1);
 	 :: else -> printf("\n\n Please get L8 done first \n\n");
 	fi;
 	printf("LECTURES are now continued");
-   	:: else -> printf("\n\n");printf("Please complete CW1 first \n\n");
+  	:: else -> printf("\n\n");printf("Please complete CW1 first \n\n");
 	fi;
 	RD(CW2,STUDENT,CCO,CO);
 	}

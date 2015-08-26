@@ -1,5 +1,7 @@
+
+
 /*
- * EPROMELA code of the ECA rules that implement a
+ * LPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
  *
  * Ching Hay Chau, 27 Jul 2015, Ncl Uni, UK

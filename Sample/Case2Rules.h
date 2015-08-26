@@ -1,66 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  * EPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
@@ -379,6 +317,8 @@ RULE(ChooseAccept){
 	 printf("<type>reset</type>\n");
 	 printf("<status>reset</status>\n");
 	 printf("\n\n")}
+	 SET_O(C1,0);SET_O(C2,0);SET_O(C3,0);
+	 SET_P(C1,0);SET_P(C2,0);SET_P(C3,0);
 	 RD(ChooseAccept,STUDENT,CCO,CND);
     }	
  /* handle CW with technical failure outcome */

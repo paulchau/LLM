@@ -114,13 +114,18 @@ class newLTL extends JPanel {
 				boolean valid = checkLTLInput(description.getText(),
 						formula.getText());
 				if (valid) {
-					dao.addLTLForlumaPrototype(description.getText(),
-							formula.getText(), name.getText());
-					JOptionPane.showMessageDialog(null, "New LTL added");
-					panel.reload();
-					description.setText("");
-					name.setText("");
-					formula.setText("");
+					try {
+						dao.addLTLForlumaPrototype(description.getText(),
+								formula.getText(), name.getText());
+						JOptionPane.showMessageDialog(null, "New LTL added");
+						panel.reload();
+						description.setText("");
+						name.setText("");
+						formula.setText("");
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null,
+								"Invalid input. Nickname maybe too long.");
+					}
 				} else {
 					JOptionPane
 							.showMessageDialog(

@@ -15,9 +15,8 @@ import ncl.b1037041.LTL.entites.*;
 import ncl.b1037041.db.tool.DataBaseUtil;
 
 
-public class ImplLTLDao implements InterfaceLTLDao {
+public class ImplLTLDao{
 
-	@Override
 	public void addLTLForlumaPrototype(String description, String formula, String nickname) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -39,7 +38,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}	
 	}
 
-	@Override
 	public ArrayList<LTLDefinition> getAllLTLDefinition() {
 		ArrayList<LTLDefinition> results = new ArrayList<LTLDefinition>();
 		Connection connection = null;
@@ -75,7 +73,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		return results;
 	}
 
-	@Override
 	public void removeLTLDefinition(int id) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -96,7 +93,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}
 	}
 
-	@Override
 	public List<LPromelaModel> getAllLpm() {
 		List<LPromelaModel> results = new ArrayList<LPromelaModel>();
 		Connection connection = null;
@@ -131,7 +127,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		return results;
 	}
 
-	@Override
 	public LPromelaModel getLpm(int id) {
 		LPromelaModel lpm = null;
 		Connection connection = null;
@@ -164,7 +159,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		return lpm;
 	}
 
-	@Override
 	public void addDefinition2Lpm(int chorId, int ltlId) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -186,7 +180,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}	
 	}
 
-	@Override
 	public void addLpmMessageInfo(int chorId, String message,
 			String ltlSymbol, String boolMessage) {
 		Connection connection = null;
@@ -210,7 +203,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}	
 	}
 
-	@Override
 	public void deleteAllInfoOfLpm(int chorId) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -231,7 +223,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}
 	}
 
-	@Override
 	public List<ModelMessageInfo> getMessageInfo(int chorId) {
 		List<ModelMessageInfo> results = new ArrayList<ModelMessageInfo>();
 		Connection connection = null;
@@ -278,150 +269,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		return results;
 	}
 
-	@Override
-	public List<LTLInstance> getLTLInstances(int chorId) {
-		List<LTLInstance> results = new ArrayList<LTLInstance>();
-		Connection connection = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		String sql = "select i.id id, i.specific_description s_d, i.specific_formula s_f, i.is_setup setup, "
-				+ "c.id model_id, c.name model_name, c.file_path file, "
-				+ "d.id desc_id, d.formula formula, d.description description, d.nickname nickname "
-				+ "from ltl_formula_instance i "
-				+ "inner join lpromela_model c on i.model_id = c.id "
-				+ "inner join ltl_formula_definition d on i.definition_id = d.id "
-				+ "where i.model_id = " + chorId;
-		try {
-			connection = DataBaseUtil.getConnection();
-			ps = connection.prepareStatement(sql);
-			rs = ps.executeQuery();
-			LTLInstance instance = null;
-			while(rs.next()) {
-				instance = new LTLInstance();
-				instance.setId(rs.getInt("id"));
-				instance.setSpecificFormula(rs.getString("s_f"));
-				instance.setSpecificDescription(rs.getString("s_d"));
-				instance.setIsSetup(rs.getInt("setup"));
-				
-				LPromelaModel lpm = new LPromelaModel();
-				lpm.setId(rs.getInt("model_id"));
-				lpm.setName(rs.getString("model_name"));
-				lpm.setFilePath(rs.getString("file"));
-				
-				instance.setLpm(lpm);
-				
-				LTLDefinition definition = new LTLDefinition();
-				definition.setId(rs.getInt("desc_id"));
-				definition.setFormula(rs.getString("formula"));
-				definition.setDescription(rs.getString("description"));
-				definition.setNickname(rs.getString("nickname"));
-				
-				instance.setDefinition(definition);
-				
-				results.add(instance);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(rs != null) {
-				DataBaseUtil.closeResultSet(rs);
-			}
-			if(ps != null) {
-				DataBaseUtil.closeStatement(ps);				
-			}
-			if(connection != null) {
-				DataBaseUtil.closeConnection(connection);
-			}
-		}	
-		return results;
-	}
-
-	@Override
-	public void updateLTLInstance(int instanceId, String s_formula,
-			String s_description) {
-		Connection connection = null;
-		PreparedStatement ps = null;
-		String sql = "update ltl_formula_instance set "
-				 + "specific_formula = '"+s_formula+"', "
-				 + "specific_description = '"+s_description+"', "
-				 + "is_setup = 1 "
-				 + "where id = " + instanceId;
-		try {
-			connection = DataBaseUtil.getConnection();
-			ps = connection.prepareStatement(sql);
-			ps.execute();
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(ps != null) {
-				DataBaseUtil.closeStatement(ps);				
-			}
-			if(connection != null) {
-				DataBaseUtil.closeConnection(connection);
-			}
-		}
-	}
-
-	@Override
-	public List<LTLInstance> getConfigedInstances(int chorId) {
-		List<LTLInstance> results = new ArrayList<LTLInstance>();
-		Connection connection = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		String sql = "select i.id id, i.specific_description s_d, i.specific_formula s_f, i.is_setup setup, "
-				+ "c.id model_id, c.name model_name, c.file_path file, "
-				+ "d.id desc_id, d.formula formula, d.description description, d.nickname nickname "
-				+ "from ltl_formula_instance i "
-				+ "inner join lpromela_model c on i.model_id = c.id "
-				+ "inner join ltl_formula_definition d on i.definition_id = d.id "
-				+ "where i.model_id = " + chorId + " "
-				+ "and i.is_setup = 1 order by id";
-		try {
-			connection = DataBaseUtil.getConnection();
-			ps = connection.prepareStatement(sql);
-			rs = ps.executeQuery();
-			LTLInstance instance = null;
-			while(rs.next()) {
-				instance = new LTLInstance();
-				instance.setId(rs.getInt("id"));
-				instance.setSpecificFormula(rs.getString("s_f"));
-				instance.setSpecificDescription(rs.getString("s_d"));
-				instance.setIsSetup(rs.getInt("setup"));
-				
-				LPromelaModel lpm = new LPromelaModel();
-				lpm.setId(rs.getInt("model_id"));
-				lpm.setName(rs.getString("model_name"));
-				lpm.setFilePath(rs.getString("file"));
-				
-				instance.setLpm(lpm);
-				
-				LTLDefinition definition = new LTLDefinition();
-				definition.setId(rs.getInt("desc_id"));
-				definition.setFormula(rs.getString("formula"));
-				definition.setDescription(rs.getString("description"));
-				definition.setNickname(rs.getString("nickname"));
-				
-				instance.setDefinition(definition);
-				
-				results.add(instance);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(rs != null) {
-				DataBaseUtil.closeResultSet(rs);
-			}
-			if(ps != null) {
-				DataBaseUtil.closeStatement(ps);				
-			}
-			if(connection != null) {
-				DataBaseUtil.closeConnection(connection);
-			}
-		}	
-		return results;
-	}
-
-	@Override
 	public void addLpm(LPromelaModel chor) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -443,7 +290,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}	
 	}
 
-	@Override
 	public void updateLpmName(int chorId, String newName) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -466,7 +312,6 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}
 	}
 
-	@Override
 	public void deleteLpm(int chorId) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -507,108 +352,8 @@ public class ImplLTLDao implements InterfaceLTLDao {
 		}
 	}
 	
-	@Override
-	public List<LTLInstance> getNonConfigedInstances(int chorId) {
-		List<LTLInstance> results = new ArrayList<LTLInstance>();
-		Connection connection = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		String sql = "select i.id id, i.specific_description s_d, i.specific_formula s_f, i.is_setup setup, "
-				+ "c.id model_id, c.name model_name, c.file_path file, "
-				+ "d.id desc_id, d.formula formula, d.description description, d.nickname nickname "
-				+ "from ltl_formula_instance i "
-				+ "inner join lpromela_model c on i.model_id = c.id "
-				+ "inner join ltl_formula_definition d on i.definition_id = d.id "
-				+ "where i.model_id = " + chorId + " "
-				+ "and i.is_setup = 0";
-		try {
-			connection = DataBaseUtil.getConnection();
-			ps = connection.prepareStatement(sql);
-			rs = ps.executeQuery();
-			LTLInstance instance = null;
-			while(rs.next()) {
-				instance = new LTLInstance();
-				instance.setId(rs.getInt("id"));
-				instance.setSpecificFormula(rs.getString("s_f"));
-				instance.setSpecificDescription(rs.getString("s_d"));
-				instance.setIsSetup(rs.getInt("setup"));
-				
-				LPromelaModel lpm = new LPromelaModel();
-				lpm.setId(rs.getInt("model_id"));
-				lpm.setName(rs.getString("model_name"));
-				lpm.setFilePath(rs.getString("file"));
-				
-				instance.setLpm(lpm);
-				
-				LTLDefinition definition = new LTLDefinition();
-				definition.setId(rs.getInt("desc_id"));
-				definition.setFormula(rs.getString("formula"));
-				definition.setDescription(rs.getString("description"));
-				definition.setNickname(rs.getString("nickname"));
-				
-				instance.setDefinition(definition);
-				
-				results.add(instance);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(rs != null) {
-				DataBaseUtil.closeResultSet(rs);
-			}
-			if(ps != null) {
-				DataBaseUtil.closeStatement(ps);				
-			}
-			if(connection != null) {
-				DataBaseUtil.closeConnection(connection);
-			}
-		}	
-		return results;
-	}
 
-	@Override
-	public void deleteLTLInstance(int instanceId) {
-		Connection connection = null;
-		PreparedStatement ps = null;
-		String sql = "delete from ltl_formula_instance where id = " + instanceId;
-		try {
-			connection = DataBaseUtil.getConnection();
-			ps = connection.prepareStatement(sql);
-			ps.execute();
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(ps != null) {
-				DataBaseUtil.closeStatement(ps);				
-			}
-			if(connection != null) {
-				DataBaseUtil.closeConnection(connection);
-			}
-		}
-	}
 
-	@Override
-	public void deleteAllLTLInstance(int chorId) {
-		Connection connection = null;
-		PreparedStatement ps = null;
-		String sql = "delete from ltl_formula_instance where model_id = " + chorId;
-		try {
-			connection = DataBaseUtil.getConnection();
-			ps = connection.prepareStatement(sql);
-			ps.execute();
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(ps != null) {
-				DataBaseUtil.closeStatement(ps);				
-			}
-			if(connection != null) {
-				DataBaseUtil.closeConnection(connection);
-			}
-		}
-	}
-
-	@Override
 	public ModelMessageInfo getInfoByMessage(int chorId, String message) {
 		ModelMessageInfo info = null;
 		Connection connection = null;
