@@ -1,6 +1,5 @@
-
 /*
- * LPROMELA code of the ECA rules that implement a
+ * EPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
  * The code prints out messages with xml like
  * tags which can be used for signaling out
@@ -154,7 +153,6 @@ RULE(L3){
  /* handle L3 with success outcome */
  WHEN::EVENT(L3,IS_O(L3,STUDENT),SC(L3))
   ->{
-	 SET_X(L3,STUDENT);  
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -168,7 +166,7 @@ RULE(L3){
 	 SET_P(CW1,0);
 	 SET_O(CW1,1);
 	 SET_P(L4,0);
-	 SET_O(L4,1);	 
+	 SET_O(L4,1);	 	 SET_X(L3,STUDENT); 
 	 RD(L3,STUDENT,CCO,CO);
     }	
  /* handle L3 with technical failure outcome */
@@ -322,8 +320,7 @@ RULE(L6){
  /* handle L6 with success outcome */
  WHEN::EVENT(L6,IS_O(L6,STUDENT),SC(L6))
   ->{
-	 SET_X(L6,STUDENT);  
-     atomic{
+	 atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
      printf("<responder>LMS</responder>\n");
@@ -336,7 +333,7 @@ RULE(L6){
 	 SET_P(CW2,0);
 	 SET_O(CW2,1);
 	 SET_P(L7,0);
-	 SET_O(L7,1);	 
+	 SET_O(L7,1);	 SET_X(L6,STUDENT);  
 	 RD(L6,STUDENT,CCO,CO);
     }	
  /* handle L6 with technical failure outcome */
@@ -435,7 +432,6 @@ RULE(L8){
  /* handle L8 with success outcome */
  WHEN::EVENT(L8,IS_O(L8,STUDENT),SC(L8))
   ->{
-	 SET_X(L8,STUDENT);  
      atomic{
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
@@ -448,8 +444,8 @@ RULE(L8){
 	 SET_O(L8,0);
 	 if
 	 :: (IS_X(CW1,STUDENT) && (IS_X(CW2,STUDENT))) -> SET_P(EXAM,0); SET_O(EXAM,1);
-	 :: else -> printf("\n\n");printf("Please get coursework done first \n\n");
-	 fi;
+	 :: else -> printf("\n\n");printf("Please get course-work done first \n\n");
+	 fi;SET_X(L8,STUDENT); 
 	 RD(L8,STUDENT,CCO,CO);
     }	
  /* handle L8 with technical failure outcome */
@@ -474,7 +470,7 @@ RULE(L8){
      printf("<type>reset</type>\n");
      printf("<status>reset</status>\n");
      printf("\n\n")}
-
+	
      RD(L8,STUDENT,CCO,CO);/*repeat*/
 	}
 	 /*Handle prohibited action*/
@@ -523,7 +519,7 @@ RULE(CW1){
      } 
  
      printf("No submission at within required time"); 
-     SET_O(CW1,0);
+     SET_O(CW1,1);
      atomic{
      printf("\n\n");
      printf("<originator>reset</originator>\n");
@@ -546,7 +542,7 @@ RULE(CW1){
      } 
  
      printf("Coursework 1 failed"); 
-     SET_O(CW1,0);
+     SET_O(CW1,1);
      atomic{
      printf("\n\n");
      printf("<originator>reset</originator>\n");
@@ -576,7 +572,6 @@ RULE(CW2){
 	if
 	:: IS_X(CW1,STUDENT) ->
      atomic{
-	 SET_X(CW2,STUDENT); 	 
      printf("\n\n");
      printf("<originator>STUDENT</originator>\n");
      printf("<responder>LMS</responder>\n");
@@ -585,14 +580,12 @@ RULE(CW2){
      printf("\n\n")
      }
 	CwCount=CwCount+1;	 
-	SET_X(CW2,STUDENT);
-	SET_O(CW2,0);
 	SET_P(L7,0);
 	SET_O(L7,1);
 	if
 	 :: (IS_X(L8,STUDENT) && (IS_X(CW1,STUDENT))) -> SET_P(EXAM,0); SET_O(EXAM,1);
 	 :: else -> printf("\n\n Please get L8 done first \n\n");
-	fi;
+	fi;	SET_X(CW2,STUDENT); SET_O(CW2,0);
 	printf("LECTURES are now continued");
   	:: else -> printf("\n\n");printf("Please complete CW1 first \n\n");
 	fi;
@@ -608,11 +601,7 @@ RULE(CW2){
      printf("<status>timeout</status>\n");
      printf("\n\n")
      } 
- 
      printf("No submission at within required time"); 
-     SET_O(CW1,0);
-	 SET_O(CW2,0);
-	 SET_O(EXAM,0);
      atomic{
      printf("\n\n");
      printf("<originator>reset</originator>\n");
@@ -633,9 +622,6 @@ RULE(CW2){
      printf("<status>Learning Fail</status>\n");
      printf("\n\n")
      } 
-     SET_O(CW1,0);
-	 SET_O(CW2,0);
-	 SET_O(EXAM,0);
      printf("Coursework 2 failed"); 
      atomic{
      printf("\n\n");
@@ -654,7 +640,6 @@ RULE(CW2){
 	}
  END(CW2);		 
 }
-
 
 /* Rule triggered by EXAM executions initiated
  * by the STUDENT and completed either in success or 
@@ -696,9 +681,8 @@ RULE(EXAM){
      printf("<status>timeout</status>\n");
      printf("\n\n")
      } 
- 
      printf("Exam -- timeout"); 
-     SET_O(EXAM,0);
+     SET_O(EXAM,1);
      atomic{
      printf("\n\n");
      printf("<originator>reset</originator>\n");
@@ -720,9 +704,8 @@ RULE(EXAM){
      printf("<status>Learning Fail</status>\n");
      printf("\n\n")
      } 
- 
      printf("Exam -- fail"); 
-     SET_O(EXAM,0);
+     SET_O(EXAM,1);
      atomic{
      printf("\n\n");
      printf("<originator>reset</originator>\n");
@@ -738,6 +721,5 @@ RULE(EXAM){
 		printf("Prohibited action");
 		RD(EXAM,STUDENT,CCP,CO);
 	}
-	
  END(EXAM);		 
 }

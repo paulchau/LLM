@@ -15,8 +15,9 @@ import ncl.b1037041.LTL.entites.*;
 import ncl.b1037041.db.tool.DataBaseUtil;
 
 
-public class ImplLTLDao{
+public class ImplLTLDao {
 
+	
 	public void addLTLForlumaPrototype(String description, String formula, String nickname) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -38,6 +39,7 @@ public class ImplLTLDao{
 		}	
 	}
 
+	
 	public ArrayList<LTLDefinition> getAllLTLDefinition() {
 		ArrayList<LTLDefinition> results = new ArrayList<LTLDefinition>();
 		Connection connection = null;
@@ -73,6 +75,7 @@ public class ImplLTLDao{
 		return results;
 	}
 
+	
 	public void removeLTLDefinition(int id) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -93,6 +96,7 @@ public class ImplLTLDao{
 		}
 	}
 
+	
 	public List<LPromelaModel> getAllLpm() {
 		List<LPromelaModel> results = new ArrayList<LPromelaModel>();
 		Connection connection = null;
@@ -127,6 +131,7 @@ public class ImplLTLDao{
 		return results;
 	}
 
+	
 	public LPromelaModel getLpm(int id) {
 		LPromelaModel lpm = null;
 		Connection connection = null;
@@ -159,6 +164,7 @@ public class ImplLTLDao{
 		return lpm;
 	}
 
+	
 	public void addDefinition2Lpm(int chorId, int ltlId) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -180,6 +186,7 @@ public class ImplLTLDao{
 		}	
 	}
 
+	
 	public void addLpmMessageInfo(int chorId, String message,
 			String ltlSymbol, String boolMessage) {
 		Connection connection = null;
@@ -203,6 +210,7 @@ public class ImplLTLDao{
 		}	
 	}
 
+	
 	public void deleteAllInfoOfLpm(int chorId) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -223,6 +231,7 @@ public class ImplLTLDao{
 		}
 	}
 
+	
 	public List<ModelMessageInfo> getMessageInfo(int chorId) {
 		List<ModelMessageInfo> results = new ArrayList<ModelMessageInfo>();
 		Connection connection = null;
@@ -269,6 +278,34 @@ public class ImplLTLDao{
 		return results;
 	}
 
+	
+	public void updateLTLInstance(int instanceId, String s_formula,
+			String s_description) {
+		Connection connection = null;
+		PreparedStatement ps = null;
+		String sql = "update ltl_formula_instance set "
+				 + "specific_formula = '"+s_formula+"', "
+				 + "specific_description = '"+s_description+"', "
+				 + "is_setup = 1 "
+				 + "where id = " + instanceId;
+		try {
+			connection = DataBaseUtil.getConnection();
+			ps = connection.prepareStatement(sql);
+			ps.execute();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(ps != null) {
+				DataBaseUtil.closeStatement(ps);				
+			}
+			if(connection != null) {
+				DataBaseUtil.closeConnection(connection);
+			}
+		}
+	}
+
+	
+	
 	public void addLpm(LPromelaModel chor) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -290,6 +327,7 @@ public class ImplLTLDao{
 		}	
 	}
 
+	
 	public void updateLpmName(int chorId, String newName) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -312,6 +350,7 @@ public class ImplLTLDao{
 		}
 	}
 
+	
 	public void deleteLpm(int chorId) {
 		Connection connection = null;
 		PreparedStatement ps = null;
@@ -353,7 +392,49 @@ public class ImplLTLDao{
 	}
 	
 
+	
+	public void deleteLTLInstance(int instanceId) {
+		Connection connection = null;
+		PreparedStatement ps = null;
+		String sql = "delete from ltl_formula_instance where id = " + instanceId;
+		try {
+			connection = DataBaseUtil.getConnection();
+			ps = connection.prepareStatement(sql);
+			ps.execute();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(ps != null) {
+				DataBaseUtil.closeStatement(ps);				
+			}
+			if(connection != null) {
+				DataBaseUtil.closeConnection(connection);
+			}
+		}
+	}
 
+	
+	public void deleteAllLTLInstance(int chorId) {
+		Connection connection = null;
+		PreparedStatement ps = null;
+		String sql = "delete from ltl_formula_instance where model_id = " + chorId;
+		try {
+			connection = DataBaseUtil.getConnection();
+			ps = connection.prepareStatement(sql);
+			ps.execute();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(ps != null) {
+				DataBaseUtil.closeStatement(ps);				
+			}
+			if(connection != null) {
+				DataBaseUtil.closeConnection(connection);
+			}
+		}
+	}
+
+	
 	public ModelMessageInfo getInfoByMessage(int chorId, String message) {
 		ModelMessageInfo info = null;
 		Connection connection = null;

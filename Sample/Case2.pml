@@ -149,4 +149,3 @@ init
    run LEG(); run CRM(); 
   }
 }
-ltl p1 { <> ((IS_X(C1,STUDENT)) ||(IS_X(C2,STUDENT)) || (IS_X(C3,STUDENT) ))};

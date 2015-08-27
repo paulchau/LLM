@@ -2,7 +2,7 @@
 
 
 /*
- * EPROMELA code of the ECA rules that implement a
+ * LPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
  * The code prints out messages with xml like
  * tags which can be used for signaling out

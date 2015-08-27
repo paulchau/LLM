@@ -1,5 +1,3 @@
-
-
 /*
  * LPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
