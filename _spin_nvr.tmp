@@ -1,7 +1,0 @@
-never ltlCheck {    /* !(! ([] ((! (((a_lo.right==1)) && ((a_lo.role_pl==STUDENT)))) || (((c_lo.prohib==1)) && ((c_lo.role_pl==STUDENT)))))) */
-accept_init:
-T0_init:
-	do
-	:: (((! (((a_lo.right==1)) && ((a_lo.role_pl==STUDENT)))) || (((c_lo.prohib==1)) && ((c_lo.role_pl==STUDENT))))) -> goto T0_init
-	od;
-}
