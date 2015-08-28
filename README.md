@@ -6,7 +6,7 @@ LLM is a LTL Manager for extension of Promela, mainly served for the Adaptive e-
 
 ### For using the program
 As SPIN is used, a suitable C Compiler is required. 
-For Windows User, we recommend downloading through MinGW or Cygwin. If you are running on 64-bit windows, the attached GCC here is recommended to be used.
+For Windows User, we recommend downloading through MinGW or Cygwin. If you are running on 64-bit windows, a recommended GCC can be accessed <a href="https://drive.google.com/file/d/0B0Twc6pBul7ab3lRRkN6LXQ4WFE/view?usp=sharing">here</a>.
 To use the attached GCC, 
 * 1. Decrypt in C:\GCC 
 * 2. Go to Control Panel -> System -> Advanced System Settings ->  Environment Variables
