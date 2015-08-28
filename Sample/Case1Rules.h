@@ -1,5 +1,6 @@
+
 /*
- * EPROMELA code of the ECA rules that implement a
+ * LPROMELA code of the ECA rules that implement a
  * a contract between a STUDENT and LMS.
  * The code prints out messages with xml like
  * tags which can be used for signaling out
@@ -444,7 +445,7 @@ RULE(L8){
 	 SET_O(L8,0);
 	 if
 	 :: (IS_X(CW1,STUDENT) && (IS_X(CW2,STUDENT))) -> SET_P(EXAM,0); SET_O(EXAM,1);
-	 :: else -> printf("\n\n");printf("Please get course-work done first \n\n");
+	 :: else -> printf("\n\n");printf("Please get coursework done first \n\n");
 	 fi;SET_X(L8,STUDENT); 
 	 RD(L8,STUDENT,CCO,CO);
     }	
@@ -641,6 +642,7 @@ RULE(CW2){
  END(CW2);		 
 }
 
+
 /* Rule triggered by EXAM executions initiated
  * by the STUDENT and completed either in success or 
  * technical failure.
@@ -681,6 +683,7 @@ RULE(EXAM){
      printf("<status>timeout</status>\n");
      printf("\n\n")
      } 
+ 
      printf("Exam -- timeout"); 
      SET_O(EXAM,1);
      atomic{
@@ -704,6 +707,7 @@ RULE(EXAM){
      printf("<status>Learning Fail</status>\n");
      printf("\n\n")
      } 
+ 
      printf("Exam -- fail"); 
      SET_O(EXAM,1);
      atomic{
@@ -721,5 +725,6 @@ RULE(EXAM){
 		printf("Prohibited action");
 		RD(EXAM,STUDENT,CCP,CO);
 	}
+	
  END(EXAM);		 
 }

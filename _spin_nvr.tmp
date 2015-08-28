@@ -1,9 +1,0 @@
-never ltlCheck {    /* !([] (BUYREQ)) */
-T0_init:
-	do
-	:: atomic { (! ((BUYREQ))) -> assert(!(! ((BUYREQ)))) }
-	:: (1) -> goto T0_init
-	od;
-accept_all:
-	skip
-}

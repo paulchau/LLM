@@ -123,9 +123,8 @@ class newLTL extends JPanel {
 						name.setText("");
 						formula.setText("");
 					} catch (Exception e) {
-						JOptionPane
-								.showMessageDialog(null,
-										"Invalid Input. Nickname maybe too long. Please check");
+						JOptionPane.showMessageDialog(null,
+								"Invalid input. Nickname maybe too long.");
 					}
 				} else {
 					JOptionPane

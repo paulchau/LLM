@@ -1,12 +1,8 @@
 
-
-
-
-
 /*
  * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
- * little.pml: LPROMELA code of a 
+ * Case1.pml: LPROMELA code of a 
  * contract between a STUDENT and LMS. This model 
  * is meant to correctly implement the English 
  * contract of Fig 4 of this techical report, thus 
@@ -37,7 +33,7 @@
 #include "setting.h"      /* macro definition */
 #include "EduOperation.h" /* macro definition */
 #include "goodRules.h"        /* ECA rule code    successful*/
-/*#include "badRules.h"*/        /* ECA rule code    with error*/
+/*#include "badRules.h"*/       /* ECA rule code    with error*/
 
 #define TRUE  1
 #define FALSE 0

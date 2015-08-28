@@ -2,7 +2,7 @@
 /*
  * Ching Hay Chau, 7 Jul 2015, Ncl Uni, UK
  *
- * Case1.pml: EPROMELA code of a 
+ * Case1.pml: LPROMELA code of a 
  * contract between a STUDENT and LMS. This model 
  * is meant to correctly implement the English 
  * contract of Fig 4 of this techical report, thus 
@@ -11,7 +11,7 @@
  * To run this code you need 
  * 1) Spin Version 6.1.0 or newer.
  * 2) The macros setting.h and EduOperation.h
- *    vector.lpr and for.h deployed in your
+ *    bitvector.lpr and for.h deployed in your
  *    working folder.
  * 3) rules.h in your working folder.
  *
@@ -20,8 +20,8 @@
  * in the code as needed. Keep in mind that
  * SPIN can verify only a single LTL at a time.
  *
- * 5) To run the code from Linux type:
- * % spin -a Sample.pml
+ * 5) To run the code from Linux / Windows PowerShell type:
+ * % spin -a Case1.pml
  * % cc -o pan pan.c
  * % pan -a
  *
@@ -122,7 +122,7 @@ proctype LEG()
  :: L_E(STUDENT, L2, TF) -> L_E(STUDENT, L2, S);
  :: L_E(STUDENT, L3,  S); 
  :: L_E(STUDENT, L3,  TF) -> L_E(STUDENT, L3,  S);  
-  :: L_E(STUDENT, CW1, S);  
+ :: L_E(STUDENT, CW1, S);  
  :: L_E(STUDENT, CW1, TO); 
  :: L_E(STUDENT, CW1, LF);   
  :: L_E(STUDENT, L4,  S);  
@@ -141,10 +141,6 @@ proctype LEG()
 
  :: L_E(STUDENT, L8,  S); 
  :: L_E(STUDENT, L8,  TF) -> L_E(STUDENT, L8,  S);    
- 
-
-
-
  :: L_E(STUDENT, EXAM, S);
  :: L_E(STUDENT, EXAM, TO);
  :: L_E(STUDENT, EXAM, LF);

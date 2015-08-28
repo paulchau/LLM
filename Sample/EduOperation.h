@@ -1,3 +1,7 @@
+/* It is built based on EPROMELA, from the project "A Toolkit for model checking of electonic contracts" 
+ * by A. Abdelsadiq, C. Molina-Jimenez, and S. Shrivastava.
+ * forked from https://github.com/carlos-molina/contraval
+ */
 #include "for.h"
 #include "bitvector.lpr"
 /*
@@ -178,7 +182,7 @@ inline INIT_WITH_5(lo,rp,r,o,p)
 			lo.right=r;
 			lo.oblig=o;
 			lo.prohib=p;	
-            lo.executed=0; /* Double check this - do we need it here ??*/
+            lo.executed=0;
 			lo.id=cntttr;
  }
 }
